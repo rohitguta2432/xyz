@@ -1,0 +1,116 @@
+<div class="container-fluid mtb20px">
+	<div class="row">
+		<form class="client-form" enctype="multipart/form-data" novalidate angular-validator name="editUserForm">
+			<div class="col-sm-12">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6 mb10px">
+							<div class="profile-img" ng-click="openImageBrowse()">
+								<img src="{{userProfileImg}}" class="img-responsive" />
+								<a>
+									<div class="edit-icon"><i class="fa fa-pencil"></i></div>
+								</a>
+							</div>
+							<input class="form-control" ng-change="updateImage()" style="display:none;" id="profile-img" type="file" ngf-select="" ng-model="userProfileFile"
+							 name="file" ngf-pattern="'image/*'" accept="image/gif, image/png, image/jpeg" ngf-max-size="10MB" />
+							<label class="note"><em>(image should not be greater than 1600x1200 px and max 2MB)</em></label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div ng-if="isAdmin" class="col-sm-6">
+				<label>Select Client</label>
+				<div class="form-group" style="height: auto">
+					<div class="socioselect">
+						<div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+						 options="clientOpt" selected-model="selectedClient" events="{ onItemSelect: changeClientForUser }"></div>
+						<label ng-if="selectedClientError" class="control-label has-error validationMessage">
+							<i class="fa fa-times"></i>
+									Required
+						</label>
+					</div>
+				</div>
+			</div>-->
+			<div class="col-sm-6 ">
+				<div class="form-group ">
+					<label>First Name</label>
+					<input type="text" ng-model="currentUserValue.firstName" value="{{currentUserValue.firstName}}" class="form-control" name="currentUserValue.firstName"
+					 validator="formValidator.alphabetOnly(currentUserValue.firstName) === true" invalid-message="formValidator.alphabetOnly(currentUserValue.firstName)"
+					 required />
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group ">
+					<label>Last Name</label>
+					<input type="text" ng-model="currentUserValue.lastName" value="{{currentUserValue.lastName}}" class="form-control" name="currentUserValue.lastName"
+					/>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group ">
+					<label>Email</label>
+					<input type="email" readonly name="email" ng-model="currentUserValue.email" value="{{currentUserValue.email}}" class="form-control"
+					 name="currentUserValue.email" validator="formValidator.emailValidation(currentUserValue.email) === true" invalid-message="formValidator.emailValidation(currentUserValue.email)"
+					 required />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group ">
+					<label>Password</label>
+					<input type="password" validator="formValidator.passwordValidator(password) === true" invalid-message="formValidator.passwordValidator(password,false)"
+					 ng-model="password" placeholder="*******" class="form-control" name="password" />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label>Re-Enter Password</label>
+					<input type="password" ng-model="rePassword" placeholder="*******" class="form-control" name="rePassword" validator="password === rePassword"
+					 invalid-message="'Password do not match!'" />
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group ">
+					<label>Phone</label>
+					<input type="text" ng-model="currentUserValue.phone" maxlength="10" value="{{currentUserValue.phone}}" class="form-control"
+					 name="currentUserValue.phone" validator="formValidator.phoneValidation(currentUserValue.phone) === true" invalid-message="formValidator.phoneValidation(currentUserValue.phone)"
+					 required>
+				</div>
+			</div>
+
+			<div class="col-sm-6">
+
+				<div class="form-group">
+					<label>Role</label>
+					<div class="socioselect ">
+						<!--<select id="select-state" placeholder="Select Role" ng-model="roleSelected" class="simp-select form-control" required name="roleSelected"
+						 ng-options="role as role.name for role in existRoles track by role.name" ng-change="updateRole()">
+										<option value="" disabled>Select Role</option>
+
+										
+									</select>-->
+
+
+						<div ng-class="{postErrorFieldBorder : selectedRoleError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+						 options="existRoles" selected-model="selectedRole" events="{ onItemSelect: changeRoleForUser,onItemDeselect: deselectRoleForUser }"></div>
+						<label ng-if="selectedRoleError" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i>
+										Required
+									</label>
+
+
+					</div>
+				</div>
+			</div>
+
+			<ng-include ng-if="rolesHeader" src=rolePermissionsView></ng-include>
+
+			<div class="col-sm-12">
+				<div class="btnbox">
+					<div class=" pull-right">
+						<button type="submit" name="submit" class="btn btn-compose" ng-click="updateUserProfile(editUserForm)">Save</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

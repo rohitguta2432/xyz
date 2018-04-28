@@ -1,0 +1,149 @@
+<div class="container-fluid mt20px">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="camp">
+                <h4>Campaign 1 title</h4>
+
+                <div class="camp_graph">
+                    <img ng-src="{{imageUrl}}report1.jpg" class="img-responsive" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="camp">
+                <h4>Campaign 1 title</h4>
+
+                <div class="camp_graph">
+                    <img ng-src="{{imageUrl}}report1.jpg" class="img-responsive" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="camp">
+                <h4>Campaign 1 title</h4>
+
+                <div class="camp_graph">
+                    <img ng-src="{{imageUrl}}report1.jpg" class="img-responsive" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt10px">
+        <div class="col-sm-12">
+            <img ng-src="{{imageUrl}}cam-rt-graph3.jpg" class="img-responsive center-block" />
+        </div>
+    </div>
+    <div class="row mt10px">
+        <div class="col-sm-12">
+            <img ng-src="{{imageUrl}}report2.jpeg" class="img-responsive center-block" />
+        </div>
+    </div>
+    <div class="row mt10px">
+       
+        <div class="col-sm-4">
+            <h4>Top Post Campaign1</h4>
+            <div class="social-post twitter">
+                <div class="row">
+                    
+                    <div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3">
+                        <a class="tweet-img" ng-href="{{value.extended_entities.media[0].expanded_url}}" target="_blank">
+                           <img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div ng-class="{'col-sm-9 task-details post-info': value.extended_entities.media[0].media_url_https!=null, 'col-sm-12 task-details post-info': value.extended_entities.media[0].media_url_https==null}">
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <h4 ng-model="copiedText" ng-bind-html="value.text|toUrl" class="task-title">Top post text</h4>
+                            </div>
+                            <div class="col-sm-5 pr0px">
+                                <ul class="pl0px">
+									<li class="share"><i class="fa fa-share share"></i> 12 </li>
+									<li class="heart"><i class="fa fa-heart heart"></i> 23 </li>
+									<li class="retweet"><i class="fa fa-retweet"></i> 14 </li>
+								</ul>
+                            </div>
+                            <div class="col-sm-7">
+                                <span class="post-date">Jun 26, 2017 - 12:23 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt15px">
+                    <div class="col-sm-3">
+                        <label class="platform-bg"><i class="fa fa-twitter"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Top Post Campaign2</h4>
+            <div class="social-post twitter">
+                <div class="row">
+                    
+                    <div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3">
+                        <a class="tweet-img" ng-href="{{value.extended_entities.media[0].expanded_url}}" target="_blank">
+                           <img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div ng-class="{'col-sm-9 task-details post-info': value.extended_entities.media[0].media_url_https!=null, 'col-sm-12 task-details post-info': value.extended_entities.media[0].media_url_https==null}">
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <h4 ng-model="copiedText" ng-bind-html="value.text|toUrl" class="task-title">Top post text</h4>
+                            </div>
+                            <div class="col-sm-5 pr0px">
+                                <ul class="pl0px">
+									<li class="share"><i class="fa fa-share share"></i> 12 </li>
+									<li class="heart"><i class="fa fa-heart heart"></i> 23 </li>
+									<li class="retweet"><i class="fa fa-retweet"></i> 14 </li>
+								</ul>
+                            </div>
+                            <div class="col-sm-7">
+                                <span class="post-date">Jun 26, 2017 - 12:23 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt15px">
+                    <div class="col-sm-3">
+                        <label class="platform-bg"><i class="fa fa-twitter"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <h4>Top Post Campaign3</h4>
+            <div class="social-post twitter">
+                <div class="row">
+                    
+                    <div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3">
+                        <a class="tweet-img" ng-href="{{value.extended_entities.media[0].expanded_url}}" target="_blank">
+                           <img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div ng-class="{'col-sm-9 task-details post-info': value.extended_entities.media[0].media_url_https!=null, 'col-sm-12 task-details post-info': value.extended_entities.media[0].media_url_https==null}">
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <h4 ng-model="copiedText" ng-bind-html="value.text|toUrl" class="task-title">Top post text</h4>
+                            </div>
+                            <div class="col-sm-5 pr0px">
+                                <ul class="pl0px">
+									<li class="share"><i class="fa fa-share share"></i> 12 </li>
+									<li class="heart"><i class="fa fa-heart heart"></i> 23 </li>
+									<li class="retweet"><i class="fa fa-retweet"></i> 14 </li>
+								</ul>
+                            </div>
+                            <div class="col-sm-7">
+                                <span class="post-date">Jun 26, 2017 - 12:23 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt15px">
+                    <div class="col-sm-3">
+                        <label class="platform-bg"><i class="fa fa-twitter"></i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+@media (max-width:1300px){
+	.influencer-profile { display: block; width: 100%;overflow-x: auto;white-space: nowrap; padding-top: 6px;}
+	
+}
+
+@media (max-width:1199px){
+	body,html{font-size:9px;}
+	ul.platform-summary {display: block;overflow-x: auto;white-space: nowrap;width: 100%;}
+	ul.platform-summary li{margin-right:10px;}
+	.dis-flex .post-summary{width:88%;}
+	.col-5{width:33.33% !important;float:left;}
+	#user .user-listing li{width: 48% ;}
+}
+@media (max-width:1024px){	
+	.client-form .form-control,.client-form .socioselect{min-height:35px;}
+	.client-form .form-control {padding: 5px;}
+	.input-group-addon.calender-icon,.input-group-addon.input-icon{padding: 0 10px;}
+	.btn.btn-compose,a.btn.btn-compose,.btn.btn-default,.btn.btn-blank,.btn.btn-done,.btn.btn-post,a.btn.btn-default,button.btn.btn-default.prev-step,.btn.btn-default.addcomptr {height: 35px;padding: 6px 12px;}	
+	.review .tab-content {max-height:459px}
+	.nav li.right-btn{top: 2px;}
+	
+}
+@media(max-width:1023px){
+	body,html{font-size:8px;}
+
+}
+
+@media(min-width:1500px){
+	.post-img ul.imgone li.embed-responsive-16by9,ul.imgtwo li.embed-responsive-16by9 {
+		padding-bottom: 35% !important;
+	}
+}
+

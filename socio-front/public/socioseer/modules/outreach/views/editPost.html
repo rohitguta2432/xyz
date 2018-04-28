@@ -1,0 +1,721 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 p0px mt20px">
+		<form class="client-form compose" novalidate angular-validator name="editPostForm">
+				<div class="compose-post">
+
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="{{composeTab}}"><a href="#compose" aria-controls="compose" role="tab" data-toggle="tab">Compose</a></li>
+						<li role="presentation" class="{{scheduleTab}}"><a href="#schedule" aria-controls="schedule" role="tab" data-toggle="tab">Schedule</a></li>
+						<li role="presentation" class="{{audienceTab}}"><a href="#audience" aria-controls="audience" role="tab" data-toggle="tab">Audience</a></li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content mt20px">
+						<div role="tabpanel" class="tab-pane fade in {{composeTab}}"  id="compose">
+							<div class="post-editor">
+							<div class="row" ng-if="clientDropdown" style="margin-bottom: 25px;">
+									<div class="col-sm-3">
+										<div class="from-group height-auto">
+											<label>Client</label>
+											<div class="socioselect">
+												<select name="selectedClient" class="simp-select  form-control" ng-change="changeClient(selectedClient)" ng-model="selectedClient"
+												ng-options="item as item.clientName for item in clientData track by item.id" required>
+												<option value="">Select Client</option>
+												</select>
+											</div>
+
+										</div>
+									</div>
+							</div>
+								<div class="row">
+									<div class="col-sm-3">
+										<div class="from-group height-auto">
+											<label>Campaign</label>
+											<div class="socioselect">
+												<select name="currentCampaign" placeholder="Campaign" class="simp-select  form-control" ng-change="changeCampaign(currentCampaign)" ng-model="currentCampaign"
+												    ng-options="camp as camp.title for camp in campaignData">
+												<option value="">Select campaign</option>
+												</select>
+											</div>
+
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<div class="form-group height-auto">
+											<label>Social Media Channels</label>
+											<div class="btn-group socioselect multiselect">
+											
+												<a ng-if="mediaChannelErrorFlag" class='btn btn-blank dropdown-toggle form-control errorBorder'>{{selectedPlatforms}}
+													 	<span class='caret'></span>
+												</a>
+												<a ng-if="!mediaChannelErrorFlag" class='btn btn-blank dropdown-toggle form-control'>{{selectedPlatforms}}
+													 	<span class='caret'></span>
+												</a>
+
+												<ul class='dropdown-menu drop-check' aria-labelledby='dropdownMenu'>
+													<li class="check-box">
+														<label class="vote-check">
+															<input name="selectAll" type="checkbox" ng-model="selectAll" ng-click='checkAll()' />
+															<span>Select All</span>																 
+														</label>
+													</li>
+													<li class="check-box" ng-class="{'select-check check-box': option.select, 'check-box': option.select===false}" ng-repeat='option in optionSocial'>
+														<label ng-click='toggleSelectItem(option)' class="vote-check">
+															<input name="option.select" type="checkbox"  ng-model="option.select" />
+															<span > {{option.name}}</span>																
+														</label>
+													</li>
+												</ul>
+											</div>
+											
+											<label ng-if="mediaChannelErrorFlag" class="control-label has-error validationMessage">
+												<i class="fa fa-times"></i> {{mediaChannelError}}
+											</label>
+										</div>
+									</div>
+
+									<div class="col-sm-3">
+										<label>Handle</label>
+										<div class="btn-group socioselect multiselect" >
+											<a ng-if="selectedHandlersErrorFlag" class='btn btn-blank dropdown-toggle form-control errorBorder'>{{selectedHandler}}
+													 	<span class='caret'></span>
+											</a>
+											<a ng-if="!selectedHandlersErrorFlag" class='btn btn-blank dropdown-toggle form-control'>{{selectedHandler}}
+													 	<span class='caret'></span>
+											</a>
+											
+											<ul class='dropdown-menu drop-check' aria-labelledby='dropdownMenu'>
+												<li class="check-box">
+													<label class="vote-check">
+															<input name="selectAllHandle" type="checkbox" ng-model="selectAllHandle" ng-click='checkAllHandle()' />
+															<span>Select All</span>																 
+													</label>
+												</li>
+												<li class="check-box" ng-class="{'select-check check-box': handler.select, 'check-box': handler.select===false}" ng-repeat='handler in handlerPost'>
+													<label ng-click='toggleSelectHandle(handler)' class="vote-check">
+															<input name="handler.select" type="checkbox"  ng-model="handler.select" />
+															<span> {{handler.handler}}</span>																
+														</label>
+												</li>
+
+											</ul>
+										</div>
+										
+										<label ng-if="selectedHandlersErrorFlag" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i> {{selectedHandlersError}}</label>
+
+									</div>
+
+									<div class="col-sm-3 ">
+										<div class="form-group">
+											<label>Shorten URL</label>
+											<div class="input-group">
+												<input name="shortenURL" type="text" class="form-control input-text-addon" ng-model="shortenURL" placeholder="Enter URL" />
+												<span class="input-group-addon shorten" ng-click="doShortenUrl()">Shorten</span>
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+								<!-- ck editor -->
+								<div class="row ">
+									<div class="col-sm-12 ">
+										<textarea required name="tinymceModel"   ng-model="tinymceModel" cols="15"></textarea>
+										<!--textarea id="container-editor" name="footerContent">Content goes here....</textarea-->
+									</div>
+								</div>
+
+								<div class="row mt10px">
+									<div class="col-sm-3">
+										<div class="check-box">
+											<label class="vote-check">
+												<input type="checkbox" name="optionscheck" ng-model="notifyCheck" checked ><span>Notify me when sent</span>
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-9">
+										<div class="pull-right">
+											<!--<a href="suggestion.html" class="btn btn-blank"><i class="fa fa-file-text-o" aria-hidden="true"></i> Content Suggestion</a>-->
+											<span class="formSuccessMsg" ng-if="success">{{draftSuccessMsg}}</span>
+											<span class="formErrorMsg" ng-if="!success">{{draftSuccessMsg}}</span>
+
+											<a href="#preview" data-toggle="modal" class="btn btn-blank"><i class="fa fa-eye"></i> Preview</a>
+											<button type="submit" name="draft" ng-click="saveDraft(composePostForm)" class="btn btn-blank">
+											<i class="fa fa-save"></i>Save as Draft</button>
+											<button type="submit" name="saveSchecule" ng-click="saveAndSchedule()" aria-controls="schedule" role="tab" data-toggle="tab" class="btn btn-blank"><i class="fa fa-save"></i> Save & Schedule</button>
+										</div>
+									</div>
+								</div>
+							</div>
+					</form>
+					<form class="client-form compose">
+							<div class="post-suggestion hide">
+								<div class="row mt20px">
+									<div class="col-sm-5 ">
+										<h3 class="h3 m0px ">Content Suggestion
+											<a class="dropdown-toggle asort" data-toggle="dropdown" href="#"><span class="sort-icon "></span></a>
+											<ul class="dropdown-menu dropdown-messages dropdown-arrow dropdown-right">
+												<li>
+													<div class="col-sm-3">
+														<label>Industry:</label>
+													</div>
+													<div class="col-sm-9 mb5px">
+														<div class="socioselect form-control">
+															<select name="brands" placeholder="Select Numbers of Brands" class="simp-select">
+																						<option value="aa" class="Selected">Global</option>
+																						<option value="AL">Global</option>
+																						<option value="AK">Global</option>
+																						<option value="AZ">Global</option>												
+																					</select>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="col-sm-3">
+														<label>Competitor:</label>
+													</div>
+													<div class="col-sm-9 mb5px">
+														<div class="socioselect form-control">
+															<select name="brands1" placeholder="Select Numbers of Brands" class="simp-select">
+																						<option value="aa" class="Selected">SpiceJet</option>
+																						<option value="AL">SpiceJet</option>
+																						<option value="AK">SpiceJet</option>
+																						<option value="AZ">SpiceJet</option>												
+																					</select>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="col-sm-3">
+														<label>Campaign:</label>
+													</div>
+													<div class="col-sm-9 mb5px">
+														<div class="socioselect form-control">
+															<select name="brands2" placeholder="Select Numbers of Brands" class="simp-select">
+																						<option value="aa" class="Selected">Cheap Flights</option>
+																						<option value="AL">Cheap Flights</option>
+																						<option value="AK">Cheap Flights</option>
+																						<option value="AZ">Cheap Flights</option>												
+																					</select>
+														</div>
+													</div>
+												</li>
+											</ul>
+
+										</h3>
+									</div>
+
+									<div class="col-sm-2 pull-right ">
+										<div class="socioselect  mb10px fix-height">
+											<select name="state" id="select-state" placeholder="sort" class="simp-select form-control">
+																	<option value="aa" class="Selected">Sort</option>
+																	<option value="AL">Likes</option>
+																	<option value="aaa">Comments</option>
+																	<option value="ad">Shares</option>
+																	<option value="add">Recent</option>
+																</select>
+										</div>
+									</div>
+
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="review content-suggestion">
+											<!-- Nav tabs -->
+											<ul class="nav nav-tabs" role="tablist">
+												<li role="presentation" class="active"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">All</a></li>
+												<li role="presentation"><a href="#facebook" aria-controls="facebook" role="tab" data-toggle="tab">Facebook</a></li>
+												<li role="presentation"><a href="#twitter" aria-controls="twitter" role="tab" data-toggle="tab">Twitter</a></li>
+												<li role="presentation"><a href="#instagram" aria-controls="instagram" role="tab" data-toggle="tab">Instagram</a></li>
+												<li role="presentation"><a href="#youtube" aria-controls="youtube" role="tab" data-toggle="tab">Youtube</a></li>
+											</ul>
+
+											<!-- Tab panes -->
+											<div class="tab-content" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+												<div role="tabpanel" class="tab-pane active fade in" id="all">
+													<div class="row">
+														<div class="col-sm-12">
+															<ul class="pl0px key-list">
+																<li>#batterypark</li>
+																<li>#kansas</li>
+																<li>#supersaturday</li>
+																<li>#airtrain</li>
+																<li>#terminal4</li>
+																<li>#queenboss</li>
+																<li>#batterypark</li>
+																<li>#kansas</li>
+																<li>#supersaturday</li>
+																<li>#airtrain</li>
+																<li>#terminal4</li>
+																<li>#queenboss</li>
+																<li>#batterypark</li>
+																<li>#kansas</li>
+																<li>#supersaturday</li>
+																<li>#airtrain</li>
+																<li>#terminal4</li>
+																<li>#queenboss</li>
+																<li>#batterypark</li>
+																<li>#kansas</li>
+																<li>#supersaturday</li>
+																<li>#airtrain</li>
+																<li>#terminal4</li>
+																<li>#queenboss</li>
+															</ul>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-6">
+															<div class="content">
+																<div class="row">
+																	<div class="col-sm-3 col-md-3 col-lg-2">
+																		<img src="{{imageUrl }}review-pic.jpg" class="img-responsive center-block " />
+																	</div>
+																	<div class="col-sm-7 col-lg-8">
+																		<h5 class="post-title">Don't Stop Travelling Untill You've Seen The Sun Set From Every Coast</h5>
+																		<ul class="pl0px mb0px">
+																			<li>2 <i class="fa fa-share"></i></li>
+																			<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+																			<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+																		</ul>
+																		<p class="post-detail">Post 1, Campaign 1, Fri, Jan 1 2017 - 12:05 P.M</p>
+
+																	</div>
+																	<div class="col-sm-2 col-lg-2 platform-icon">
+																		<i class="fa fa-facebook-square"></i>
+																	</div>
+																	<div class="col-sm-12">
+																		<div class="pull-right">
+																			<a href="#" class="btn btn-compose btn-sm">Copy</a>
+																			<a href="#" class="btn btn-compose btn-sm">Add to content library</a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-6">
+															<div class="content">
+																<div class="row">
+																	<div class="col-sm-3 col-md-3 col-lg-2">
+																		<img src="{{imageUrl }}review-pic.jpg" class="img-responsive center-block " />
+																	</div>
+																	<div class="col-sm-7 col-lg-8">
+																		<h5 class="post-title">Don't Stop Travelling Untill You've Seen The Sun Set From Every Coast</h5>
+																		<ul class="pl0px mb0px">
+																			<li>2 <i class="fa fa-share"></i></li>
+																			<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+																			<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+																		</ul>
+																		<p class="post-detail">Post 1, Campaign 1, Fri, Jan 1 2017 - 12:05 P.M</p>
+
+																	</div>
+																	<div class="col-sm-2 col-lg-2 platform-icon">
+																		<i class="fa fa-linkedin"></i>
+																	</div>
+																	<div class="col-sm-12">
+																		<div class="pull-right">
+																			<a href="#" class="btn btn-compose btn-sm">Copy</a>
+																			<a href="#" class="btn btn-compose btn-sm">Add to content library</a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-6">
+															<div class="content">
+																<div class="row">
+																	<div class="col-sm-3 col-md-3 col-lg-2">
+																		<img src="{{imageUrl }}review-pic.jpg" class="img-responsive center-block " />
+																	</div>
+																	<div class="col-sm-7 col-lg-8">
+																		<h5 class="post-title">Don't Stop Travelling Untill You've Seen The Sun Set From Every Coast</h5>
+																		<ul class="pl0px mb0px">
+																			<li>2 <i class="fa fa-share"></i></li>
+																			<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+																			<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+																		</ul>
+																		<p class="post-detail">Post 1, Campaign 1, Fri, Jan 1 2017 - 12:05 P.M</p>
+
+																	</div>
+																	<div class="col-sm-2 col-lg-2 platform-icon">
+																		<i class="fa fa-twitter"></i>
+																	</div>
+																	<div class="col-sm-12">
+																		<div class="pull-right">
+																			<a href="#" class="btn btn-compose btn-sm">Copy</a>
+																			<a href="#" class="btn btn-compose btn-sm">Add to content library</a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-6">
+															<div class="content">
+																<div class="row">
+																	<div class="col-sm-3 col-md-3 col-lg-2">
+																		<img src="{{imageUrl }}review-pic.jpg" class="img-responsive center-block " />
+																	</div>
+																	<div class="col-sm-7 col-lg-8">
+																		<h5 class="post-title">Don't Stop Travelling Untill You've Seen The Sun Set From Every Coast</h5>
+																		<ul class="pl0px mb0px">
+																			<li>2 <i class="fa fa-share"></i></li>
+																			<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+																			<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+																		</ul>
+																		<p class="post-detail">Post 1, Campaign 1, Fri, Jan 1 2017 - 12:05 P.M</p>
+
+																	</div>
+																	<div class="col-sm-2 col-lg-2 platform-icon">
+																		<i class="fa fa-youtube"></i>
+																	</div>
+																	<div class="col-sm-12">
+																		<div class="pull-right">
+																			<a href="#" class="btn btn-compose btn-sm">Copy</a>
+																			<a href="#" class="btn btn-compose btn-sm">Add to content library</a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-12 ">
+															<a href="suggestion.html" class="pull-right"> <label>View All <i class="fa fa-angle-double-right"></i></label> </a>
+														</div>
+													</div>
+												</div>
+												<div role="tabpanel" class="tab-pane fade in" id="facebook">
+
+												</div>
+												<div role="tabpanel" class="tab-pane fade in" id="twitter">
+
+												</div>
+												<div role="tabpanel" class="tab-pane fade in" id="linkdin">
+
+												</div>
+												<div role="tabpanel" class="tab-pane fade in" id="youtube">
+
+												</div>
+												<div role="tabpanel" class="tab-pane" id="linkdin">
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div role="tabpanel" class="tab-pane fade in {{scheduleTab}}" id="schedule">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row">
+										<div class="col-sm-6">
+											<label>Frequency/Date Time Selection</label>
+										</div>
+										<div class="col-sm-6 ">
+											<button type="submit" name="addPlatform" ng-click="addPlatform()" class="btn btn-default pull-right mb10px"><span class="add-icon"></span> Add</button>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<!-- table-heading -->
+											<div class="flex-heading">
+												<div class="flex_child">
+													<label>Platform</label>
+												</div>
+												<div class="flex_child">
+													<label>Frequency</label>
+												</div>
+												<div class="flex_child">
+													<label>Start Date & Time</label>
+												</div>
+												<div class="flex_child">
+													<label> End Date & Time</label>
+												</div>
+												<div class="flex_child">
+													<label>Action</label>
+												</div>
+											</div>
+											<!-- table-heading end -->
+
+											<!-- first row -->
+											<div class="flex-parent" ng-repeat="sch in allPlatforms">
+												<div class="flex_child">
+													<div class="socioselect ">
+														<select name="platform" id="select-state" placeholder="Platform" class="simp-select form-control" ng-model="sch.platforms" ng-options="opt as opt.name for opt in optionSocial">
+															<option value="">Select platform</option>
+														</select>
+													</div>
+												</div>
+												<div class="flex_child">
+													<div class="socioselect ">
+														<select name="frequency" id="select-state" placeholder="frequency" class="simp-select form-control" ng-model="sch.frequency" ng-change="checkEndOption(sch.frequency)" ng-options="freq as freq.frequency for freq in allFrequency">	
+															<option value="">Select frequency</option>
+														</select>
+													</div>
+												</div>
+												<!-- repeat in this div-->
+												<div class="flex_child colmn_dir">
+													<div class="flex_subchild date" ng-repeat="sdt in sch.dateTime">
+														<div class="input-group">
+															<div class="dropdown datetime">
+																<a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown" data-target="#" href="#">
+																	<div class="input-group">
+																		<input name="startDT" id="date" class="form-control" placeholder="Start Date"  ng-model="sdt.startDT">
+																		<span class="input-group-addon calender-icon"><span class=" date-time-icon" ></span></span>
+
+																	</div>
+																</a>
+																<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+																	<datetimepicker data-ng-model="sdt.startDT"   data-datetimepicker-config="{ dropdownSelector: '.dropdown-toggle' }"></datetimepicker>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- repeat in this div-->
+												<div class="flex_child colmn_dir">
+													<div class="flex_subchild date" ng-repeat="edt in sch.dateTime">
+														<div class="input-group">
+															<div class="dropdown" ng-if="sch.frequency.id==9">
+																<a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown" data-target="#" href="#">
+																	<div class="input-group">
+																		<input type="text" disabled="true" id="date" name="endDT" class="form-control" placeholder="End Date" value="" ng-model="edt.endDT">
+																		<span class="input-group-addon calender-icon"><span class=" date-time-icon" ></span></span>
+
+																	</div>
+																</a>
+															</div>
+															<div class="dropdown" ng-if="sch.frequency.id!=9">
+																<a class="dropdown-toggle" id="dropdown" role="button" data-toggle="dropdown" data-target="#" href="#">
+																	<div class="input-group">
+																		<input name="endDT1" type="text" id="date" name="date" class="form-control" placeholder="End Date" value="" ng-model="edt.endDT">
+																		<span class="input-group-addon calender-icon"><span class=" date-time-icon" ></span></span>
+
+																	</div>
+																</a>
+																<ul class="dropdown-menu right-menu" role="menu" aria-labelledby="dLabel">
+																	<datetimepicker data-ng-model="edt.endDT" data-datetimepicker-config="{ dropdownSelector: '#dropdown' }">
+																	</datetimepicker>
+																</ul>
+															</div>
+														</div>
+													</div>
+
+												</div>
+												<!-- repeat in this div-->
+												<div class="flex_child colmn_dir">
+													<div class="flex_subchild" ng-repeat="dt in sch.dateTime">
+														<a ng-if="dt.id==0" ng-click="addDT(sch)"><span class="add-icon"></span></a>
+														<a ng-click="deleteDT(dt, sch)"><span class="trash-icon"></span></a>
+													</div>
+
+												</div>
+											</div>
+											<!-- second row -->
+
+										</div>
+									</div>
+
+									<div class="mt20px">
+										<img src="{{imageUrl }}schedule-graph.jpg" class="img-responsive" />
+									</div>
+									<div class="col-sm-12">
+										<div class="pull-right mt20px">
+											<a ng-click="saveSchecule()" data-toggle="tab" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Select Audience</a>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div role="tabpanel" class="tab-pane fade in {{audienceTab}}" id="audience">
+							<div class="row">
+
+								<div class="col-sm-6">
+									<div class="form-group height-auto">
+										<label>Select Audience</label>
+										<div class=" control-group ">
+											<input name="audInput" type="text" placeholder="Audience" ng-model="audInput" ng-keyup="addAudInput(audInput)" class="demo-default form-control input-tags"
+											    value="">
+											<ul id="suggestion" class=" client-list mlr15px" ng-if="totalAud.length>0">
+												<li ng-repeat="aud in totalAud" ng-click="selectedAudience(aud)">
+													<ng-if aud.id></ng-if>
+													{{aud.name}}
+												</li>
+											</ul>
+										</div>
+
+									</div>
+									<div class="form-group height-auto">
+										<div class="comma-seprated" ng-repeat="aud in selectedAud">
+											<div class="cancel-select">
+												<i class="fa fa-linkedin-square comma"></i>
+												<label>{{aud.name}}</label>
+												<i ng-click="deselectAud(aud)" class="fa fa-close facross"></i>
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12">
+									<label>Followers Suggestion </label>
+									<div class="follower ">
+										<div class="row">
+											<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account facebook">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right " aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right " aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 5 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account instagram">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 5 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account youtube">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-youtube" aria-hidden="true"></i> Youtube <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 5<i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account twitter">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 5 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 mt20px">
+									<div class="pull-right">
+										<a ng-click="sendForReview()" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Send for Review</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="preview-modal popupmodal " ng-if="tinymceModel">
+	<div class="modal fade review" tabindex="-1" role="dialog" id="preview" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content ">
+				<form class="client-form">
+					<div class="modal-header ">
+						<button type="button" name="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="{{opt.class}}" ng-if="opt.select" ng-repeat="opt in optionSocial">
+								<a href="{{opt.href}}" aria-controls="facebook" role="tab" data-toggle="tab">
+									{{opt.name}}
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-body">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane fade in active" id="facebook-post">
+								<div class="row">
+									<div class="col-sm-12" ng-bind-html="tinymceModel">
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade in" id="twitter-post">
+								<div class="row">
+									<div class="col-sm-12" ng-bind-html="tinymceModel">
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade in" id="youtube-post">
+								<div class="row">
+									<div class="col-sm-12" ng-bind-html="tinymceModel">
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+</div>

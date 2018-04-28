@@ -1,0 +1,101 @@
+<div class="page-wrapper header-wrapper white-bg">
+	<!-- top header -->
+	<div class="row ">
+		<nav class="navbar navbar-fixed-top white-bg" role="navigation" style="margin-bottom: 0">
+			<div class="navbar-header">
+				<a class="navbar-minimalize" ng-click="minimizeMenu()" target="_self">
+					<i class="fa fa-bars fa-3x "></i>
+				</a>
+			</div>
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown more-options">
+					<a class="dropdown-toggle" data-toggle="dropdown" ng-click="notificationMenu()" href="#">
+						<div class="col-sm-12">
+							<div class=" notification">
+								<span class="bell-icon"></span>
+								<span class="notification-icon" ng-show="noteCount>0">{{noteCount}}</span>
+							</div>
+						</div>
+					</a>
+					<div class="dropdown-menu dropdown-messages dropdown-arrow notification-list">
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">Notifications</h3>
+
+							</div>
+
+							<div class="panel-body p0px">
+								<label class="no-found ac p10px" ng-show="!noteData">No new notification</label>
+								<ul class="pl0px noti-list" ng-repeat="(noteKey, note) in noteData">
+									<li class="dis-flex new unread">
+										<div class="flex-ch1">
+											<span class="pending-app-icon"></span>
+										</div>
+										<div class="flex-ch2">
+											<label>{{noteKey}}</label>
+											<span class="clock">{{note.createdDate | date:'dd MMM yyyy h:mm a'}}</span>
+										</div>
+										<div class="flex-ch1 vertical-middle">
+											<span class="label label-pending minwidth">{{note}}</span>
+										</div>
+									</li>
+								</ul>
+
+							</div>
+
+							<div class="panel-footer"><a ui-sref="notification">View All</a></div>
+						</div>
+					</div>
+				</li>
+
+				<li class="dropdown more-options">
+					<a class="dropdown-toggle flex-center" data-toggle="dropdown" href="#">
+						<div class="dis-inl">
+							<div class="profile-pic">
+								<img ng-if="!currentUserProfileImage || currentUserProfileImage == 'null'" ng-src="{{imageUrl}}dummy-profile.jpg" class="img-responsive  center-block"
+								/>
+								<img ng-if="currentUserProfileImage && currentUserProfileImage != 'null'" ng-src="{{currentUserProfileImage}}" class="img-responsive  center-block "
+								/>
+								<!--<span class="user-active"></span> -->
+							</div>
+						</div>
+						<div class="dis-inl">
+							<label class="user-name">{{currentUserName}}</label>
+							<span class="user-role">{{currentUserRole}} <i class="flaticon-down-arrow"></i></span>
+						</div>
+					</a>
+					<ul class="dropdown-menu dropdown-messages dropdown-arrow">
+						<li>
+							<a ui-sref="myProfile">
+								<div class="drop-content">
+									<span class="flaticon-avatar flaticon"></span>
+									<span class="drop-name">My Profile</span>
+								</div>
+							</a>
+						</li>
+						<li ng-if="canShowClient && !isAdministrator" class="hide">
+							<a ui-sref="viewClient" ng-class="setClientIdFor()">
+								<div class="drop-content">
+									<span class="flaticon-avatar flaticon"></span>
+									<span class="drop-name">View Client</span>
+								</div>
+							</a>
+						</li>
+						<li>
+							<a href="#" ng-click="logout()">
+								<div class="drop-content">
+									<span class="flaticon-logout flaticon"></span>
+									<span class="drop-name">Logout</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+	</div>
+	<!-- /top header -->
+
+</div>
+<!-- / page wrapper -->
+</div>

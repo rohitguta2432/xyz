@@ -1,0 +1,114 @@
+<div class="wrapper wrapper-content">
+	<div class="container-fluid all-notifications">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- <ul class="pl0px notification-options pull-right">
+					<li><a href="#">Mark All Read</a></li>
+				</ul> -->
+			</div>
+		</div>
+		<div class="row">
+				<label class="no-found">{{errorNotification}}</label>
+			<ul class="pl0px all" >
+ 
+				 <li ng-class="note.status==18 ? 'dis-flex new unread ': 'dis-flex new read '" class="{{note.notificationType | lowercase}}" ng-repeat="note in noteData">
+					<div class="flex-ch1">
+						<i class="fa "></i>
+					</div>
+					<div class="flex-ch2">
+						<label ng-click="notificationClickEvent(note)">{{note.description?note.description:'N/A'}}</label> 
+						 <span class="clock">{{note.createdDate | date:'dd MMM yyyy h:mm a'}}</span>						
+					</div>
+
+				</li> 
+					</div>
+
+				<!--<li class="dis-flex new read event">
+					<div class="flex-ch1">
+						<i class="fa "></i>
+					</div>
+					<div class="flex-ch2">
+						<label>Facebook & Twitter slammed in the UK</label>
+						<span class="clock">2:50 hr ago</span>
+					</div>
+
+				</li>
+				<li class="dis-flex new read task">
+					<div class="flex-ch1">
+						<i class="fa"></i>
+					</div>
+					<div class="flex-ch2">
+						<label>Facebook & Twitter slammed in the UK</label>
+						<span class="clock">2:50 hr ago</span>
+					</div>
+
+				</li>
+				<li class="dis-flex new read matrix">
+					<div class="flex-ch1">
+						<i class="fa"></i>
+					</div>
+					<div class="flex-ch2">
+						<label>Facebook & Twitter slammed in the UK</label>
+						<span class="clock">2:50 hr ago</span>
+					</div>
+
+				</li>
+				<li class="dis-flex new read team">
+					<div class="flex-ch1">
+						<i class="fa"></i>
+					</div>
+					<div class="flex-ch2">
+						<label>Facebook & Twitter slammed in the UK</label>
+						<span class="clock">2:50 hr ago</span>
+					</div>
+
+				</li>
+				<li class="dis-flex new read duedate">
+					<div class="flex-ch1">
+						<i class="fa"></i>
+					</div>
+					<div class="flex-ch2">
+						<label>Facebook & Twitter slammed in the UK</label>
+						<span class="clock">2:50 hr ago</span>
+					</div>
+
+				</li>-->
+<!--				<li class="dis-flex new unread">
+					<div class="flex-ch1">
+						<span class="pending-app-icon"></span>
+					</div>
+					<div class="flex-ch2">
+						<label>Facebook & Twitter slammed in the UK</label>
+						<span class="clock">2:50 hr ago</span>
+						<span class="label label-pending">Pending approval</span>
+					</div>
+
+				</li>
+				<li class="dis-flex new event">
+					<div class="flex-ch1">
+						<span class="event-icon"></span>
+					</div>
+					<div class="flex-ch2">
+						<label>Holi: The festival</label>
+						<span class="clock">29 hr ago, 19/03/2017</span>
+					</div>
+
+				</li>
+				<li class="dis-flex new unread">
+					<div class="flex-ch1">
+						<span class="approved-icon"></span>
+					</div>
+					<div class="flex-ch2">
+						<label>Tech's new frontier: The human brain</label>
+						<span class="clock">2 hr ago</span>
+						<span class="label label-primary">Approved</span>
+					</div>
+
+				</li>-->
+			</ul>
+ 
+		</div>
+	</div>
+
+
+	<!-- /body part -->

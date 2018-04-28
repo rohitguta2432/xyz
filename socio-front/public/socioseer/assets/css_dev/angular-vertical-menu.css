@@ -1,0 +1,107 @@
+.sidebar-menu, .sidebar-menu ul {
+  font-size: 14px;
+  list-style: none;
+  list-style-position: outside;
+}
+
+.vertical-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vertical-menu a {
+  color: #555555;
+}
+
+.vertical-menu a:hover, .vertical-menu a:active, .vertical-menu a:focus {
+  outline: none;
+  text-decoration: none;
+  color: #222222;
+}
+
+.vertical-menu > li {
+  background-color: #f9f9f9;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.vertical-menu > li .active {
+  background-color: #f9f9f9;
+}
+
+.vertical-menu > li i, .vertical-menu > li span, .vertical-menu > li a {
+  cursor: inehrit;
+}
+
+.vertical-menu > li > a {
+  padding: 12px 5px 12px 15px;
+  display: block;
+}
+
+.vertical-menu > li > a .fa, .vertical-menu > li > a .glyphicon, .vertical-menu > li > a .ion {
+  width: 20px;
+}
+
+.vertical-menu .treeview-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.vertical-menu > li:first-child {
+  border-top: 1px solid #fff;
+}
+
+.vertical-menu .treeview-menu > li {
+  cursor: pointer;
+}
+
+.vertical-menu .treeview-menu > li > a {
+  padding: 10px 5px 10px 30px;
+  display: block;
+  margin: 0px 0px;
+  cursor: inherit;
+  border-top: 1px solid #fff;
+}
+
+.vertical-menu .treeview-menu > li > a .fa, .vertical-menu .treeview-menu > li > a .glyphicon, .vertical-menu .treeview-menu > li > a .ion {
+  width: 20px;
+  display: none;
+  border-bottom: 1px solid #fff;
+}
+
+.badge-danger {
+  background-color: #d43f3a;
+}
+
+.badge-warning {
+  background-color: #d58512;
+}
+
+.badge-success {
+  background-color: #398439;
+}
+
+.badge-info {
+  background-color: #269abc;
+}
+
+.badge-inverse {
+  background-color: #333333;
+}
+
+.child a:hover .fa-circle, .child .active a .fa-circle {
+  color: #5187c3
+}
+
+.vertical-menu .treeview-menu .active > a {
+  color: #5187c3;
+  background: #e8e7e7;
+}
+ .vertical-menu .treeview-menu a:hover {
+  color: #5187c3;
+}

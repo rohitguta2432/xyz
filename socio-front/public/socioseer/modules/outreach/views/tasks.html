@@ -1,0 +1,252 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 mt10px">
+			<div class="row">
+				<div class="col-sm-4 client-form" ng-show="adminClientDropdown">
+					<div class="form-group height-auto">
+						<label>Select Client</label>
+						<div class="socioselect">
+							<div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+							    options="clientOpt" selected-model="selectedClient" events="{ onItemSelect: changeClient, onItemDeselect: onDeselectClient }"></div>
+
+
+
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2 ">
+					<!-- <form class="client-form">
+						<label class="col-sm-3 p10px ar">Sort By:</label>
+						<div class="from-group col-sm-9">
+						
+							<div class="socioselect ">
+								<select class="simp-select form-control" placeholder="Sort By:">
+									<option value="OlderNew">Older - New</option>
+									<option value="NewOlder">New - Older</option>
+								</select>
+							</div>
+						</div>
+					</form> -->
+				</div>
+				<div class="col-sm-4 pull-right">
+					<form class="client-form">
+						<div class="form-group height-auto">
+							<label ng-show="adminClientDropdown">&nbsp;</label>
+							<div class="input-group">
+								<input type="text" class="form-control input-text-addon" ng-keyup="searchTasks($event)" ng-model="searchKey" placeholder="Search here..."
+								/>
+								<span class="input-group-addon search-icon" ng-if="searchKey.length" ng-click="getTasks(0, currentTabId)"><i class="fa fa-search"></i></span>
+								<span class="input-group-addon search-icon" ng-if="!searchKey.length"><i class="fa fa-search"></i></span>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt10px">
+		<div class="col-sm-12 ">
+			<div class="review task-list ">
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active all"><a ng-click="getTasks(0,1)" href="#all" aria-controls="all" role="tab" data-toggle="tab">All</a></li>
+					<li role="presentation" class="pending"><a ng-click="getTasks(0,2)" href="#pending" aria-controls="pending" role="tab" data-toggle="tab">Pending</a></li>
+					<li role="presentation" class="approved"><a ng-click="getTasks(0,3)" href="#approved" aria-controls="approved" role="tab" data-toggle="tab">Approved</a></li>
+					<li role="presentation" class="rejected"><a ng-click="getTasks(0,4)" href="#rejected" aria-controls="rejected" role="tab" data-toggle="tab">Rejected</a></li>
+					<li role="presentation" class="expired">
+						<a ng-click="getTasks(0,5)" href="#expired" aria-controls="expired" role="tab" data-toggle="tab">Expired</a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<label class="no-found p10px" ng-show="noTaskFound.length > 0">{{noTaskFound}}</label>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="all" >
+						<div class="row">
+							<div class="col-sm-12 " ng-repeat="allTask in allTasksData">
+								<div class="{{allTask.statusClass.class}}">
+									<div class="row">
+										<div class="col-sm-9">
+											<h4 class="task-title">
+												<span class="color">Campaign Title: </span><a ng-click="reviewApprove(allTask)">
+													{{allTask.campaignData.title?allTask.campaignData.title:'NA'}}
+												</a>
+											</h4>
+										</div>
+										<div class="col-sm-2"><span class="{{allTask.statusClass.classspan}}">{{allTask.statusClass.tag}}</span></div>  
+										<div class="col-sm-12">
+											<div class="task-details">
+												<ul>
+													<li><b>Author:</b> {{allTask.postSchedule.post.createdName?allTask.postSchedule.post.createdName:'NA'}}</li>
+													<li><b>Created on:</b> {{allTask.createdDate  | date:'dd MMM h:mm a'}}</li>
+													<li class="del-red"><b>Due:</b> {{allTask.postSchedule.runAt  | date:'dd MMM yyyy'}}</li>
+												</ul>
+											</div>
+											<div class="task-desc">
+												<p ng-bind-html="allTask.postSchedule.post.text | parseTagsTwitter"></p>
+											</div>
+											<div class="task-keywords">
+												<ul>
+													<li ng-bind-html="hash | parseTagsTwitter" ng-repeat="hash in allTask.campaignData.hashtags">{{hash | parseTagsTwitter}}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="approved" >
+						<div class="row">
+							<div class="col-sm-12 " ng-repeat="allTask in allApprovedData">
+								<div class="{{allTask.statusClass.class}}">
+									<div class="row">
+										<div class="col-sm-9">
+											<h4 class="task-title">
+												<span class="color">Campaign Title: </span><a ng-click="reviewApprove(allTask)">
+													{{allTask.campaignData.title?allTask.campaignData.title:'NA'}}
+												</a>
+											</h4>
+										</div>
+										<div class="col-sm-2"><span class="{{allTask.statusClass.classspan}}">{{allTask.statusClass.tag}}</span></div>
+										<div class="col-sm-12">
+											<div class="task-details">
+												<ul>
+													<li><b>Author:</b> {{allTask.postSchedule.post.createdName?allTask.postSchedule.post.createdName:'NA'}}</li>
+													<li><b>Created on:</b> {{allTask.createdDate  | date:'dd MMM h:mm a'}}</li>
+													<li class="del-red"><b>Due:</b> {{allTask.postSchedule.runAt  | date:'dd MMM yyyy'}}</li>
+												</ul>
+											</div>
+											<div class="task-desc">
+												<p class="mb10px" ng-bind-html="allTask.postSchedule.post.text | parseTagsTwitter"></p>
+											</div>
+											<div class="task-keywords">
+												<ul>
+													<li ng-bind-html="hash | parseTagsTwitter" ng-repeat="hash in allTask.campaignData.hashtags">{{hash | parseTagsTwitter}}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="rejected">
+						<div class="row">
+							<div class="col-sm-12 " ng-repeat="allTask in allRejectedData">
+								<div class="{{allTask.statusClass.class}}">
+									<div class="row">
+										<div class="col-sm-9">
+											<h4 class="task-title">
+												<span class="color">Campaign Title: </span><a ng-click="reviewApprove(allTask)">
+													{{allTask.campaignData.title?allTask.campaignData.title:'NA'}}
+												</a>
+											</h4>
+										</div>
+										<div class="col-sm-2"><span class="{{allTask.statusClass.classspan}}">{{allTask.statusClass.tag}}</span></div>
+										<div class="col-sm-12">
+											<div class="task-details">
+												<ul>
+													<li><b>Author:</b> {{allTask.postSchedule.post.createdName?allTask.postSchedule.post.createdName:'NA'}}</li>
+													<li><b>Created on:</b> {{allTask.createdDate  | date:'dd MMM h:mm a'}}</li>
+													<li class="del-red"><b>Due:</b> {{allTask.postSchedule.runAt  | date:'dd MMM yyyy'}}</li>
+												</ul>
+											</div>
+											<div class="task-desc">
+												<p class="mb10px" ng-bind-html="allTask.postSchedule.post.text | parseTagsTwitter"></p>
+											</div>
+											<div class="task-keywords">
+												<ul>
+													<li ng-bind-html="hash | parseTagsTwitter" ng-repeat="hash in allTask.campaignData.hashtags">{{hash | parseTagsTwitter}}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="pending" >
+						<div class="row">
+							<div class="col-sm-12 " ng-repeat="allTask in allPendingData">
+								<div class="{{allTask.statusClass.class}}">
+									<div class="row">
+										<div class="col-sm-9">
+											<h4 class="task-title">
+												<span class="color">Campaign Title: </span><a ng-click="reviewApprove(allTask)">
+													{{allTask.campaignData.title?allTask.campaignData.title:'NA'}}
+												</a>
+											</h4>
+										</div>
+										<div class="col-sm-2"><span class="{{allTask.statusClass.classspan}}">{{allTask.statusClass.tag}}</span></div>
+										<div class="col-sm-12">
+											<div class="task-details">
+												<ul>
+													<li><b>Author:</b> {{allTask.postSchedule.post.createdName?allTask.postSchedule.post.createdName:'NA'}}</li>
+													<li><b>Created on:</b> {{allTask.createdDate  | date:'dd MMM h:mm a'}}</li>
+													<li class="del-red"><b>Due:</b> {{allTask.postSchedule.runAt  | date:'dd MMM yyyy'}}</li>
+												</ul>
+											</div>
+											<div class="task-desc">
+												<p ng-bind-html="allTask.postSchedule.post.text | parseTagsTwitter"></p>
+											</div>
+											<div class="task-keywords">
+												<ul>
+													<li ng-bind-html="hash | parseTagsTwitter" ng-repeat="hash in allTask.campaignData.hashtags">{{hash |parseTagsTwitter }}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="expired">
+						<div class="row">
+							<div class="col-sm-12 " ng-repeat="allTask in allExpiredData">
+								<div class="{{allTask.statusClass.class}}">
+									<div class="row">
+										<div class="col-sm-9">
+											<h4 class="task-title">
+												<span class="color">Campaign Title: </span><a ng-click="reviewApprove(allTask)">
+													{{allTask.campaignData.title?allTask.campaignData.title:'NA'}}
+												</a>
+											</h4>
+										</div>
+										<div class="col-sm-2"><span class="{{allTask.statusClass.classspan}}">{{allTask.statusClass.tag}}</span></div>
+										<div class="col-sm-12">
+											<div class="task-details">
+												<ul>
+													<li><b>Author:</b> {{allTask.postSchedule.post.createdName?allTask.postSchedule.post.createdName:'NA'}}</li>
+													<li><b>Created on:</b> {{allTask.createdDate  | date:'dd MMM h:mm a'}}</li>
+													<li class="del-red"><b>Due:</b> {{allTask.postSchedule.runAt  | date:'dd MMM yyyy'}}</li>
+												</ul>
+											</div>
+											<div class="task-desc">
+												<p class="mb10px" ng-bind-html="allTask.postSchedule.post.text | parseTagsTwitter"></p>
+											</div>
+											<div class="task-keywords">
+												<ul>
+													<li ng-bind-html="hash | parseTagsTwitter" ng-repeat="hash in allTask.campaignData.hashtags">{{hash |parseTagsTwitter }}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+		<div ng-include="'includes/pagination.html'" class="page-nation mt20px">

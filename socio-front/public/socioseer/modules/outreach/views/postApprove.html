@@ -1,0 +1,275 @@
+<style>
+	.socioselect:after,
+	.droparrow:after {
+		display: none;
+	}
+</style>
+
+<div class="container-fluid reviewapprove">
+	<form class="client-form">
+		<div class=" ">
+			<div class="col-sm-12 mtb20px campaign-statistic">
+				<div class="row dis-flex">
+					<div class="col-sm-3 left">
+						<div class="details">
+							<label>Campaign Title</label>
+							<h3>{{currentTaskData.campaignData.title}} </h3>
+						</div>
+					</div>
+					<div class="col-sm-3 left">
+						<div class="details">
+							<label>Social Platform</label>
+							<h3>
+								<span class="platform-icon" ng-repeat="pf in currentTaskData.platformUniqueList">
+									<!--{{pf.name}}
+									{{$last?'':','}}-->
+									<i class="fa fa-{{pf.name}} fa-3x"></i>
+								</span>
+							</h3>
+						</div>
+					</div>
+					<div class="col-sm-3 left">
+						<div class="details">
+							<label>Handles</label>
+							<ul class="handle-list">
+								<li ng-repeat="handles in currentTaskData.socialHandlers">
+									<a ng-if="handles.socialPlatform.name=='twitter'" ng-href="https://twitter.com/{{handles.accessToken.screen_name}}" target="_blank">
+                                  		@{{handles.accessToken.screen_name}} 
+									</a>
+									<a ng-if="handles.socialPlatform.name=='facebook'" ng-href="https://facebook.com/{{handles.accessToken.pageId}}" target="_blank">
+                                  		 {{handles.accessToken.screen_name}} 
+									</a>
+
+								</li>
+								<!--<span ng-repeat="pf in currentTaskData.campaignData.handles">
+									{{pf.accessToken.screen_name}}
+									{{$last?'':','}}
+								</span>-->
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-3 left">
+						<div class="details">
+							<label>Targeted Audience</label>
+							<h3>
+								<span ng-repeat="aud in currentTaskData.targetAudience">{{aud.name}}{{$last?'':','}}</span>
+								<span ng-if=" !currentTaskData.targetAudience">NA</span>
+							</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 ">
+				<div class="review">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+
+
+						<li role="presentation" ng-class="{'active' : $first, 'twitter': pltf.name.toLowerCase()=='twitter', 'facebook': pltf.name.toLowerCase()=='facebook' }"
+						    ng-repeat="pltf in currentTaskData.platformUniqueList">
+
+							<a href="#{{pltf.name}}-post" role="tab" data-toggle="tab">
+									{{pltf.name}}
+								</a>
+
+						</li>
+
+					</ul>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane fade in " id="{{pltf.name}}-post" ng-class="{'active' : $first}" ng-repeat="pltf in currentTaskData.platformUniqueList">
+							<div class="row">
+								<div class="col-sm-12">
+									<!-- tw -->
+									<div class="permalink for-twitter" id="permalink-tweet" ng-if="pltf.name=='twitter'">
+										<div class="contents clearfix">
+											<div class="permalink-header">
+												<img ng-if="!getHandleImage(currentTaskData.socialHandlers,'twitter')" ng-src="{{imageUrl}}dummy-profile.jpg" id="twit_logo"
+												    class=" avatar js-action-profile-avatar" />
+												<img ng-if="getHandleImage(currentTaskData.socialHandlers,'twitter')" id="twit_logo" ng-src="{{getHandleImage(currentTaskData.socialHandlers,'twitter')}}"
+												    class="avatar js-action-profile-avatar" />
+
+												<div data-aria-label-part="" class="fullname js-action-profile-name show-popup-with-id">
+													<span class="txt_twit_name">
+														<strong>{{getHandleName(currentTaskData.socialHandlers,'twitter')}}</strong>
+													</span>
+												</div>
+												<div class="lineheight">
+													<span ng-if="handles.socialPlatform.name=='twitter'" ng-repeat="handles in currentTaskData.socialHandlers" class="txt_twit_account">
+														<a   ng-href="https://twitter.com/{{handles.accessToken.screen_name}}" target="_blank">
+															@{{handles.accessToken.screen_name}} 
+														</a>
+													</span>
+												</div>
+											</div>
+
+											<p class="desc" ng-bind-html="currentTaskData.text | parseTagsTwitter"></p>
+
+											<div id="box-image" class="box-image">
+
+												<ul ng-class="{'imgone': currentTaskData.medias.length == 1, 'imgtwo': currentTaskData.medias.length == 2, 'imgthree': currentTaskData.medias.length == 3, 'imgfour': currentTaskData.medias.length == 4,'default':currentTaskData.medias.length > 4}">
+													<li ng-repeat="(key,value) in currentTaskData.medias">
+														<img ng-src="{{value.url}}" class="img-responsive" ng-if="value.mediaType=='IMAGE'" />
+														<video controls style="max-width: 100%; height: auto;" class="embed-responsive-item" ng-src="{{value.url}}" ng-if="value.mediaType=='VIDEO'"></video>
+													</li>
+												</ul>
+											</div>
+											<div class="task-details">
+												<ul class="pull-right">
+													<li>Created Date &amp; Time: {{currentTaskData.createdDate | date:'dd MMM h:mm a'}}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+
+									<div class="permalink for-facebook" id="facebook-data" ng-if="pltf.name=='facebook'">
+										<div class="contents clearfix">
+											<div class="permalink-header">
+												<img ng-if="!getHandleImage(currentTaskData.socialHandlers,'facebook')" ng-src="{{imageUrl}}dummy-profile.jpg" id="twit_logo"
+												    class=" avatar js-action-profile-avatar" />
+												<img ng-if="getHandleImage(currentTaskData.socialHandlers,'facebook')" id="twit_logo" ng-src="{{getHandleImage(currentTaskData.socialHandlers,'facebook')}}"
+												    class="avatar js-action-profile-avatar" />
+
+												<div data-aria-label-part="" class="fullname js-action-profile-name show-popup-with-id">
+													<span class="txt_twit_name"><strong>{{getHandleName(currentTaskData.socialHandlers,'facebook')}}</strong></span>
+												</div>
+												<div class="lineheight">
+													<span ng-if="handles.socialPlatform.name=='facebook'" ng-repeat="handles in currentTaskData.socialHandlers" class="txt_twit_account">
+														<a ng-href="https://facebook.com/{{handles.accessToken.pageId}}" target="_blank">
+															{{handles.accessToken.screen_name}} 
+														</a>
+													</span>
+												</div>
+											</div>
+											<h4 class="review-title">{{currentTaskData.campaignTitle}}</h4>
+											<p class="desc" ng-bind-html="currentTaskData.text | parseTagsFacebook"></p>
+											<div id="box-image" class="box-image">
+
+												<ul ng-class="{'imgone': currentTaskData.medias.length == 1, 'imgtwo': currentTaskData.medias.length == 2, 'imgthree': currentTaskData.medias.length == 3, 'imgfour': currentTaskData.medias.length == 4,'default':currentTaskData.medias.length > 4}">
+													<li ng-repeat="(key,value) in currentTaskData.medias">
+														<img ng-src="{{value.url}}" class="img-responsive" ng-if="value.mediaType=='IMAGE'" />
+														<video controls style="max-width: 100%; height: auto;" class="embed-responsive-item" ng-src="{{value.url}}" ng-if="value.mediaType=='VIDEO'"></video>
+													</li>
+												</ul>
+											</div>
+											<div class="task-details">
+												<ul class="pull-right">
+													<li>Created Date &amp; Time: {{currentTaskData.createdDate | date:'dd MMM h:mm a'}}</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--<div role="tabpanel" class="tab-pane  fade in" id="facebook-post" ng-class="{'active' : $first}">
+							<div class="row">
+
+								<div class="col-sm-9">
+									<h4 class="review-title">{{currentTaskData.campaignTitle}}</h4>
+									<p class="author">{{currentTaskData.createdDate | date:'MMM dd, yyyy'}}</p>
+									<p class="desc" ng-bind-html="currentTaskData.text"></p>
+								</div>
+							</div>
+						</div>-->
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+
+
+		<div class="row" ng-show="scheduleData">
+			<div class="col-sm-12 ">
+				<div class="row">
+					<div class="col-sm-12">
+						<!-- table-heading -->
+						<div class="flex-heading">
+							<div class="flex_child">
+								<label>Platform</label>
+							</div>
+							<div class="flex_child">
+								<label>Frequency</label>
+							</div>
+							<div class="flex_child">
+								<label>Start Date & Time</label>
+							</div>
+							<div class="flex_child">
+								<label> End Date & Time</label>
+							</div>
+							<div class="flex_child " style="display:none">
+								<label> asdsadse</label>
+							</div>
+						</div>
+
+						<!-- table-heading end -->
+						<!-- first row -->
+						<div class="flex-parent" ng-repeat="sch in scheduleData track by $index">
+							<div class="flex_child">
+								<div class="socioselect">
+									<select ng-disabled="true" id="select-state" placeholder="Platform" class="simp-select form-control">
+																				<option value="aa" class="Selected">{{sch.platform}}</option>
+																			</select>
+								</div>
+							</div>
+							<div class="flex_child">
+								<div class="socioselect ">
+									<select ng-disabled="true" id="select-state" placeholder="frequency" class="simp-select form-control">
+																				<option value="aa" class="Selected">{{sch.frequency}}</option>
+																			</select>
+								</div>
+							</div>
+							<!-- repeat in this div-->
+							<div class="flex_child colmn_dir">
+								<div class="flex_subchild date" ng-repeat="st in sch.timeArr">
+									<div class="input-group calendarIcon">
+
+										<!--<input type="text" class="form-control" placeholder="Start Date" />-->
+										<div class="readOnly-div">
+											<span>{{st.startTime | date:'MMM dd, yyyy h:mm a'}}</span>
+										</div>
+										<span style="background: none;" class="input-group-addon calender-icon"><span class=" date-time-icon" ></span></span>
+									</div>
+								</div>
+							</div>
+							<!-- repeat in this div-->
+							<div class="flex_child colmn_dir">
+								<div class="flex_subchild date" ng-repeat="st in sch.timeArr">
+									<div class="input-group calendarIcon" ng-if="sch.frequencyCode!=9">
+
+										<div class="readOnly-div">
+											<span>{{st.endTime  | date:'MMM dd, yyyy h:mm a'}}</span>
+										</div>
+										<!--<input type="text" class="form-control" placeholder="End Date" />-->
+										<span style="background: none;" class="input-group-addon calender-icon"><span class="date-time-icon" ></span></span>
+									</div>
+								</div>
+							</div>
+							<div class="flex_child colmn_dir" ng-hide="true"></div>
+
+
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row" ng-show="currentTaskData.status!=14">
+
+			<div class="col-sm-12 mt20px ">
+				<div class="form-group height-auto">
+					<label>Post Comment</label>
+					<textarea ng-model="postCommentArea" readonly class="form-control" placeholder="Post Comments..."></textarea>
+				</div>
+			</div>
+		</div>
+
+	</form>
+</div>

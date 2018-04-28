@@ -1,0 +1,50 @@
+<div class="modal-body"
+    ng-swipe-left="Lightbox.nextImage()"
+    ng-swipe-right="Lightbox.prevImage()">
+ 
+    <!-- close button -->
+    <button class="img-preview close" aria-hidden="true" ng-click="$dismiss()">×</button>
+
+
+  <div class="lightbox-image-container">
+    <!-- caption -->
+    <div class="lightbox-image-caption">
+      <span>{{Lightbox.imageCaption}}</span>
+    </div>
+
+    <!-- image -->
+    <img ng-if="!Lightbox.isVideo(Lightbox.image)"
+        lightbox-src="{{Lightbox.imageUrl}}" class="img-responsive center-block">
+
+    <!-- video -->
+    <div ng-if="Lightbox.isVideo(Lightbox.image)"
+        class="embed-responsive embed-responsive-16by9">
+      <!-- video file embedded directly -->
+      <video ng-if="!Lightbox.isSharedVideo(Lightbox.image)"
+          lightbox-src="{{Lightbox.imageUrl}}"
+          controls
+          autoplay="true">
+      </video>
+
+      <!-- video embedded with an external service using
+           `ng-videosharing-embed` -->
+      <embed-video ng-if="Lightbox.isSharedVideo(Lightbox.image)"
+          lightbox-src="{{Lightbox.imageUrl}}"
+          ng-href="{{Lightbox.imageUrl}}"
+          iframe-id="lightbox-video"
+          class="embed-responsive-item">
+        <a ng-href="{{Lightbox.imageUrl}}">Watch video</a>
+      </embed-video>
+    </div>
+  </div>
+  <div class="btn-nav" ng-if="Lightbox.images.length > 1">
+      <a class="btn btn-xs prev" ng-click="Lightbox.prevImage()">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+      </a>
+
+
+      <a class="btn btn-xs next" ng-click="Lightbox.nextImage()">
+       <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+    </div>
+</div>

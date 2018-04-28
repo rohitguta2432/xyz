@@ -1,0 +1,123 @@
+/* app css stylesheet */
+
+.menu {
+    list-style: none;
+    border-bottom: 0.1em solid black;
+    margin-bottom: 2em;
+    padding: 0 0 0.5em;
+}
+
+.menu:before {
+    content: "[";
+}
+
+.menu:after {
+    content: "]";
+}
+
+.menu > li {
+    display: inline;
+}
+
+.menu > li + li:before {
+    content: "|";
+    padding-right: 0.3em;
+}
+
+.error-msg {
+    text-align: center;
+    color: #f00;
+    font-size: 14px;
+    padding-bottom: 5px;
+    font-weight: 400;
+}
+
+text.highcharts-credits {
+    display: none;
+}
+
+
+/****Parag*/
+
+.task-desc p, .task-desc a {
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin:5px 0;
+    color: #555;
+}
+
+.custom_dropdown .btn-group.multiselect-parent {
+    width: 100%;
+}
+
+.last {
+    display: none;
+}
+
+.custom_dropdown button.dropdown-toggle.btn.btn-default {
+    width: 100%;
+    display: block;
+    text-align: left;
+    min-height: 35px;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    border-color: #adadad;
+    text-transform: capitalize;
+    transition: none;
+    -webkit-transition: none;
+    -moz-transition: none;
+}
+
+.custom_dropdown button.dropdown-toggle.btn.btn-default:hover {
+    background: #fff;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.post-editor {
+    padding: 0 15px;
+}
+
+.suggestion-box .nav>li>a {
+    color: #1195ce;
+    font-size: 1.4rem;
+}
+
+.scroll-wrapper.scrollbar-dynamic.navbar-default.navbar-static-side.ng-scope {
+    position: absolute !important;
+}
+
+.review .tab-content.create-team {
+    overflow: visible;
+}
+
+textarea{
+    resize: vertical;
+}
+
+.popupmodal .client-form .form-group label {
+    margin-bottom: 5px
+}
+form:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+.graph-icon .fa{
+    color:#aaa;
+    font-size:1.5rem;
+    text-align:center;
+}
+.graph-icon .fa-thumbs-up{
+    color:#295396;
+}
+.graph-icon .fa-share{
+    color:#17bf63;
+}
+.graph-icon .fa-favourite{
+    color:#e0245e;
+}
+.graph-icon .fa-comments{
+    color:#0c97d3;
+}

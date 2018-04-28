@@ -1,0 +1,137 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-10 mtb20px">
+			<form class="client-form" novalidate angular-validator name="createTeamForm" autocomplete="off">
+				<div class="col-sm-12">
+					<div class="form-group height-auto">
+						<div class="row">
+							<div class="col-sm-3">
+								<label class="pt10px pull-right">Team Name:</label>
+							</div>
+
+							<div class="col-sm-9">
+								<input type="text" placeholder="Team Name" class="form-control" ng-model="teamName" name="teamName" validator="formValidator.alphabetOnly(teamName) === true"
+								 invalid-message="formValidator.alphabetOnly(teamName)" required />
+							</div>
+						</div>
+					</div>
+
+					<div ng-if="isAdmin" class="form-group height-auto">
+						<div class="row">
+							<div class="col-sm-3">
+								<label class="pt10px pull-right">Select Client</label>
+							</div>
+
+							<div class="col-sm-9">
+								<div class="">
+									<!--<select ng-model="obj.teamClient" name="obj.teamClient" id="select-industry" ng-change="check()" class="form-control"  ng-options="item as item.clientName for item in clientData track by item.id" required>
+									<option  value="">Select Client</option>
+									</select>-->
+									<div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+									 options="clientOpt" selected-model="selectedClient" events="{ onItemSelect: changeClient, onItemDeselect: deselectClient }"></div>
+									<label ng-if="selectedClientError" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i>
+										Required
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group height-auto">
+						<div class="row">
+							<div class="col-sm-3">
+								<label class="pt10px pull-right">User:</label>
+							</div>
+							<div class="col-sm-9">
+								<div class="row">
+									<div class="col-sm-12">
+										<div disabled="isUserDisabled" ng-class="{postErrorFieldBorder : selectedUserError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraMultiSettings"
+										 options="userOpt" selected-model="selectedUsers" events="{ onItemSelect: changeUser }"></div>
+										<label ng-if="selectedUserError" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i>
+										Required
+									</label>
+										<!--<input ng-disabled="isAdmin && !obj.teamClient" type="text" placeholder="User" ng-model="teamUserInput" ng-keyup="addTeamUser($event, teamUserInput)"
+										 class="form-control" name="teamUserInput" validator="listValidator(teamUserInput) === true" invalid-message="listValidator(teamUserInput)"
+										/>
+
+										<label class="note error-text">{{noUserFound}}</label>
+
+										<ul id="suggestion" ng-if="teamMembers.length>0" class="client-list	mlr15px">
+											<li ng-repeat="(key,value) in teamMembers" ng-click="selectedUserInTeam(value)" onchange="teamUserInput">
+												<ng-if value.id==></ng-if>
+												{{value.firstName + ' ' + value.lastName}}
+											</li>
+										</ul>-->
+									</div>
+									<!--<div class="col-sm-12">
+										<ul class="team-listing pl0px ">
+											<li ng-repeat="user in selectedUsers" onchange="teamUserInput">
+												<label>{{ user.firstName + ' ' + user.lastName }} </label>
+												<span ng-click="deselectUserInTeam(user)" class="close-sm-icon"></span>
+											</li>
+										</ul>
+									</div>-->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group height-auto">
+						<div class="row">
+							<div class="col-sm-3">
+								<label class="pt10px pull-right">Content Approver:</label>
+							</div>
+							<div class="col-sm-9">
+								<div class="row">
+									<div class="col-sm-12">
+										<!--<input ng-disabled="isAdmin && !obj.teamClient" type="text" placeholder="Approver name" class="form-control" ng-model="selecetdApproverBy"
+										 ng-keyup="addApprover($event, selecetdApproverBy)" name="selecetdApproverBy" validator="apprverListValidator(selecetdApproverBy) === true"
+										 invalid-message="apprverListValidator(selecetdApproverBy)" />-->
+
+
+										<div disabled="isApproverDisabled" ng-class="{postErrorFieldBorder : selectedAppError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+										 options="appOpt" selected-model="selectedApprover" events="{ onItemSelect: changeApprover }"></div>
+										<label ng-if="selectedAppError" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i>
+										Required
+									</label>
+
+									</div>
+									<!--<label class="note plr15px">{{noApproverFound}}</label>-->
+
+									<!--<div class="col-sm-12">
+
+										<ul id="suggestion" class=" client-list mlr15px" ng-if="teamApprover.length>0">
+											<li ng-repeat="value in teamApprover" ng-click="selectedApprover(value)" onchange="selecetdApproverBy">
+												{{value.firstName + ' ' + value.lastName}}
+											</li>
+										</ul>
+
+										<ul class="team-listing pl0px mtb20px">
+											<li ng-if="teamCreatedBy">
+												<label ng-model="teamCreatedBy">{{teamCreatedBy.firstName + ' ' + teamCreatedBy.lastName}} </label>
+												<span><i class="close-sm-icon" ng-click="deselectApprover()" ></i></span></li>
+										</ul>
+									</div>-->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group mt10px">
+						<div class="row">
+							<div class="col-sm-3">
+
+							</div>
+							<div class="col-sm-9">
+
+								<input type="submit" name="submit" class="btn btn-compose" value="Save" ng-click="createNewTeam(createTeamForm)" />
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

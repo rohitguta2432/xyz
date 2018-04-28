@@ -1,0 +1,52 @@
+<div class="setting-content permission">
+    <div class="{{roleClass}}">
+        <table class="table table-striped table-bordered table-hover settings">
+            <thead>
+                <th>Roles/Permissions</th>
+                <th class="role">All </th>
+                <th class="role">Create</th>
+                <th class="role">Read </th>
+                <th class="role">Update</th>
+                <th class="role last-items">Delete</th>
+            </thead>
+        </table>
+        <div class="table-scroll">
+            <table class="table table-striped table-bordered table-hover settings">
+                <tbody>
+                    <tr>
+                        <!--<td style="text-align: center;position: absolute;width: 100%;" colspan="6">
+                            <label><img ng-src="{{imageUrl}}loader.gif" style="width: 25%;"></label>
+                        </td>-->
+                    </tr>
+                    <tr ng-repeat="(key, entity) in existRoleData">
+                        
+                        <td><label>{{entity.displayName}}<!-- {{entity.name}}--></label></td>
+
+                        <td class="ac role">
+                            <div class="check-box">
+                                <label class="vote-check">
+								<input type="checkbox" ng-model="check"  ng-disabled="viewCheckBoxValue || entity.isDisabled" ng-click="checkAll(key,check,key)" ng-checked="entity.checkAll=='1' && !entity.isDisabled" >
+     							<span></span>
+							    </label>
+                            </div>
+                        </td>
+
+                        <td ng-repeat="(k, value) in entity.role_permissions" class="ac role">
+                            <div class="check-box">
+                                <label class="vote-check">
+													<input  type="checkbox"  ng-disabled="viewCheckBoxValue || value.isDisabled" ng-model="checkInd"  ng-checked="value.status=='1' && !value.isDisabled"  ng-click="checkIndCheck(key,checkInd,value.name)">
+													<span></span>
+												</label>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+<!--    <div style="position: absolute; top: 30%; left: 45%;">
+        <img ng-src="{{imageUrl}}loader.gif" style="width: 30%;">
+    </div>-->
+</div>

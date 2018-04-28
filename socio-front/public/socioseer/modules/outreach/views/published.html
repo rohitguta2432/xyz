@@ -1,0 +1,298 @@
+<style type="text/css">
+    .published #calendarDiv.calendarDiv {
+        height: 0px;
+        overflow: hidden;
+        border: 0px;
+    }
+
+    .published #calendarDiv.calendarDiv.opened {
+        height: auto;
+        overflow: auto;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row " ng-if="clientDropdown">
+        <div class="col-sm-4 client-form ">
+            <div class="form-group height-auto">
+                <label>Select Client</label>
+                <div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings" options="clientOpt" selected-model="selectedClient"
+                    events="{ onItemSelect: changeClient, onItemDeselect: onDeselectClient }"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="published panel">
+                <div class="panel-heading">
+                    <div class="col-sm-3  brd-right">
+                        <label class="p10px">Filter : Date <i id="calenderIcon" class="fa fa-angle-down filter-circle"></i></label>
+                        <div id="dateRange" class="center-arrow">
+                            <form class="client-form" novalidate angular-validator name="filterForm" autocomplete="off">
+                                <div class="row text-center">
+                                    <div class="date col-sm-6">
+                                        <div class="input-group ">
+                                            <datepicker date-max-limit="{{maxDate | date:'yyyy-MM-dd'}}" date-format="d MMMM,y" datepicker-show="true">
+                                                <input required ng-change="resetEndDate()" ng-model="fStartDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control"
+                                                    name="fStartDate" />
+                                            </datepicker>
+                                            <span class="input-group-addon calender-icon"><span class="date-icon"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="date col-sm-6">
+                                        <div class="input-group ">
+                                            <datepicker date-format="d MMMM,y" datepicker-show="{{visibility}}" date-min-limit="{{fStartDate}}" date-max-limit="{{maxDate | date:'yyyy-MM-dd'}}">
+                                                <input required ng-model="fEndDate" type="text" placeholder="End Date" class="angular-datepicker-input form-control" name="fEndDate"
+                                                />
+                                            </datepicker>
+                                            <span class="input-group-addon calender-icon"><span class=" date-icon" ></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="date col-sm-12 mt20px">
+                                        <button id="resetHiddenCal" class="btn hide btn-blank" type=" class=" btn btn-blank "" name="resetForm" ng-click="resetForm(filterForm)">RESET</button>
+                                        <button type="submit" name="submit" class="btn btn-compose filterBtn" ng-click="filterPostByDate(filterForm)">Filter</button>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-7 p7px brd-right client-form sm-drop">
+                        <form name="helloForm" novalidate angular-validator>
+                            <button id="resetHidden" class="btn hide btn-blank" type=" class=" btn btn-blank "" name="resetForm" ng-click="resetForm(helloForm)">RESET</button>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="button-group socioselect">
+                                        <select class="simp-select form-control" name="pubPlatform" ng-model="pubPlatform" ng-change="filterPubPost(pubPlatform)"
+                                            ng-options="platform as platform.name for platform in optionSocial">
+																	<option value="">Select Platform</option>
+																</select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="button-group socioselect">
+                                        <select ng-disabled="selectedClient.length==0" name="adminClient" class="simp-select  form-control" ng-change="changeCampaign(selectedCampaign)"
+                                            ng-model="selectedCampaign" ng-options="item as item.title for item in campaign track by item.id">
+																	<option value="">Select Campaign</option>
+																</select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-1 brd-right">
+                        <a id="openCalender" class="calender" href="#"><span class="date-icon"></span></a>
+                    </div>
+                    <div class="col-sm-1 p7px">
+                        <button ng-disabled="!showResetButton" id="resetIt" type="submit" name="submit" class="btn btn-blank">Reset</button>
+                    </div>
+                </div>
+                <div id="calendarDiv" class="calendarDiv dropdown-arrow">
+                </div>
+
+                <div class="panel-body dis-flex">
+                    <div class="col-sm-3 p0px brd-right ">
+                        <div class="all_posts" id="allPost" ng-scrollbars ng-scrollbars-config="configScroll">
+                            <ng-include src="'includes/loader.html'"></ng-include>
+
+                            <ul ng-if="dataAvail" class="post-list">
+                                <!-- <li class="division-title day">
+																<label></label>
+															</li> -->
+
+                                <li ng-repeat="post in publishedPost" class="published-post read" ng-class="{active: $first==true}" id="post{{$index}}" ng-click="getPostDetails(post,$index)">
+                                    <div class="dis-flex publish-check">
+                                        <div class="dis-flex custom-width-70">
+                                            <!-- <label class="check" ><input type="checkbox" name="optionscheck" id="" value="" checked ><span></span></label> -->
+                                            <h5 class="p-name ">{{post.campaignName}}</h5>
+                                        </div>
+                                        <!--<ul class=" mb0px">
+											<li class="marker" ng-click="markFavourite(post,$index)" id="marker{{$index}}">
+												<i class="fa fa-star-o" aria-hidden="true"></i>
+											</li>
+										</ul>-->
+                                        <ul class="mb0px platform-icon platform custom-width-30">
+                                            <li ng-if="(post.platform.name | lowercase) == 'facebook'"><i class="fa fa-facebook-official comma"></i></li>
+                                            <li ng-if="(post.platform.name | lowercase) == 'twitter'"><i class="fa fa-twitter comma"></i></li>
+
+                                        </ul>
+                                    </div>
+                                    <h4>{{post.post.text}}</h4>
+                                    <!-- Post Text -->
+                                    <div class="post-author">
+                                        <ul>
+                                            <li>Author: <b>{{post.post && post.post.createdName?post.post.createdName:"NA"}}</b></li>
+                                            <li> Created Date: <b>{{post.createdDate| date:'dd MMMM, yyyy h:mm:ss a'}}</b></li>
+											 <li> Post Status: <strong>{{post.postHandlers[0].status==200?"Published on twitter":"Declined by twitter"}}</strong></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul ng-if="!dataAvail" class="post-list">
+                                <label class="no-post p20px">{{postContent}}</label>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 p0px ">
+                        <div class="">
+                            <div class="division-title vertical-middle">
+                                <label>{{postContent.campaignName}}</label>
+                                <ul class="mb0px platform-icon platform pull-right">
+                                    <li ng-if="(postContent.platform.name | lowercase) == 'facebook'"><i class="fa fa-facebook-official comma "></i></li>
+                                    <li ng-if="(postContent.platform.name | lowercase) == 'twitter'"><i class="fa fa-twitter comma"></i></li>
+
+                                </ul>
+                            </div>
+                            <div class="published-post-detail" ng-if="!dataAvail">
+                                <label>No content published during specified period.</label>
+                            </div>
+
+                            <div class="published-post-detail" ng-if="dataAvail" ng-scrollbars ng-scrollbars-config="configScroll">
+                                <div class="col-sm-12 ">
+                                    <div ng-if="(postContent.platform.name | lowercase) == 'twitter'" class="post-content" ng-bind-html="postContent.post.text | parseTagsTwitter">
+                                        {{postContent.post.text | parseTagsTwitter}}
+                                    </div>
+                                    <div ng-if="(postContent.platform.name | lowercase) == 'facebook'" class="post-content" ng-bind-html="postContent.post.text | parseTagsFacebook">
+                                        {{postContent.post.text | parseTagsFacebook}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" ng-if="postContent.post.mediaUrls.length > 0">
+                                    <div class="post-img">
+                                        <!--<ul ng-class="{'imgone': selectedMedia.length == 1, 'imgtwo': selectedMedia.length == 2, 'imgthree': selectedMedia.length == 3, 'imgfour': selectedMedia.length == 4,}">-->
+                                        <ul ng-class="{'imgone': postContent.post.mediaUrls.length == 1, 'imgtwo': postContent.post.mediaUrls.length == 2, 'imgthree': postContent.post.mediaUrls.length == 3, 'imgfour': postContent.post.mediaUrls.length == 4,'default': postContent.post.mediaUrls.length > 4}">
+                                            <!-- dynamic class according to image count -->
+                                            <li ng-repeat="(key,value) in postContent.post.mediaUrls" ng-class="{'embed-responsive embed-responsive-16by9 single-video': value.mediaType=='VIDEO'}">
+                                                <img ng-src="{{value.url}}" class="img-responsive center-block" ng-if="value.mediaType=='IMAGE'" />
+
+                                                <video ng-if="value.mediaType=='VIDEO'" class="embed-responsive-item" controls>
+                                                    <source ng-src="{{value.url}}" type="video/mp4">
+                                                </video>
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+
+                                    <div class="published-details">
+
+                                        <div ng-if="clientDropdown"><label class="col-sm-3"><b>Client Name:</b> </label><label class="col-sm-9">{{postContent.clientName?postContent.clientName:"NA"}}</label></div>
+                                        <div class="full-length"><label class="col-sm-3"><b>Brand:</b> </label><label class="col-sm-9">{{postContent.post && postContent.post.brandName?postContent.post.brandName:"NA"}}</label></div>
+                                        <div class="full-length"><label class="col-sm-3"><b>Handle:</b> 	</label><label class="col-sm-9">
+												<!--<span ng-repeat="(hand,value) in postContent.selectedHandlers">
+                                               
+												<span  ng-if="hand.toLowerCase()==postContent.platform.name.toLowerCase()">
+													<span ng-repeat="(key,handle) in value ">
+                                                        
+                                                        <span ng-repeat="h in postContent.postHandlers">
+
+                                                                <a ng-if="h.handlerId==key && hand.toLowerCase()=='twitter'" ng-href="https://twitter.com/i/web/status/{{h.socialPostIds[0]}}" target="_blank"> {{handle}} </a>
+                                                               
+                                                                <span ng-if="hand.toLowerCase()!='twitter'"> {{handle}} </span>
+                                                            
+                                                        </span>
+													<span ng-if="!$last">, </span>
+													</span>	
+													
+												</span>
+												
+												</span>-->
+												
+												<span ng-repeat="(hand,value) in postContent.post.socialHandlerName">
+													{{value}} {{$last?"":","}}
+												</span>
+												<span ng-if="!postContent.post.socialHandlerName"> NA </span>
+
+										</label>
+                                        </div>
+                                        <div class="full-length"><label class="col-sm-3"><b>Author:</b></label><label class="col-sm-9"> {{postContent.post && postContent.post.createdName?postContent.post.createdName:"NA"}}</label></div>
+                                        <div class="full-length"><label class="col-sm-3"><b>Scheduled Date & Time:</b> </label><label class="col-sm-9">{{postContent.runAt | date:'dd MMMM, yyyy h:mm:ss a'}}</label></div>
+                                        <!--<div class="full-length"><label class="col-sm-3"><b>Audience:</b> </label><label class="col-sm-9">
+											<span ng-if="postContent.post.audiences.length>0" ng-repeat="aud in postContent.post.audiencesName"> {{aud}}<span ng-if="!$last">, </span></span>
+											<span ng-if="postContent.post.audiences.length==0"> NA </span>
+										</label></div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--<div class="add-modal popupmodal" >
+	<div class="modal fade" tabindex="-1" role="dialog" id="opencal" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" id="popcalendar">
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+</div>-->
+
+<div class="preview-modal popupmodal ">
+    <div class="modal fade" tabindex="-1" role="dialog" id="campaignPreview" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content ">
+                <form class="client-form">
+                    <div class="modal-header ">
+                        <button type="button" name="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                        <h4>Campaign Title: <b>{{alertCampaign.postData[0].post.campaignTitle}}</b></h4>
+                    </div>
+                    <div class="modal-body p0px">
+                        <!-- Tab panes -->
+                        <div class="client-form">
+                            <div class="row">
+
+                                <div class="col-sm-12">
+                                    <ul>
+                                        <li class="post-listing" ng-repeat="ps in alertCampaign.postData">
+                                            <div class="vertical-middle">
+                                                <div class="platform-icon">
+
+
+
+                                                    <i ng-if="(ps.platform.name | lowercase) == 'twitter'" class="fa fa-twitter fa-3x"></i>
+                                                    <i ng-if="(ps.platform.name | lowercase) == 'facebook'" class="fa fa-facebook-official fa-3x"></i>
+
+                                                </div>
+                                                <div class="">
+                                                    <div class="task-desc">
+                                                        <p><a ng-click="getPostDetail(ps.post)">{{ps.post.text}}</a></p>
+                                                    </div>
+                                                    <div class="task-details">
+                                                        <ul>
+                                                            <li>Author: {{ps.post.createdName?ps.post.createdName:'NA'}}</li>
+                                                            <li>Created on: {{ps.createdDate | date:'dd
+                                                                MMM yyyy h:mm a'}}</li>
+                                                            <li>Due: {{ps.runAt | date:'dd MMM yyyy h:mm
+                                                                a'}}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->

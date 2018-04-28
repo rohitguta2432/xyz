@@ -1,0 +1,1 @@
+!function(e){"use strict";var n=function(n){return{restrict:"A",link:function(t,i,u){var s=i.find("> nav > ul");s.addClass("metismenu");var r=""!==u.eehMetisMenu?e.fromJson(u.eehMetisMenu):{};n(function(){s.metisMenu(r)})}}};e.module("eehMetisMenu",[]).directive("eehMetisMenu",["$timeout",n])}(angular);

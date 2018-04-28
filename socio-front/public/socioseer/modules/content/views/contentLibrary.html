@@ -1,0 +1,568 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 content-header">
+			<div class="row">
+				<div class="col-sm-2">
+					<a data-toggle="modal" ng-click="resetFormData(addContentForm,addMediaForm)" href="#{{formModal}}"><button type="submit" class="btn btn-compose"><span class="fa fa-plus"></span> Add</button></a>
+				</div>
+
+				<div class="col-sm-4"></div>
+				<div class="col-sm-2">
+					<form class="client-form">
+						<div class="from-group height-auto mb0px">
+
+						</div>
+					</form>
+				</div>
+				<div class="col-sm-4">
+					<form class="client-form">
+						<div class="form-group height-auto mb0px">
+							<div class="input-group">
+								<input type="text" ng-keyup="searchCLients($event)" class="form-control input-text-addon" ng-model="searchKey" placeholder="Search"
+								/>
+								<span class="input-group-addon search-icon" ng-if="searchKey.length" ng-click="getContentView(0)"><i class="fa fa-search"></i></span>
+								<span class="input-group-addon search-icon" ng-if="!searchKey.length"><i class="fa fa-search"></i></span>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	</form>
+</div>
+
+<div class="row">
+	<div class="col-sm-12 content-tab library">
+		<div class=" ">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#content" ng-click="selectedTab('content')" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
+				<li role="presentation">
+					<a href="#media" ng-click="selectedTab('media')" aria-controls="media" role="tab" data-toggle="tab">Media</a>
+				</li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="content">
+					<div class="row">
+						<div class="col-sm-12 no-found" ng-if="countValue==0">
+							{{contentDataMsg}}
+						</div>
+						<div class="col-sm-12" ng-if="countValue>0" ng-repeat="content in contentData">
+							<!--| orderBy: content.createdDate: true ">-->
+							<div class="content-box">
+								<div class="row">
+									<!--<div class="col-sm-3">
+										<div class="content-img">
+											<ul ng-class="{'imgone': content.media.length == 1, 'imgtwo': content.media.length == 2, 'imgthree': content.media.length == 3, 'imgfour': content.media.length == 4,'default': content.media.length > 4}">
+												<li ng-repeat="(key,value) in content.media">
+													<img ng-src="{{value.url}}" class="img-responsive" />
+												</li>
+											</ul>
+											
+										</div>
+									</div>
+									<div class="col-sm-9">-->
+										<div class="col-sm-7">
+											<h4 class="content-title">
+												{{content.title===null?'NA':content.title}}
+											</h4>
+										</div>
+										<div class="col-sm-5">
+											<ul class="content-action">
+
+												<li style="position: relative;">
+													<a href="javascript:void(0)" title="Copy" ngclipboard data-clipboard-target="#content{{$index}}">
+														<i class="fa fa-files-o" aria-hidden="true"></i>
+													</a>
+													<span style="display:none;position: absolute; right: 5px;  font-size: 12px; opacity: 0.8;">Copied</span>
+												</li>
+												<li>
+													<a ng-click="editContentIndex($index)" href="javascript:void(0)" title="Edit">
+														<i class="fa fa-pencil-square-o"  aria-hidden="true"></i>
+													</a>
+												</li>
+												<li>
+													<a ng-click="deleteRecord(content)" href="javascript:void(0)" title="Delete">
+														<i class="fa fa-trash" aria-hidden="true"></i>
+													</a>
+												</li>
+											</ul>
+										</div>
+										<div class="col-sm-12">
+											<div class="task-details">
+												<ul>
+													<li>
+														<b>Created Date:</b> <span>{{content.createdDate===null?'NA':content.createdDate | date:'EEE, MMM dd yyyy'}}</span>
+													</li>
+													<li>
+														<b>Author:</b> {{content.authorName===null?'NA':content.authorName}}
+													</li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-sm-12">
+											<div class="content-desc">
+												<p id="content{{$index}}" ng-bind-html="content.postDescription===null?'NA':content.postDescription | parseTagsTwitter">
+													{{content.postDescription===null?'NA':content.postDescription | parseTagsTwitter}}
+												</p>
+											</div>
+										</div>
+										<div class="col-sm-12">
+											<div class="content-share">
+												<b>Source URL:</b>
+												<span target="_blank" ng-if="!content.postURL">
+															NA
+												</span>
+												<a target="_blank" ng-if="content.postURL" ng-href="{{content.postURL}}">
+															{{content.postURL}}
+														</a>
+											</div>
+										</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="media">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="no-found">{{mediaDataError}}</div>
+							<ul class="gallery gallery5">
+								<li ng-repeat="image in images" class="col-5 plr5px">
+									<div class="gallery-img" ng-class="{'embed-responsive embed-responsive-16by9':image.type == 'video'}">
+										<a ng-click="Lightbox.openModal(images, $index)">
+											<video ng-if="image.type == 'video'" class="video-reponsive embed-responsive-item" ng-src="{{image.thumbUrl}}"></video>
+											<img ng-if="image.type != 'video'" ng-src="{{image.thumbUrl}}" class=" img-responsive">
+										</a>
+										<div class="delete">
+											<span class="trash-icon" ng-click="deleteRecord(image)"></span>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="page-nation mt20px">
+				<ng-include src="'includes/pagination.html'"></ng-include>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="add-modal popupmodal" ng-show="contentForm">
+	<div class="modal fade" tabindex="-1" role="dialog" id="addContent" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form class="client-form" novalidate angular-validator name="addContentForm">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<h4 class="modal-title" id="gridSystemModalLabel">Add Content</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row ">
+							<div ng-if="clientDropdown">
+								<div class="form-group  plr10px">
+									<div class="col-sm-4">
+										<label class="pt10px">Select Client:</label>
+									</div>
+									<div class="col-sm-8">
+										<!--<div class="socioselect">
+											<select name="selectedClient" class="simp-select  form-control" ng-change="changeClient(selectedClient)" ng-model="selectedClient"
+											 ng-options="item as item.clientName for item in clientData track by item.id" required>
+												<option value="">Select Client</option>
+											</select>
+										</div>-->
+										<div class="">
+											
+											<div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+											 options="clientOpt" selected-model="selectedClientData" events="{ onItemSelect: changeClientDropDown, onItemDeselect: onDeselectClient }"></div>
+
+										</div>
+										<label ng-if="selectedClientError" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i>
+										Required
+									</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Add Title:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<input type="text" class="form-control" placeholder="Title" ng-model="contentTitle" name="contentTitle" validator="formValidator.alphabetOnly(contentTitle) === true"
+									 invalid-message="formValidator.alphabetOnly(contentTitle)" required/>
+
+								</div>
+							</div>
+
+							<div class="form-group  plr10px textarea">
+								<div class="col-sm-4">
+									<label class="pt10px">Description:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<textarea class="form-control" placeholder="Description" ng-model="description" name="description" validator="formValidator.alphabetOnly(description) === true"
+									 invalid-message="formValidator.alphabetOnly(description)" required></textarea>
+
+								</div>
+							</div>
+
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Keywords:</label>
+								</div>
+								<div class="col-sm-8">
+									<tags-input ng-model="contentKeywords" class="form-control tag-input" placeholder="Add Keywords" name="keywords" id="keywordsData"
+									 on-tag-added="tagAddedKeywords($tag)"></tags-input>
+								</div>
+							</div>
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Source URL:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input type="text" placeholder="URL" class="form-control light-text" ng-model="contentSourceUrl" name="contentSourceUrl"
+									 validator="formValidator.isValidUrl(contentSourceUrl) === true" invalid-message="formValidator.isValidUrl(contentSourceUrl)"
+									/>
+
+								</div>
+							</div>
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Image:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input multiple type="file" id="media-img-content" class="form-control" ngf-select="" ng-model="file" name="file" ngf-pattern="'image/*'"
+									 accept="image/gif, image/png, image/jpeg" ng-change="previewFiles(file)" ngf-max-height="10000" ngf-max-size="40MB"
+									/>
+									<label class="note">Maximum size of 4 MB is allowed</label>
+									<div> {{fileLimitError }}</div>
+									<span ng-repeat="fd in filesData track by $index" class="san-inline-block img_choose_section">
+												<img ng-src="{{fd.src}}" class="img-responsive img-thumbnail contentimg" />
+												<i ng-click="removeFile($index)" class="fa fa-times-circle-o"></i>
+										</span>
+									<img ng-if="filesData.length>0" ng-src="{{imageUrl}}add-more.jpg" ng-click="addMoreContentMedia()" class="img-responsive img-thumbnail contentimg"
+									/>
+
+
+								</div>
+							</div>
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Video:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input type="file" class="form-control" ng-change="mergeVideo(videoFile)" ngf-select ng-model="videoFile" name="videoFile"
+									 ngf-pattern="video/*" accept="video/*" ngf-max-size="1024MB" />
+
+
+									<label class="note">Supported video format mp4 &amp; Max 15 MB is allowed</label>
+
+									<div ng-if="videoFile && videoFile.type=='video/mp4'" class="embed-responsive embed-responsive-16by9 mt10px">
+										<video class="embed-responsive-item" controls ngf-src="videoFile"></video>
+									</div>
+									<label class="has-error" ng-if="videoFile && videoFile.type!='video/mp4'"> Invalid File Type</label>
+
+									<!--<label>Or</label>
+									<input type="text" placeholder="https://www.youtube.com/watch?v=YXjYfpqg8Z0" class="form-control " ng-keyup="getThumb(youTubeUrl)"
+									 ng-model="youTubeUrl" name="youTubeUrl" />
+									<img ng-src="{{thumbSrc}}" class="img-responsive youtube-thumb" />-->
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-12 ">
+							<button ng-disabled="isClicked" type="submit" class="btn btn-compose" ng-click="addContent(addContentForm)" name="submit">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+
+<div class="add-modal popupmodal">
+	<div class="modal fade" tabindex="-1" role="dialog" id="editContent" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form class="client-form" novalidate angular-validator name="editContentForm">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<h4 class="modal-title" id="gridSystemModalLabel">Edit Content</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row ">
+
+							<div ng-if="clientDropdown">
+
+								<div class="form-group  plr10px">
+									<div class="col-sm-4">
+										<label class="pt10px">Select Client:</label>
+									</div>
+									<div class="col-sm-8">
+										<div class="socioselect">
+											<select name="selectedClient" class="simp-select  form-control" ng-change="changeClient(editContentData.selectedClient)"
+											 ng-model="editContentData.selectedClient" ng-options="item as item.clientName for item in clientData track by item.id"
+											 required>
+												<option value="">Select Client</option>
+											</select>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Add Title:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<input type="text" class="form-control" placeholder="Title" ng-model="editContentData.title" name="contentTitleEdit" validator="formValidator.alphabetOnly(contentTitleEdit) === true"
+									 invalid-message="formValidator.alphabetOnly(contentTitleEdit)" required/>
+
+
+								</div>
+							</div>
+
+
+							<div class="form-group  plr10px textarea">
+								<div class="col-sm-4">
+									<label class="pt10px">Description:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<textarea class="form-control" placeholder="Description" ng-model="editContentData.postDescription" name="editContentData.postDescription"
+									 validator="formValidator.alphabetOnly(editContentData.description) === true" invalid-message="formValidator.alphabetOnly(editContentData.postDescription)"
+									 required></textarea>
+
+								</div>
+							</div>
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Keywords:</label>
+								</div>
+								<div class="col-sm-8">
+									<tags-input ng-model="editContentData.tags" class="form-control tag-input" placeholder="Add Keywords" name="editContentData.tags"
+									 id="keywordsData" on-tag-added="tagAddedKeywords($tag)"></tags-input>
+								</div>
+							</div>
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Source URL:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input type="text" placeholder="URL" class="form-control light-text" ng-model="editContentData.postURL" name="editContentData.postURL"
+									 validator="formValidator.isValidUrl(editContentData.postURL) === true" invalid-message="formValidator.isValidUrl(editContentData.postURL)"
+									/>
+
+								</div>
+							</div>
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Media:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input multiple type="file" id="media-img-edit" class="form-control" ngf-select="" ng-model="file" name="file" ngf-pattern="'image/*'"
+									 accept="image/gif, image/png, image/jpeg" ng-change="previewFiles(file)" ngf-max-height="10000" ngf-max-size="40MB"
+									/>
+
+									<label class="note">Maximum size of 10 MB is allowed</label>
+									<div>{{fileLimitError }}</div>
+									<span ng-repeat="fd in filesData track by $index" class="san-inline-block img_choose_section">
+											<img ng-src="{{fd.src}}" class="img-responsive img-thumbnail contentimg" />
+											<i ng-click="removeFile($index)" class="fa fa-times-circle-o"></i>
+										</span>
+
+									<img ng-if="filesData.length>0" ng-src="{{imageUrl}}add-more.jpg" ng-click="addMoreMediaEdit()" class="img-responsive img-thumbnail contentimg"
+									/>
+
+								</div>
+							</div>
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Video:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input type="file" class="form-control" ng-change="mergeVideo(videoFile)" ngf-select ng-model="videoFile" name="videoFile"
+									 ngf-pattern="video/*" accept="video/*" ngf-max-size="1024MB" />
+
+
+									<label class="note">Supported video format mp4 &amp; Max 15 MB is allowed</label>
+
+									<div ng-if="videoFile && videoFile.type=='video/mp4'" class="embed-responsive embed-responsive-16by9 mt10px">
+										<video class="embed-responsive-item" controls ngf-src="videoFile"></video>
+									</div>
+									<label class="has-error" ng-if="videoFile && videoFile.type!='video/mp4'"> Invalid File Type</label>
+
+									<label>Or</label>
+									<input type="text" placeholder="https://www.youtube.com/watch?v=YXjYfpqg8Z0" class="form-control " ng-keyup="getThumb(youTubeUrl)"
+									 ng-model="youTubeUrl" name="youTubeUrl" />
+									<img ng-src="{{thumbSrc}}" class="img-responsive youtube-thumb" />
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-12 ">
+							<button type="submit" class="btn btn-compose" ng-click="updateContent(editContentForm)" name="submit">Update</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+
+<div class="add-modal popupmodal" ng-show="mediaForm">
+	<div class="modal fade" tabindex="-1" role="dialog" id="addMedia" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form class="client-form" novalidate angular-validator name="addMediaForm">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<h4 class="modal-title" id="gridSystemModalLabel">Add Media</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row" ng-if="clientDropdown">
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Select Client:</label>
+								</div>
+								<div class="col-sm-8">
+									<div class="socioselect">
+										<!--	<select name="selectedClient" class="simp-select  form-control" ng-change="changeClient(selectedClient)" ng-model="selectedClient"
+										 ng-options="item as item.clientName for item in clientData track by item.id" required>
+												<option value="">Select Client</option>
+											</select>-->
+										<div class="">
+											
+											<div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+											 options="clientOpt" selected-model="selectedClientData" events="{ onItemSelect: changeClientDropDown, onItemDeselect: onDeselectClient }"></div>
+
+										</div>
+										<label ng-if="selectedClientError" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i>
+										Required
+									</label>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Keywords:</label>
+								</div>
+								<div class="col-sm-8">
+									<tags-input ng-model="mediaKeywords" class="form-control tag-input" placeholder="Add Keywords" name="mediaKeywords" on-tag-added="tagAddedKeywords($tag)"></tags-input>
+								</div>
+							</div>
+
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Image:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<input multiple type="file" id="media-img-media" class="form-control" ngf-select="" ng-model="file" name="file" ngf-pattern="'image/*'"
+									 accept="image/gif, image/png, image/jpeg" ng-change="previewFiles(file)" ngf-max-height="10000" ngf-max-size="40MB"
+									/>
+									<label class="note">Maximum size of 4 MB is allowed</label>
+									<div>{{fileLimitError }}</div>
+									<label class="has-error"> {{fileError}}</label>
+
+									<span ng-repeat="fd in filesData track by $index" class="san-inline-block img_choose_section">
+										<img ng-if="fd.type=='image'" ng-src="{{fd.src}}" class="img-responsive img-thumbnail contentimg" />
+										<i ng-click="removeFile($index)" class="fa fa-times-circle-o"></i>
+									</span>
+
+									<img ng-if="filesData.length>0" ng-src="{{imageUrl}}add-more.jpg" ng-click="addMoreMedia()" class="img-responsive img-thumbnail contentimg"
+									/>
+
+								</div>
+
+							</div>
+
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Video:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input type="file" class="form-control" ng-change="mergeVideo(videoFile)" ngf-select ng-model="videoFile" name="videoFile"
+									 ngf-pattern="video/*" accept="video/*" ngf-max-size="1024MB" />
+									<label class="note">Supported video format mp4 &amp; Max 15 MB is allowed</label>
+
+									<div ng-if="videoFile && videoFile.type=='video/mp4' && videoPreview" class="embed-responsive embed-responsive-16by9 mt10px">
+										<video class="embed-responsive-item" controls ngf-src="videoFile"></video>
+									</div>
+									<label class="has-error" ng-if="videoFile && videoFile.type!='video/mp4'"> Invalid File Type</label>
+									<!--<label>Or</label>
+									<input type="text" placeholder="https://www.youtube.com/watch?v=YXjYfpqg8Z0" class="form-control " ng-keyup="getThumb(youTubeUrl)"
+									 ng-model="youTubeUrl" name="youTubeUrl" />
+									<img ng-src="{{thumbSrc}}" class="img-responsive youtube-thumb" />-->
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-12 ">
+							<button ng-disabled="isClicked" type="submit" ng-disabled="mediaSaveButton" class="btn btn-compose" ng-click="addMedia(addMediaForm)" name="submit">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+<ng-include src=popUpModal></ng-include>

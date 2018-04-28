@@ -1,0 +1,368 @@
+<!-- Progress bar -->
+<div class="container-fluid">
+	<div class="row ">
+		<div class="col-md-10">
+			<div class="row bs-wizard">
+
+				<div class="process">
+					<div class="process-row nav nav-tabs" id="tabs">
+						<div class="process-step bs-wizard-step menu1 active">
+							<div class="progress">
+								<div class="progress-bar"></div>
+							</div>
+							<a class=" btn btn-info btn-circle bs-wizard-dot" data-toggle="tab" href="#menu1"><span class="flaticon-checked"></span></a>
+							<div class="bs-wizard-info text-center ">Client Details</div>
+						</div>
+						<div class="process-step bs-wizard-step menu2 disabled">
+							<div class="progress">
+								<div class="progress-bar"></div>
+							</div>
+							<a class=" btn btn-default btn-circle bs-wizard-dot" data-toggle="tab" href="#menu2"><span></span></a>
+							<div class="bs-wizard-info text-center "> Contact Information</div>
+						</div>
+						<div class="process-step bs-wizard-step menu3 disabled">
+							<div class="progress">
+								<div class="progress-bar"></div>
+							</div>
+							<a class=" btn btn-default btn-circle bs-wizard-dot" data-toggle="tab" href="#menu3"><span></span></a>
+							<div class="bs-wizard-info text-center "> Create Account</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="tab-content">
+					<div id="menu1" class="tab-pane fade active in">
+						<form class="client-form" enctype="multipart/form-data" novalidate angular-validator name="createClientFormStep1">
+
+							<div>
+								<div class="row plr15px">
+									<div class="col-sm-6 ">
+										<div class="form-group height-auto">
+											<label>Client Logo</label>
+											<div class="profile-img">
+												<img ng-if="clientImage" ng-src="{{clientImage}}" class="img-responsive" />
+												<img ng-if="!clientImage" ng-src="{{defaultImage}}" class="img-responsive" />
+
+												<a class="editImage" ng-click="opeFileManager()">
+													<div class="edit-icon"><i class="fa fa-pencil"></i></div>
+												</a>
+											</div>
+											<input ng-hide="clientImage" type="file" class="form-control hide" ngf-select="" ng-model="file" name="file" ngf-max-height="10000"
+											 ngf-max-size="40MB" ng-change="changeMySrc()" />
+											<label class="note"><em>(image should not be greater than 1600x1200 px and max 2MB)</em></label>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Client Name</label>
+										<input type="text" ng-model="client.clientName" placeholder="Type Client Name" class="form-control" name="client.clientName"
+										 validator="formValidator.alphabetOnly(client.clientName) === true" invalid-message="formValidator.alphabetOnly(client.clientName)"
+										 required />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group ">
+										<label>Number of Brands</label>
+										<input placeholder="Number of Brands" min="1" ng-model="client.noOfBrands" type="number" class="form-control" name="client.noOfBrands"
+										 required>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Industry</label>
+
+										<div class="socioselect">
+											<select name="industryData" id="select-industry" class="  form-control" ng-model="industryData" ng-change="getSegments(industryData.id)"
+											 ng-options="item as item.industryName for item in industries track by item.id" required>
+																			<option  value="">Select Industry</option>
+																	</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Segment</label>
+										<div class="socioselect ">
+											<select ng-disabled="helperFactory.isEmpty(segmentsData)" id="select-segment" name="segmentData" class="form-control" ng-model="segmentData"
+											 ng-change="getSubSegments(segmentData.id)" data-ng-options="item as item.segmentName for item in segmentsData track by item.id"
+											 required>
+																			<option value="">Select Segment</option>
+																	</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Sub Segment</label>
+										<div class="socioselect ">
+											<select ng-disabled="helperFactory.isEmpty(subSegmentsData)" id="select-segment" class="form-control" name="subSegmentData"
+											 ng-model="subSegmentData" data-ng-options="item as item.subSegmentName for item in subSegmentsData track by item.id"
+											 required>
+																			<option value="">Select Sub Segment</option>
+																	</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Web url</label>
+										<input type="text" ng-model="client.webUrl" placeholder="Type URL" class="form-control" name="client.webUrl" validator="formValidator.isValidUrl(client.webUrl) === true"
+										 invalid-message="formValidator.isValidUrl(client.webUrl)" required />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Subscription Duration</label>
+										<div class="row">
+											<div class="date col-sm-5">
+												<div class="input-group">
+													<datepicker date-format="d MMMM,y" datepicker-show="{{visibility}}">
+														<input readonly="true" ng-model="client.startDateString" name="client.startDateString" type="text" placeholder="Start Date"
+														 class="angular-datepicker-input form-control" required/>
+													</datepicker>
+													<span class="input-group-addon calender-icon"><span class=" date-icon" ></span></span>
+												</div>
+											</div>
+											<div class="col-sm-2 ac to"><label>to</label></div>
+											<div class="date col-sm-5">
+												<div class="input-group">
+													<datepicker date-min-limit="{{client.startDateString}}" date-format="d MMMM,y" datepicker-show="{{visibility}}">
+														<input readonly="true" ng-model="client.endDateString" validator="formValidator.dateValidator(client.startDateString,client.endDateString) === true"
+														 invalid-message="'End date should be greater than start date!'" name="client.endDateString" type="text" placeholder="End Date"
+														 class="angular-datepicker-input form-control" required />
+													</datepicker>
+													<span class="input-group-addon calender-icon"><span class=" date-icon" ></span></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Number of Users</label>
+										<input type="number" min="1" ng-model="client.noOfUsers" placeholder="Number of Users" name="client.noOfUsers" class="form-control"
+										 required />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>License Type</label>
+										<div class="socioselect ">
+											<select class="form-control" id="select-license" placeholder="Select Licence Type" name="licenseTypesData" ng-model="licenseTypesData"
+											 data-ng-options="item as item.licenceType for item in licenseTypeData track by item.id">
+																	<option value="">Select licence Type</option>
+																	</select>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="competitor">
+
+								<div class="col-sm-6 mb10px">
+									<h3>Competitor's Definition</h3>
+								</div>
+								<div class="col-sm-6 mb10px">
+									<button ng-click="addMoreCompetitors()" name="addMore" type="button" class="btn btn-default addcomptr addnewcomptr fr"><span class="add-icon" ></span> <span class="text">Add</span></button>
+								</div>
+								<div ng-repeat="clientComptitor in client.competitiorsDefinitions" class="add-competitor">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label>Competitor's Name</label>
+											<input type="text" ng-model="clientComptitor.name" name="clientComptitor.name" placeholder="Enter Competitor's Name" class="form-control"
+											/>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+
+											<label>Keywords</label>
+											<tags-input ng-model="clientComptitor.keyword" class="form-control tag-input" placeholder="Add Keywords" name="clientComptitor.keyword"
+											 on-tag-added="tagAddedKeywords($tag)"></tags-input>
+
+
+										</div>
+									</div>
+
+									<div class="col-sm-6" ng-repeat="pltf in platformData">
+										<div class="form-group">
+											<label>{{pltf.name}}</label>
+											<div class="competitor-data">
+												
+												<tags-input ng-model="clientComptitor.handle[pltf.name]" class="form-control tag-input" placeholder="Add Handles" name="clientComptitor.handle[pltf.id]"
+												 on-tag-added="tagAddedKeywords($tag)" allowed-tags-pattern="@"></tags-input>
+												<label class="note ar">
+													<em>Allowed pattern eg. @socioseer </em>
+												</label>
+											</div>
+
+
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+							<ul class="list-unstyled list-inline m0px">
+								<li>
+									<button ng-click="saveClientStep1(createClientFormStep1)" name="createClientFormSubmitStep1" type="submit" class="btn btn-done next-step mr10px">Save &amp; Continue <i class="fa fa-chevron-right"></i></button></li>
+							</ul>
+						</form>
+					</div>
+					<div id="menu2" class="tab-pane fade">
+						<form class="client-form" enctype="multipart/form-data" novalidate angular-validator name="createClientFormStep2">
+							<div class="fl">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Name</label>
+										<input ng-model="clientInformation.name" name="clientInformation.name" required type="text" placeholder="Enter Name" class="form-control"
+										/>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Designation</label>
+										<input type="text" ng-model="clientInformation.designation" name="clientInformation.designation" required placeholder="Designation"
+										 class="form-control" />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Email</label>
+										<input type="email" ng-model="clientInformation.email" placeholder="Enter Email Id" class="form-control" name="clientInformation.email"
+										 validator="formValidator.emailValidation(clientInformation.email) === true" invalid-message="formValidator.emailValidation(clientInformation.email)"
+										/>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Country</label>
+										<div class="socioselect ">
+											<select class="form-control" id="select-license" placeholder="Select Country" required ng-change="getRegionByCountryId(countries.id)"
+											 name="countries" ng-model="countries" data-ng-options="item as item.name for item in countryData track by item.id">
+																<option value="">Select Country</option>
+																</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Region</label>
+										<div class="socioselect ">
+											<select ng-disabled="helperFactory.isEmpty(countryRegionData)" required class="form-control" id="select-license" placeholder="Select Region"
+											 name="regions" ng-model="regions" data-ng-options="item as item.name for item in countryRegionData track by item.name">
+																<option value="">Select Region</option>
+																</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>City</label>
+										<input type="text" ng-model="clientInformation.city" name="clientInformation.city" required placeholder="City" class="form-control"
+										/>
+									</div>
+								</div>
+
+
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Mobile Number</label>
+										<div class="input-group error">
+											<span class="input-group-addon clinet-telcode ">{{isdCode}}</span>
+											<input ng-model="clientInformation.mobileNumber" name="clientInformation.mobileNumber" type="text" required placeholder="Enter Mobile Number"
+											 validator="formValidator.phoneValidation(clientInformation.mobileNumber) === true" invalid-message="formValidator.phoneValidation(clientInformation.mobileNumber)"
+											 maxlength="10" required class="form-control numberonly" />
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Office Landline</label>
+										<div class="input-group error">
+											<span class="input-group-addon clinet-telcode ">{{isdCode}}</span>
+											<input maxlength="15" type="text" ng-model="clientInformation.officeLandline" name="clientInformation.officeLandline" placeholder="Type Number"
+											 class="form-control numberonly" />
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="form-group height-auto">
+										<label>Address</label>
+										<textarea maxlength="256" ng-model="clientInformation.address" required name="clientInformation.address" placeholder="Enter Address here..."
+										 class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+
+							<ul class="list-unstyled list-inline ">
+
+								<li><button type="button" class="btn btn-default btn-cancel prev-step" name="back2"><i class="fa fa-chevron-left"></i> Back</button></li>
+								<li><button ng-click="saveClientStep2(createClientFormStep2)" name="createClientFormSubmitStep2" type="submit" class="btn btn-done next-step">Save &amp; Continue <i class="fa fa-chevron-right"></i></button></li>
+
+							</ul>
+						</form>
+					</div>
+					<div id="menu3" class="tab-pane fade">
+						<form class="client-form" enctype="multipart/form-data" angular-validator novalidate name="createClientFormStep3">
+							<div class="fl">
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>First Name</label>
+										<input ng-model="accountDetails.firstName" required name="accountDetails.firstName" type="text" placeholder="Enter First Name"
+										 class="form-control" />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Last Name</label>
+										<input ng-model="accountDetails.lastName" required name="accountDetails.lastName" type="text" placeholder="Enter Last Name"
+										 class="form-control" />
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Email Id</label>
+										<input ng-model="accountDetails.email" required name="accountDetails.email" type="email" placeholder="Enter Email Id" class="form-control"
+										 validator="formValidator.emailValidation(accountDetails.email) === true" invalid-message="formValidator.emailValidation(accountDetails.email)"
+										/>
+										<label class="note" style="font-size: 10px; font-style: italic; text-align: right;">
+											Note: Default client admin
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Password</label>
+										<input ng-model="accountDetails.password" type="password" required name="accountDetails.password" validator="formValidator.passwordValidator(accountDetails.password) === true"
+										 invalid-message="formValidator.passwordValidator(accountDetails.password)" placeholder="Enter Password" class="form-control"
+										/>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>Re-type Password</label>
+										<input ng-model="accountDetails.rePassword" required type="password" validator="accountDetails.password === accountDetails.rePassword"
+										 invalid-message="'Password do not match!'" name="accountDetails.rePassword" placeholder="Re-Enter Password" class="form-control"
+										/>
+									</div>
+								</div>
+
+							</div>
+							<ul class="list-unstyled list-inline ">
+								<li><button type="button" class="btn btn-default btn-cancel prev-step" name="cancel">
+														<i class="fa fa-chevron-left"></i> Back</button></li>
+								<li><button type="submit" ng-click="saveClientStep3(createClientFormStep3)" name="createClientFormSubmitStep3" class="btn btn-done"><i class="fa fa-check"></i> Done</button></li>
+							</ul>
+						</form>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,187 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 mtb">
+
+
+			<div class="row">
+				<div class="col-sm-12">
+
+					<form class="client-form" autocomplete="off">
+
+						<div class="row">
+							<div class="col-sm-4 plr5px" ng-show="adminClientDropdown">
+								<div class="col-sm-12">
+									<div class="form-group">
+											<label>Select Client</label>	
+										<div class="socioselect">
+											<select name="adminClient" class="simp-select  form-control" ng-change="changeClient(selectedClient)" ng-model="selectedClient"
+											 ng-options="item as item.clientName for item in clientData track by item.id">
+												<option value="">Select Client</option>
+												</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-7 plr5px">
+								<label>Date</label>
+								<div class="input-group time-input">
+									<datepicker date-format="dd/MM/yyyy" datepicker-show="{{visibility}}">
+										<input ng-model="startDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control" />
+									</datepicker>
+									<span class="input-group-addon no-left-brd no-right-brd p0px"><span class=" date-icon" ></span></span>
+
+									<datepicker date-format="dd/MM/yyyy" datepicker-show="{{visibility}}">
+										<input ng-model="endDate" type="text" placeholder="End Date" class="nofirstnolast angular-datepicker-input form-control"
+										/>
+									</datepicker>
+									<span class="input-group-addon p0px"><span class=" date-icon" ></span></span>
+								</div>
+							</div>
+
+							<div class="col-sm-1 plr5px">
+								<label>&nbsp;</label>
+								<button ng-click="filterDrafts()" type="button" class="btn  btn-compose">Filter</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row mt20px">
+		<div class="col-sm-12 p0px">
+			<div class="panel-group team-report" id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default" ng-repeat="(key, team) in performanceData">
+					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#team{{key}}" aria-expanded="true" aria-controls="team{{key}}">
+						<div class="panel-heading" ng-click="showPerformance(team)" role="tab" id="heading{{key}}">
+							<h4 class="panel-title">{{team.name}}</h4>
+						</div>
+					</a>
+					<div id="team{{key}}" class="panel-collapse collapse in team-panel accordion-body collapse" role="tabpanel" aria-labelledby="heading{{key}}">
+						<div class=" panel-default socio-table table-responsive">
+							<!-- Table -->
+							<table class="table  table-bordered wholeteam">
+								<thead>
+									<tr>
+										<th></th>
+										<th class="role">Post Counts</th>
+										<th class="role">Average Per Day</th>
+										<th class="role">Approved</th>
+										<th class="role">Pending</th>
+										<th class="role">Rejected</th>
+										<th class="role">Published</th>
+										<th class="sm-role"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td></td>
+										<td>{{team.postCount}}</td>
+										<td>{{team.postCount}}</td>
+										<td>{{team.approvedCount}}</td>
+										<td>{{team.pendingCount}}</td>
+										<td>{{team.rejectedCount}}</td>
+										<td>{{team.pubishedCount}}</td>
+										<td class="ac"><a ng-click="team.isReportOpen=!team.isReportOpen"><span class="report-icon"></span></a></td>
+									</tr>
+								</tbody>
+							</table>
+							<div ng-show="team.isReportOpen">
+								<div class="col-sm-6">
+									<hc-pie-chart title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
+								</div>
+								<div class="col-sm-6">
+									<hc-pie-chart title="Team Report" data="team.pieData">Placeholder for pie chart</hc-pie-chart>
+								</div>
+							</div>
+						</div>
+						<div class="panel-default p10px member">
+							<div class="row">
+								<div class="col-sm-12 teams-report">
+									<!-- table-heading -->
+									<div class="flex-heading head">
+										<div class="teamchild">
+											<label>Author Name</label>
+										</div>
+										<div class="teamchild role">
+											<label>Post Counts</label>
+										</div>
+										<div class="teamchild role">
+											<label>Average Per Day</label>
+										</div>
+										<div class="teamchild role">
+											<label> Approved</label>
+										</div>
+										<div class="teamchild role">
+											<label>Pending	</label>
+										</div>
+										<div class="teamchild role">
+											<label>Rejected</label>
+										</div>
+										<div class="teamchild role">
+											<label>Published</label>
+										</div>
+										<div class="teamchild sm-role ">
+											<label>&nbsp;</label>
+										</div>
+									</div>
+									<!-- table-heading end -->
+
+									<!-- first row -->
+									<div class="flex-heading data">
+										<div class="teamchild">
+											<label>Prasad Sangameshwaran</label>
+										</div>
+										<div class="teamchild role">
+											<label>50</label>
+										</div>
+										<div class="teamchild role">
+											<label>20%</label>
+										</div>
+										<div class="teamchild role">
+											<label>30</label>
+										</div>
+										<div class="teamchild role">
+											<label>10</label>
+										</div>
+										<div class="teamchild role">
+											<label>10</label>
+										</div>
+										<div class="teamchild role ">
+											<label>5</label>
+										</div>
+										<div class="teamchild sm-role p0px">
+											<label class="showimg" onclick="myFunction()"><span class="report-icon"></span></label>
+										</div>
+									</div>
+									<div class="team-charts" id="team-show">
+										<div class="col-sm-6">
+											<hc-pie-chart title="Browser usage" data="pieData">Placeholder for pie chart</hc-pie-chart>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	function myFunction() {
+		var x = document.getElementById('team-show');
+		if (x.style.display == 'block') {
+			x.style.display = 'none';
+		} else {
+			x.style.display = 'block';
+		}
+	}
+
+</script>

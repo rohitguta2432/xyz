@@ -1,0 +1,875 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 p0px mt20px">
+			<div class="compose-post">
+				<ul class="nsdav nav-sd" role="dfdf">
+					<li ng-class="{'active': step0}"><a ng-click="activeStep(0,tabDisable[0])">Compose</a></li>
+					<li ng-class="{'active': step1}"><a ng-disabled="!tabDisable[1]" ng-click="activeStep(1,tabDisable[1])">Schedule</a></li>
+					<li ng-class="{'active': step2}"><a ng-disabled="!tabDisable[2]" aria-controls="audience" ng-click="activeStep(2,tabDisable[2])">Audience</a></li>
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content mt20px">
+					<div role="tabpanel" class="tab-pane fade in" ng-class="{'active': step0}" id="compose">
+						<div class="row"  ng-if="clientDropdown">
+							<div class="col-sm-12">
+								<div class="from-group height-auto">
+									<label>Client</label>
+									<div class="socioselect">
+										<select name="selectedClient" class="simp-select  form-control" ng-change="changeClient(clientListingData.selectedClient)"
+										 ng-model="clientListingData.selectedClient" ng-options="item as item.clientName for item in clientListingData.clientData track by item.id"
+										 required>
+												<option value="">Select Client</option>
+												</select>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<form class="client-form compose" novalidate angular-validator name="compostPostForm">
+							<div class="post-editor">
+								<div class="row" style="margin-bottom: 25px;">
+
+
+									<div class="col-sm-4">
+										<div class="from-group height-auto">
+											<label>Brand</label>
+											<div class="socioselect">
+												<select ng-disabled="!clientListingData.selectedClient && clientDropdown" name="selectedBrand" class="simp-select  form-control"
+												 ng-change="changeBrand(selectedBrand)" ng-model="selectedBrand" ng-options="item as item.name for item in brandList track by item.id"
+												 required>
+												<option value="">Select Brand</option>
+												</select>
+											</div>
+										</div>
+
+									</div>
+									<div class="col-sm-4">
+										<div class="from-group height-auto">
+											<label>Campaign </label>
+											<div class="socioselect">
+												<select ng-required="!canEdit(contentApproverRole)" ng-disabled="!chekCampaignEnabled" name="currentCampaign" placeholder="Campaign"
+												 class="simp-select  form-control" ng-change="changeCampaign(campaignListingData.selectedCampaign)" ng-model="campaignListingData.selectedCampaign"
+												 ng-options="camp as camp.title for camp in campaignListingData.campaignData">
+												<option value="">Select campaign</option>
+												</select>
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="form-group height-auto">
+											<label>Social Media Channels</label>
+											<div class="btn-group socioselect multiselect">
+
+												<a ng-disabled="!clientListingData.selectedClient && clientDropdown" class='btn btn-blank dropdown-toggle form-control onOffPlatform'
+												 ng-class="{'errorBorder': mediaChannelErrorFlag==true}">
+									 <span ng-if="selectedPlatforms.length ==0">--Please Select--</span>
+									 <span ng-if="selectedPlatforms.length !=0">{{selectedPlatforms}}</span>
+																	
+													 	<span class='caret'></span>
+												</a>
+												<ul ng-show="clientListingData.selectedClient" class='dropdown-menu drop-check' aria-labelledby='dropdownMenu'>
+
+													<li ng-show="optionSocial.length>1" class="check-box">
+														<label class="vote-check">
+															<input name="selectAll" type="checkbox" ng-model="selectAll" ng-change="checkAll()" />
+															<span>Select All</span>																 
+														</label>
+													</li>
+													<li class="check-box" ng-class="{'select-check check-box': option.select, 'check-box': option.select===false}" ng-repeat='option in optionSocial'
+													 disabled="!isEnablePlatform">
+														<label class="vote-check">
+															<input ng-change='toggleSelectItem(option)' name="option.select" type="checkbox"  ng-model="option.select" />
+															<span > {{option.name}}</span>																
+														</label>
+													</li>
+												</ul>
+											</div>
+
+											<label ng-if="mediaChannelErrorFlag" class="control-label has-error validationMessage">
+												<i class="fa fa-times"></i> {{mediaChannelError}}
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<label>Handle</label>
+
+										<!-- {{handlerPost}} -->
+										<div class="btn-group socioselect multiselect">
+											<a class='btn btn-blank dropdown-toggle form-control onOffHandle' ng-class="{'errorBorder': selectedHandlersErrorFlag==true}"
+											 ng-disabled="selectedPlatforms.length == 0">
+											 <span ng-if="!selectedHandler">--Please Select--</span>
+											 <span ng-if="selectedHandler">{{selectedHandler}}</span>
+											 <span class='caret'></span>
+											</a>
+
+											<ul ng-show="handlerPost.length > 0" class='dropdown-menu drop-check' aria-labelledby='dropdownMenu' ng-show="selectedPlatforms.length>1">
+												<li ng-show="handlerPost.length > 1" class="check-box">
+													<label class="vote-check">
+															<input name="selectAllHandle" type="checkbox" ng-model="selectAllHandle" ng-click='checkAllHandle(selectAllHandle)' />
+															<span>Select All</span>																 
+													</label>
+												</li>
+
+												<li class="check-box" ng-class="{'select-check check-box': handler.select, 'check-box': handler.select===false}" ng-repeat='handler in handlerPost'>
+													<label class="vote-check">
+															<input ng-click='toggleSelectHandle(handler,$index,handler.select)'  name="handlerselect" type="checkbox"  ng-model="handler.select" />
+															<span> {{handler.accessToken.screen_name}}</span>																
+														</label>
+												</li>
+
+											</ul>
+										</div>
+
+										<label ng-if="selectedHandlersErrorFlag" class="control-label has-error validationMessage">
+										<i class="fa fa-times"></i> {{selectedHandlersError}}</label>
+
+									</div>
+
+									<div class="col-sm-4 ">
+										<div class="form-group">
+											<label>Shorten URL</label>
+											<div class="input-group">
+												<input name="shortenURL" type="text" class="form-control input-text-addon" ng-model="shortenURL" placeholder="Enter URL"
+												/>
+												<span class="input-group-addon shorten" ng-click="doShortenUrl()">
+												{{srtnBtnTxt}}
+												</span>
+											</div>
+										</div>
+
+									</div>
+
+								</div>
+
+								<div class="row media-preview-section" ng-if="showGallery">
+									<div class="col-sm-12">
+										<div class="media-preview-section-inner clearfix">
+											<!-- image previews here -->
+											<div class="col-md-3 media-preview-single-img" ng-repeat="(key,val) in selectedMedia track by $index">
+												<img ng-src="{{val.url}}" />
+												<a ng-click="removeSelectedMedia(key)">
+													<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- ck editor -->
+								<div class="row ">
+									<div class="col-sm-12">
+										<div class="panel panel-default">
+											<div class="panel-heading composepost">
+												<div class="row">
+													<div class="col-sm-8">
+														<h4 class="add-content">Add Content</h4>
+													</div>
+													<div class="col-sm-4 ar"><span class="charactercount">{{140 - tinymceModel.length}} left</span>
+														<a data-toggle="modal" data-target="#myContentModal" onclick="$('#mediaTab').click()" class=" btn btn-content">Content Library</a></div>
+												</div>
+											</div>
+											<div class="panel-body p0px">
+												<div class="col-sm-12 p0px" id="tinyHere">
+													<div class="form-groups">
+														<textarea id="postContent" maxlength="140" ng-keypress="getCharactertersCount(tinymceModel)" class="form-control post-description-editor"
+														 required name="tinymceModel" ng-model="tinymceModel" cols="15" resize="none">{{tinymceModel}}</textarea>
+
+													</div>
+													<!--textarea id="container-editor" name="footerContent">Content goes here....</textarea-->
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+
+								<div class="row mt10px">
+									<div class="col-sm-3">
+										<div class="check-box hide">
+											<label class="vote-check">
+												<input type="checkbox" name="optionscheck" ng-model="notifyCheck" checked ><span>Notify me when sent</span>
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-9">
+										<div class="pull-right">
+											<!--<a href="suggestion.html" class="btn btn-blank"><i class="fa fa-file-text-o" aria-hidden="true"></i> Content Suggestion</a>-->
+											<!-- <span class="formSuccessMsg" ng-if="success">{{draftSuccessMsg}}</span>
+											<span class="formErrorMsg" ng-if="!success">{{draftSuccessMsg}}</span> -->
+
+											<!-- <a ng-click="clearForm()" ng-if="isEditPost">Reset</a> -->
+											<a href="#preview" data-toggle="modal" class="btn btn-blank"><i class="fa fa-eye"></i> Preview</a>
+											<button type="submit" name="draft" ng-click="saveDraft(compostPostForm)" class="btn btn-blank" id="saveDraft">
+											<i class="fa fa-save"></i>Save as Draft</button>
+											<a name="saveSchecule" ng-click="saveAndSchedule()" aria-controls="schedule" role="tab" data-toggle="tab" class="btn btn-blank"><i class="fa fa-save"></i> Save &amp; Schedule</a>
+											<a name="saveAddNew" aria-controls="save" class="btn btn-blank">
+												<i class="fa fa-plus"></i>
+												Save &amp; Add New
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+						<div class="post-suggestion">
+							<div class="row mt20px">
+								<div class="col-sm-5 ">
+									<h3 class="h3 mt0px ">Content Suggestion
+										<!-- <a class="dropdown-toggle asort" data-toggle="dropdown" href="#"><span class="sort-icon "></span></a>
+										<ul class="dropdown-menu dropdown-messages dropdown-arrow dropdown-right">
+											<li>
+												<div class="col-sm-3">
+													<label>Industry:</label>
+												</div>
+												<div class="col-sm-9 mb5px">
+													<div class="socioselect form-control">
+														<select name="brands" placeholder="Select Numbers of Brands" class="simp-select">
+															<option value="aa" class="Selected">Global</option>
+															<option value="AL">Global</option>
+															<option value="AK">Global</option>
+															<option value="AZ">Global</option>												
+														</select>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="col-sm-3">
+													<label>Competitor:</label>
+												</div>
+												<div class="col-sm-9 mb5px">
+													<div class="socioselect form-control">
+														<select name="brands1" placeholder="Select Numbers of Brands" class="simp-select">
+															<option value="aa" class="Selected">SpiceJet</option>
+															<option value="AL">SpiceJet</option>
+															<option value="AK">SpiceJet</option>
+															<option value="AZ">SpiceJet</option>												
+														</select>
+													</div>
+												</div>
+											</li>
+											<li>
+												<div class="col-sm-3">
+													<label>Campaign:</label>
+												</div>
+												<div class="col-sm-9 mb5px">
+													<div class="socioselect form-control">
+														<select name="brands2" placeholder="Select Numbers of Brands" class="simp-select">
+															<option value="aa" class="Selected">Cheap Flights</option>
+															<option value="AL">Cheap Flights</option>
+															<option value="AK">Cheap Flights</option>
+															<option value="AZ">Cheap Flights</option>												
+														</select>
+													</div>
+												</div>
+											</li>
+										</ul> -->
+
+									</h3>
+								</div>
+
+								<!-- <div class="col-sm-2 pull-right ">
+									<div class="socioselect  mb10px fix-height">
+										<select name="state" id="select-state" placeholder="sort" class="simp-select form-control">
+											<option value="aa" class="Selected">Sort</option>
+											<option value="AL">Likes</option>
+											<option value="aaa">Comments</option>
+											<option value="ad">Shares</option>
+											<option value="add">Recent</option>
+										</select>
+									</div>
+								</div> -->
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="review content-suggestion">
+										<!-- Nav tabs -->
+										<ul class="nav nav-tabs" role="tablist">
+											<!-- <li role="presentation" class="active"><a href="#all" aria-controls="all" role="tab" data-toggle="tab">All</a></li> 
+											<li role="presentation"><a href="#facebook" aria-controls="facebook" role="tab" data-toggle="tab">Facebook</a></li>-->
+											<li role="presentation" class="active">
+												<a href="#twitter" aria-controls="twitter" role="tab" data-toggle="tab">Twitter</a>
+											</li>
+											<!-- <li role="presentation"><a href="#instagram" aria-controls="instagram" role="tab" data-toggle="tab">Instagram</a></li>
+											<li role="presentation"><a href="#youtube" aria-controls="youtube" role="tab" data-toggle="tab">Youtube</a></li> -->
+										</ul>
+
+										<!-- Tab panes -->
+										<div class="tab-content" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+											<div role="tabpanel" class="tab-pane active fade in" id="all">
+												<div class="row">
+													<div class="col-sm-12">
+														<ul class="pl0px key-list">
+															<li ng-if="key<50" ng-repeat="(key,value) in trendsData">
+																<a title="{{value.name}}" href="{{value.url}}" target="_blank">{{value.name}}</a></li>
+														</ul>
+													</div>
+												</div>
+												<div class="row">
+													<div style="width: 48%; float:left; margin-right: 2%" ng-repeat="x in loaderArray" class="timeline-wrapper-no-boreder" ng-hide="popularTweetsData">
+														<div class="timeline-item">
+															<div class="animated-background">
+																<div class="background-masker header-top"></div>
+																<div class="background-masker header-left"></div>
+																<div class="background-masker header-right"></div>
+																<div class="background-masker header-bottom"></div>
+																<div class="background-masker subheader-left"></div>
+																<div class="background-masker subheader-right"></div>
+																<div class="background-masker subheader-bottom"></div>
+																<div class="background-masker content-top"></div>
+																<div class="background-masker content-first-end"></div>
+																<div class="background-masker content-second-line"></div>
+																<div class="background-masker content-second-end"></div>
+																<div class="background-masker content-third-line"></div>
+																<div class="background-masker content-third-end"></div>
+															</div>
+														</div>
+													</div>
+													<div ng-repeat="(key,value) in popularTweetsData" class="col-sm-6 height-custom">
+														<div class="content">
+															<div class="row">
+																<div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3 col-md-3 col-lg-2 pr5px">
+																	<a target="_blank" ng-href="{{value.extended_entities.media[0].expanded_url}}">
+																	<img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive" />
+																	</a>
+																</div>
+																<div ng-if="!value.extended_entities" class="col-sm-3 col-md-3 col-lg-2 pr5px">
+
+																	<img ng-src="{{imageUrl}}no-image.jpg" class="img-responsive" />
+
+																</div>
+																<div class="col-sm-9 col-md-9 col-lg-10 fr pl5px">
+																	<div class="row">
+																		<div class="col-sm-10 col-lg-10">
+																			<h5 id="cp-{{key}}" ng-bind-html="value.text|toUrl" class="post-title">{{value.text|toUrl}}</h5>
+																		</div>
+																		<div class="col-sm-1 col-lg-1 platform-icon fr">
+																			<i class="fa fa-twitter"></i>
+																		</div>
+																		<div class="col-sm-12">
+																			<ul class="pl0px mb0px">
+																				<li class="blue-text"><i class="fa fa-retweet"></i> {{value.retweet_count | numberFormat:1}}</li>
+																				<li class="favourite"> <i class="fa fa-heart"></i> {{value.favorite_count | numberFormat:1}}</li>
+																				<li class="post-detail"><i class="fa fa-clock-o"></i> {{value.created_at | toTwitterData |  date: 'MMM dd, yyyy - h:mm a'}}</li>
+																				<!-- <li class=" ong-share">20 <i class="fa fa-comments-o"></i></li> -->
+																			</ul>
+																			<div class="pull-right">
+																				<a href="" ng-click="setDataToEditor(value.text)" class="btn btn-compose btn-sm" ngclipboard data-clipboard-target="#cp-{{key}}">Copy</a>
+																				<a data-toggle="modal" ng-click="setCopiedData(value.text)" href="#addContent" class="btn btn-compose btn-sm">Add to content library</a>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div role="tabpanel" class="tab-pane fade in" id="facebook">
+
+											</div>
+											<div role="tabpanel" class="tab-pane fade in" id="twitter">
+
+											</div>
+											<div role="tabpanel" class="tab-pane fade in" id="linkdin">
+
+											</div>
+											<div role="tabpanel" class="tab-pane fade in" id="youtube">
+
+											</div>
+											<div role="tabpanel" class="tab-pane" id="linkdin">
+
+											</div>
+
+										</div>
+										<div class="col-sm-12 ">
+											<a ui-sref="suggestions" class="pull-right"> <label>View All <i class="fa fa-angle-double-right"></i></label> </a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div role="tabpanel" class="tab-pane fade in" ng-class="{'active': step1}" id="schedule">
+						<form class="client-form" novalidate angular-validator name="selectAudienceForm">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row">
+										<div class="col-sm-6">
+											<label class="p10px">Frequency/Date Time Selection</label>
+										</div>
+										<div class="col-sm-6 ">
+											<button type="submit" name="addPlatform" ng-click="addPlatform()" class="btn btn-default pull-right mb10px"><span class="add-icon"></span> Add</button>
+										</div>
+									</div>
+									<div class="row" ng-if="allPlatforms.length>0">
+										<div class="col-sm-12">
+											<!-- table-heading -->
+											<div class="flex-heading">
+												<div class="flex_child">
+													<label>Platform</label>
+												</div>
+												<div class="flex_child">
+													<label>Frequency</label>
+												</div>
+												<div class="flex_child">
+													<label>Start Date & Time</label>
+												</div>
+												<div class="flex_child">
+													<label> End Date & Time</label>
+												</div>
+												<div class="flex_child">
+													<label>Action</label>
+												</div>
+											</div>
+											<!-- table-heading end -->
+
+											<!-- first row -->
+
+
+											<div class="flex-parent" ng-repeat="(platKey, sch) in allPlatforms">
+												<div class="flex_child">
+													<div class="socioselect ">
+														<select name="platform" id="select-platform" placeholder="Platform" class="select-platform-valid simp-select form-control"
+														 ng-model="sch.platforms" ng-options="opt as opt.name for opt in optionSocialSelected">
+															<option value="">Select platform</option>
+														</select>
+													</div>
+												</div>
+
+												<div class="flex_child">
+													<div class="socioselect ">
+														<select name="frequency" id="select-frequency" placeholder="frequency" class="select-frequency-valid simp-select form-control"
+														 ng-model="sch.frequency" ng-change="checkEndOption(sch.frequency)" ng-options="freq as freq.frequency for freq in allFrequency track by freq.id">	
+															<option value="">Select frequency</option>
+														</select>
+													</div>
+												</div>
+												<!-- repeat in this div-->
+												<div class="flex_child colmn_dir">
+
+													<div class="flex_subchild " ng-repeat="(key, sdt) in sch.dateTime">
+														<div class="input-group custom_caledar">
+															<input type="text" class="form-control brd4px" name="sdt.startDT" datetime-picker="MM/dd/yyyy HH:mm" ng-model="sdt.startDT"
+															 closeOnTimeNow="true" closeOnDateSelection="true" is-open="sdt.isStartOpen" />
+															<span class="input-group-addon calender-icon calendar-btn" ng-click="sdt.isStartOpen = ! sdt.isStartOpen">
+																<a ><i class="fa fa-calendar"></i></a>
+															</span>
+														</div>
+													</div>
+
+												</div>
+												<!-- repeat in this div-->
+												<div class="flex_child colmn_dir">
+
+													<div class="flex_subchild " ng-repeat="(key, edt) in sch.dateTime">
+														<div class="input-group custom_caledar">
+															<input type="text" class="form-control brd4px" datetime-picker="MM/dd/yyyy HH:mm" ng-model="picker3" is-open="sdt.isEndOpen"
+															/>
+															<span class="input-group-addon calender-icon calendar-btn" ng-click="sdt.isEndOpen=!sdt.isEndOpen">
+																<a ><i class="fa fa-calendar"></i></a>
+              												</span>
+														</div>
+													</div>
+
+
+
+												</div>
+												<!-- repeat in this div-->
+												<div class="flex_child colmn_dir">
+													<div class="flex_subchild" ng-repeat="dt in sch.dateTime">
+														<a ng-if="dt.id==0" ng-click="addDT(sch)"><span class="add-icon"></span></a>
+														<a ng-click="deleteDT(dt, sch)"><span class="trash-icon"></span></a>
+													</div>
+
+												</div>
+											</div>
+											<!-- second row -->
+										</div>
+									</div>
+
+									<div class="mt20px">
+										<!-- <img src="{{imageUrl }}schedule-graph.jpg" class="img-responsive" /> -->
+									</div>
+									<div class="col-sm-12" ng-if="allPlatforms.length>0">
+										<div class="pull-right mt20px">
+											<span class="formErrorMsg">{{schedulerErrorMsg}}</span>
+											<button name="submit" ng-click="saveSchecule(selectAudienceForm)" data-toggle="tab" class="send btn btn-compose">
+											 <i class="fa fa-paper-plane"></i> 
+											 Select Audience
+											 </button>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div role="tabpanel" class="tab-pane fade in" ng-class="{'active': step2}" id="audience">
+
+						<div class="row">
+
+							<div class="col-sm-6 client-form">
+								<div class="form-group height-auto">
+									<label>Select Audience</label>
+
+									<!--  <sm-dropdown class="fluid multiple search selection form-control" model="audienceData" items="audience" default-text="'Audience'"></sm-dropdown> -->
+
+									<multiselect show-search="true" ng-model="audienceData" options="audienceObj" id-prop="id" display-prop="name">
+									</multiselect>
+									<!--<sm-dropdown class="fluid multiple search selection" model="audienceData" items="audience" default-text="'Audience'"></sm-dropdown>-->
+									<!--<div class=" control-group ">
+										<input name="audInput" type="text" placeholder="Audience" ng-model="audInput" ng-keyup="addAudInput(audInput)" class="demo-default form-control input-tags"
+										 value="">
+										<span class="formErrorMsg">{{errorAudiennce}}</span>
+										<ul id="suggestion" class=" client-list mlr15px" ng-if="totalAud.length>0">
+											<li ng-repeat="aud in totalAud" ng-click="selectedAudience(aud)">
+												<ng-if aud.id></ng-if>
+												{{aud.name}}
+											</li>
+										</ul>
+									</div>-->
+
+								</div>
+								<!--<div class="form-group height-auto">
+									<div class="comma-seprated" ng-repeat="aud in selectedAud">
+										<div class="cancel-select">
+											<i ng-if="(aud.platform | lowercase) == 'facebook'" class="fa fa-facebook-square comma"></i>
+											<i ng-if="(aud.platform | lowercase) == 'twitter'" class="fa fa-twitter circle"></i>
+											<i ng-if="(aud.platform | lowercase) == 'instagram'" class="fa fa-instagram-square comma"></i>
+											<i ng-if="(aud.platform | lowercase) == 'youtube'" class="fa fa-youtube-square comma"></i>
+
+											<label>{{aud.name}}</label>
+											<i ng-click="deselectAud(aud)" class="fa fa-close facross"></i>
+										</div>
+									</div>
+
+								</div>-->
+							</div>
+
+						</div>
+
+						<div class="row hidden">
+							<div class="col-sm-12">
+								<label>Followers Suggestion </label>
+								<div class="follower ">
+									<div class="row">
+										<!--<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account facebook">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right " aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right " aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 5 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account instagram">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 5 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-4 col-lg-3">
+												<div class="panel panel-default social-account youtube">
+													<div class="panel-heading ">
+														<h3 class="panel-title"><i class="fa fa-youtube" aria-hidden="true"></i> Youtube <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+													</div>
+													<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+														<div class="row">
+															<div class="col-sm-12">
+																<ul class="pl0px suggestion-list">
+																	<li>Suggestion 1 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 2 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 3 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																	<li>Suggestion 4 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																	<li>Suggestion 5<i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>-->
+										<div class="col-sm-4 col-lg-3">
+											<div class="panel panel-default social-account twitter">
+												<div class="panel-heading ">
+													<h3 class="panel-title"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <i class="fa fa-star pull-right" aria-hidden="true"></i></h3>
+												</div>
+												<div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+													<div class="row">
+														<div class="col-sm-12">
+															<ul class="pl0px suggestion-list">
+																<li>Suggestion 1 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																<li>Suggestion 2 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																<li>Suggestion 3 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+																<li>Suggestion 4 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+																<li>Suggestion 5 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12 mt20px">
+								<div class="pull-right">
+									<span class="formErrorMsg">{{errorAudiennceFormError}}</span>
+									<a ng-click="sendForReview()" ng-if="!canEdit(contentApproverRole)" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Send for Review</a>
+									<a ng-click="sendForReview()" ng-if="canEdit(contentApproverRole)" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Post </a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="preview-modal popupmodal " ng-if="tinymceModel">
+	<div class="modal fade review" tabindex="-1" role="dialog" id="preview" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content ">
+				<form class="client-form">
+					<div class="modal-header ">
+						<button type="button" name="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" ng-class="{'active' : $index ==0 }" class="{{opt.class}}" ng-if="opt.select" ng-repeat="opt in optionSocial">
+								<a href="{{opt.href}}" ng-click="setClassActive(optionSocial)" role="tab" data-toggle="tab">
+									{{opt.name}}
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-body p0px">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane fade in " id="facebook-post">
+								<div class="row">
+									<div class="col-sm-12" ng-bind-html="tinymceModel">
+
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane active fade in" id="twitter-post">
+
+								<div class="row">
+									<div class="col-sm-12">
+										<!-- tw -->
+										<div class="permalink-tweet" id="permalink-tweet">
+											<div class="contents clearfix">
+												<div class="permalink-header">
+													<img ng-if="currentUserProfileImage == 'null'" ng-src="{{imageUrl}}dummy-profile.jpg" id="twit_logo" class=" avatar js-action-profile-avatar"
+													/>
+
+													<img ng-if="currentUserProfileImage != 'null'" ng-src="{{currentUserProfileImage}}" id="twit_logo" class=" avatar js-action-profile-avatar"
+													/>
+													<strong data-aria-label-part="" class="fullname js-action-profile-name show-popup-with-id">
+														<span id="twit_nome">
+															<div id="txt_twit_nome">{{currentUserName}}</div>
+														</span>
+													</strong>
+													<span data-aria-label-part="" class="username js-action-profile-name">
+														<b><span id="twit_account"><div id="txt_twit_account"> @someHandleName</div></span></b>
+													</span>
+
+												</div>
+											</div>
+											<p lang="it" data-aria-label-part="0" class="js-tweet-text tweet-text">
+												<span id="twit_content">
+													<div class="txt_twit_content" maxlength="140">{{tinymceModel}}</div>
+												</span>
+											</p>
+											<div id="box-image" class="box-image">
+												<ul ng-class="{'imgone': selectedMedia.length == 1, 'imgtwo': selectedMedia.length == 2, 'imgthree': selectedMedia.length == 3, 'imgfour': selectedMedia.length == 4,}">
+													<li ng-repeat="(key,value) in selectedMedia">
+														<img ng-src="{{value.url}}" class="img-responsive" />
+													</li>
+												</ul>
+											</div>
+											<!--<ul class="mt10px post-comments compose">
+												<li class="share"><i class="fa fa-share fa-flip-horizontal"></i></li>
+												<li class="ret"><i class="fa fa-retweet"></i> </li>
+												<li class="fav"><i class="fa fa-heart"></i> </li>
+											</ul>-->
+										</div>
+										<!-- tw -->
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade in" id="youtube-post">
+								<div class="row">
+									<div class="col-sm-12" ng-bind-html="tinymceModel">
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+</div>
+
+
+
+
+<div class="add-modal popupmodal">
+	<div class="modal fade" tabindex="-1" role="dialog" id="addContent" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form class="client-form" novalidate angular-validator name="addContentForm">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<h4 class="modal-title" id="gridSystemModalLabel">Add Content</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row ">
+							<div ng-if="clientDropdown">
+								<div class="form-group  plr10px">
+									<div class="col-sm-4">
+										<label class="pt10px">Select Client:</label>
+									</div>
+									<div class="col-sm-8">
+										<div class="socioselect">
+											<select name="selectedClient" class="simp-select  form-control" ng-change="changeClient(selectedClient)" ng-model="selectedClient"
+											 ng-options="item as item.clientName for item in clientData track by item.id" required>
+												<option value="">Select Client</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Add Title:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<input type="text" class="form-control" placeholder="Title" ng-model="contentTitle" name="contentTitle" validator="formValidator.alphabetOnly(contentTitle) === true"
+									 invalid-message="formValidator.alphabetOnly(contentTitle)" required/>
+
+								</div>
+							</div>
+
+							<div class="form-group  plr10px textarea">
+								<div class="col-sm-4">
+									<label class="pt10px">Description:</label>
+								</div>
+								<div class="col-sm-8">
+
+
+									<textarea class="form-control" placeholder="Source" ng-model="description" name="description" validator="formValidator.alphabetOnly(description) === true"
+									 invalid-message="formValidator.alphabetOnly(description)" required></textarea>
+
+								</div>
+							</div>
+
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Keywords:</label>
+								</div>
+								<div class="col-sm-8">
+									<tags-input ng-model="contentKeywords" class="form-control tag-input" placeholder="Add Keywords" name="keywords" id="keywordsData"
+									 on-tag-added="tagAddedKeywords($tag)"></tags-input>
+								</div>
+							</div>
+
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Source URL:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input type="text" placeholder="URL" class="form-control light-text" ng-model="contentSourceUrl" name="contentSourceUrl"
+									 validator="formValidator.isValidUrl(contentSourceUrl) === true" invalid-message="formValidator.isValidUrl(contentSourceUrl)"
+									 required />
+
+								</div>
+							</div>
+							<div class="form-group  plr10px">
+								<div class="col-sm-4">
+									<label class="pt10px">Upload Media:</label>
+								</div>
+								<div class="col-sm-8">
+
+									<input multiple type="file" id="media-img" class="form-control" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+									 accept="image/*" ngf-max-size="10MB" ng-Change="previewFiles(file)" />
+
+									<label class="note">Maximum size of 10 MB is allowed</label> {{fileLimitError }}
+									<span ng-repeat="fd in filesData track by $index">
+												<img ng-src="{{fd}}" class="img-responsive img-thumbnail contentimg" />
+												<i ng-click="removeFile($index)" class="fa fa-pencil"></i>
+											</span>
+									<span ng-if="filesData.length>0">
+												<img ng-src="{{imageUrl}}add.png" ng-click="addMoreMedia()" class="img-responsive img-thumbnail contentimg" />
+											</span>
+									<label>Or</label>
+									<input type="text" placeholder="https://www.youtube.com/watch?v=YXjYfpqg8Z0" class="form-control " ng-keyup="getThumb(youTubeUrl)"
+									 ng-model="youTubeUrl" name="youTubeUrl" />
+									<img ng-src="{{thumbSrc}}" class="img-responsive youtube-thumb" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-12 ">
+							<button type="submit" class="btn btn-compose" ng-click="addContent(addContentForm)" name="submit">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+
+<ng-include src="'includes/mediaLibrary.html'"></ng-include>

@@ -1,0 +1,75 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 19/07/2017 11:30
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-checked:before { content: "\f100"; }
+.flaticon-logout:before { content: "\f101"; }
+.flaticon-avatar:before { content: "\f102"; }
+.flaticon-down-arrow:before { content: "\f103"; }
+.flaticon-keyboard-right-arrow-button:before { content: "\f104"; }
+.flaticon-link-button:before { content: "\f105"; }
+.flaticon-unlink:before { content: "\f106"; }
+.flaticon-cut-with-scissors:before { content: "\f107"; }
+.flaticon-youtube:before { content: "\f108"; }
+.flaticon-time:before { content: "\f109"; }
+.flaticon-eye:before { content: "\f10a"; }
+.flaticon-add-new:before { content: "\f10b"; }
+.flaticon-photo-camera-fill:before { content: "\f10c"; }
+.flaticon-copy-symbol-of-two-filled-paper-sheets:before { content: "\f10d"; }
+.flaticon-save-button:before { content: "\f10e"; }
+.flaticon-settings:before { content: "\f10f"; }
+.flaticon-notebook:before { content: "\f110"; }
+.flaticon-clock:before { content: "\f111"; }
+    
+    $font-Flaticon-checked: "\f100";
+    $font-Flaticon-logout: "\f101";
+    $font-Flaticon-avatar: "\f102";
+    $font-Flaticon-down-arrow: "\f103";
+    $font-Flaticon-keyboard-right-arrow-button: "\f104";
+    $font-Flaticon-link-button: "\f105";
+    $font-Flaticon-unlink: "\f106";
+    $font-Flaticon-cut-with-scissors: "\f107";
+    $font-Flaticon-youtube: "\f108";
+    $font-Flaticon-time: "\f109";
+    $font-Flaticon-eye: "\f10a";
+    $font-Flaticon-add-new: "\f10b";
+    $font-Flaticon-photo-camera-fill: "\f10c";
+    $font-Flaticon-copy-symbol-of-two-filled-paper-sheets: "\f10d";
+    $font-Flaticon-save-button: "\f10e";
+    $font-Flaticon-settings: "\f10f";
+    $font-Flaticon-notebook: "\f110";
+    $font-Flaticon-clock: "\f111";

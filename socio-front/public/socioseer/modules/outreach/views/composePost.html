@@ -1,0 +1,956 @@
+<style>
+    .client-form .form-group {
+        height: 65px;
+        margin-bottom: 0;
+    }
+</style>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12 p0px ">
+            <div class="compose-post">
+                <ul class="nsdav nav-sd" role="dfdf">
+                    <li ng-class="{'active': step0}"><a ng-click="activeStep(0,tabDisable[0])">Compose</a></li>
+                    <li ng-class="{'active': step1}"><a ng-disabled="!tabDisable[1]" ng-click="activeStep(1,tabDisable[1])">Schedule</a></li>
+                    <!-- <li class="hide" ng-class="{'active': step2}"><a ng-disabled="!tabDisable[2]" aria-controls="audience" ng-click="activeStep(2,tabDisable[2])">Audience</a></li>-->
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content mt20px">
+                    <div role="tabpanel" class="tab-pane fade in" ng-class="{'active': step0}" id="compose">
+                        <div class="row" ng-if="clientDropdown">
+                            <div class="col-sm-3 client-form mb20px">
+                                <div class="form-group">
+                                    <label>Client</label>
+                                    <div class="">
+                                        <div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+                                            options="clientOptPost" selected-model="selectedClientPost" events="{ onItemSelect: changeClientDropDownP, onItemDeselect: onDeselectClientP }"></div>
+                                    </div>
+                                    <label ng-if="selectedClientError" class="control-label has-error validationMessage">
+                                        <i class="fa fa-times"></i> Required
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <form class="client-form compose" novalidate angular-validator name="compostPostForm">
+                                <div class="post-editor">
+                                    <div class="row">
+                                        <div class="col-sm-3 mb10px">
+                                            <div class="form-group">
+                                                <label>Brands</label>
+                                                <div ng-class="{postErrorFieldBorder : selectedBrandError==true}" disabled="isBrandDisabled" class="custom_dropdown" ng-dropdown-multiselect=""
+                                                    extra-settings="extraSettings" options="brandOpt" selected-model="selectedBrand"
+                                                    events="{ onItemSelect: changeBrand}">
+                                                </div>
+                                                <label ng-if="selectedBrandError" class="control-label has-error validationMessage">
+                                                    <i class="fa fa-times"></i> Required
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mb10px">
+                                            <div class="form-group">
+                                                <label>Campaign </label>
+                                                <div disabled="isCampaignDisabled" class="custom_dropdown" ng-dropdown-multiselect="" extra-settings="extraSettings" options="campaignOpt"
+                                                    selected-model="selectedCampaign" events="{ onItemSelect: changeCampaign, onItemDeselect: deSelectCampaign }">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-3 mb10px">
+                                            <div class="form-group height-auto">
+                                                <label>Social Media Channels</label>
+                                                <div ng-class="{postErrorFieldBorder : selectedPlatformError==true}" class="custom_dropdown" disabled="isPlatformDisabled"
+                                                    ng-dropdown-multiselect="" extra-settings="extraMultiSettings" options="platformOpt"
+                                                    selected-model="selectedPlatform" events="{ onItemSelect: changePlatforms, onItemDeselect: onDeselectPlatform }">
+                                                </div>
+                                                <label ng-if="selectedPlatformError" class="control-label has-error validationMessage">
+                                                    <i class="fa fa-times"></i> Required
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3 mb10px">
+                                            <label>Handles</label>
+                                            <!-- {{handlerPost}} -->
+                                            <div ng-class="{postErrorFieldBorder : selectedHandlersError==true}" disabled="!handlersOpt || handlersOpt.length==0 || isHandlerDisabled"
+                                                ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraMultiSettings"
+                                                options="handlersOpt" selected-model="selectedHandlers" events="{ onItemSelect: changeHandlers}">
+                                            </div>
+
+                                            <label ng-if="selectedHandlersError" class="control-label has-error validationMessage">
+                                                <i class="fa fa-times"></i> Required
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row media-preview-section" ng-if="showGallery && selectedMedia.length>0">
+                                        <div class="col-sm-12">
+                                            <div class="media-preview-section-inner clearfix">
+                                                <!-- image previews here -->
+                                                <div class="col-md-3 media-preview-single-img" ng-repeat="(key,val) in selectedMedia track by $index">
+                                                    <img ng-src="{{val.url}}" ng-if="val.mediaType=='IMAGE'" />
+                                                    <video ng-src="{{val.url}}" ng-if="val.mediaType=='VIDEO'" style="width: 100%;"></video>
+                                                    <div class="mediatypevideo" ng-if="val.mediaType=='VIDEO'"><span class="fa fa-play"></span>
+                                                    </div>
+                                                    <a ng-click="removeSelectedMedia(key)">
+                                                        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ck editor -->
+                                    <div class="row ">
+                                        <div class="col-sm-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading composepost">
+                                                    <div class="row">
+                                                        <div class="col-sm-8">
+                                                            <h4 class="add-content">Add Content</h4>
+                                                        </div>
+                                                        <div class="col-sm-4 search-form">
+                                                            <!--<span class="charactercount">{{140 - tinymceModel.length}} left</span>-->
+                                                            <div class="shorten">
+                                                                <input name="shortenURL" type="text" class="form-control input-text-addon" ng-model="shortenURL" placeholder="Enter URL to Short"
+                                                                />
+                                                                <!-- <span class="input-group-addon shorten" ng-click="doShortenUrl()"><span class="flaticon-cut-with-scissors"></span>                                                                {{srtnBtnTxt}}</span>-->
+                                                                <a ng-click="doShortenUrl()" class="hinttag"><span class="flaticon-link-button form-control-feedback "  ></span><span class="tooltips-icon-arrow">Shorten URL</span></a>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body p0px">
+                                                    <div class="col-sm-12 p0px" id="tinyHere">
+                                                        <div class="form-groups">
+
+                                                            <textarea ng-keyup="isContent(tinymceModel)" ng-class="{postErrorFieldBorder : postDescError==true}" id="postContent" class="form-control post-description-editor"
+                                                                name="tinymceModel" ng-model="tinymceModel" cols="15" resize="none">{{tinymceModel}}</textarea>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="panel-footer composepost">
+                                                    <div class="row ">
+                                                        <div class="col-sm-3">
+                                                            <!--<div class="check-box hide">
+                                                                <label class="vote-check"><input type="checkbox" name="optionscheck" ng-model="notifyCheck" checked><span>Notify me when sent</span></label>
+                                                            </div>-->
+                                                            <div class="panel-btn">
+
+                                                                <a data-toggle="modal" ng-click="openMediaLib('IMAGE')" class="btn btn-blank hinttag" title="">
+                                                                    <span class="flaticon-photo-camera-fill icon"></span>
+                                                                    <span class="tooltips-icon-arrow">Add Image</span>
+                                                                </a>
+                                                                <a data-toggle="modal" ng-click="openMediaLib('VIDEO')" class="btn btn-blank hinttag">
+                                                                    <span class="flaticon-youtube icon"></span>
+                                                                    <span class="tooltips-icon-arrow">Add Video</span>
+                                                                </a>
+                                                                <button type="submit" name="draft" ng-click="saveDraft(compostPostForm)" class="btn btn-blank hinttag" id="saveDraft">
+                                                                    <span class="flaticon-save-button icon"></span>
+                                                                    <span class="tooltips-icon-arrow">Save as Draft</span>
+                                                                </button>
+                                                                <a class="btn btn-blank hinttag" ng-click="publishPostNow()">
+                                                                    <span class="flaticon-time icon"></span> 
+                                                                    <span class="tooltips-icon-arrow">Publish Now</span>
+                                                                </a>
+                                                                <a name="saveSchecule" ng-click="saveAndSchedule()" aria-controls="schedule" role="tab" data-toggle="tab" class="btn btn-blank hinttag">
+                                                                    <span class="flaticon-clock icon"></span>
+                                                                    <span class="tooltips-icon-arrow">Save and Schedule</span> 
+                                                                </a>
+                                                                <!--<a ng-click="previewContent()" data-toggle="modal" class="btn btn-blank hinttag">
+                                                                    <span class="flaticon-eye icon"></span>
+                                                                    <span class="tooltips-icon-arrow">Preview</span>
+                                                                 </a>
+                                                                <a name="saveAddNew" ng-click="saveAddNew()" aria-controls="save" class="btn btn-blank hinttag">
+                                                                    <span class="flaticon-add-new icon"></span>
+                                                                    <span class="tooltips-icon-arrow">Save and Add New</span>
+                                                                 </a>-->
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-9">
+                                                            <div class="pull-right panel-btn">
+
+                                                                <a ng-click="previewContent()" data-toggle="modal" class="btn btn-compose mr5px">
+                                                                    <span class="flaticon-eye icon mr5px"></span> Preview
+                                                                 </a>
+
+                                                                <a name="saveAddNew" ng-click="saveAddNew()" aria-controls="save" class="btn btn-compose savenew">
+                                                                    <i class="fa fa-plus-circle fa-lg mr5px"></i> Save &amp; Add New
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <label ng-if="postDescError" class="control-label has-error validationMessage">
+                                                <i class="fa fa-times"></i> Required
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="post-suggestion">
+                            <div class="row mt20px">
+                                <div class="col-sm-7 ">
+                                    <h3 class="h3 mt0px ">Content Suggestion</h3>
+                                    <div class="search-toggle-section">
+                                        <div class="btn-group clearfix" role="group">
+                                            <button type="button" class="btn dropdown-toggle toggle_s_btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span></span><span></span><span></span></button>
+                                            <ul class="dropdown-menu custom_sdropdown left-arrow stop-dropdown">
+                                                <li>
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-sm-3 pt5px">Industry</label>
+                                                        <div class="col-sm-9">
+                                                            <select ng-change="setTweetsFilter(tf.industryFilter.id)" class="custom-select form-control" ng-model="tf.industryFilter"
+                                                                ng-options="item as item.industryName for item in industries track by item.id">
+                                                                <option value="">Select Industry</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-sm-3 pt5px">Segment </label>
+                                                        <div class="col-sm-9">
+                                                            <select ng-disabled="!allSegments" ng-change="setTweetsFilter()" class="custom-select form-control" ng-model="tf.segmentFilter"
+                                                                ng-options="item as item.segmentName for item in allSegments track by item.id">
+                                                                <option value="">Select Segment</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-sm-3 pt5px">Competitor </label>
+                                                        <div class="col-sm-9">
+                                                            <select ng-change="setTweetsFilter()" ng-disabled="!clientComptitors" class="custom-select form-control" ng-model="tf.compFilter"
+                                                                ng-options="item as item.name for item in clientComptitors track by item.handles">
+                                                                <option value="">Select Competitor</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="col-sm-5">
+                           <div class="pull-right">
+                           	<div class="custom-sorted client-form">
+                           		<select class=" form-control">
+                           			<option value="" selected>Sorted by</option>
+                           			<option value="">All</option>
+                           			<option value="">Comments</option>
+                           			<option value="">Shares</option>
+                           			<option value="">Likes</option>
+                           		</select>
+                           	</div>
+                           </div>
+                           </div>-->
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="review content-suggestion">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active twitter">
+                                                <a href="#twitter" aria-controls="twitter" role="tab" data-toggle="tab">Twitter</a>
+                                            </li>
+                                            <li role="presentation" class="facebook">
+                                                <a href="#facebook" aria-controls="facebook" role="tab" data-toggle="tab">Facebook</a>
+                                            </li>
+                                        </ul>
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="fix-scroll tab-pane active fade in plr15px " id="twitter" ng-scrollbars ng-scrollbars-config="configScroll">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <ul class="pl0px key-list">
+                                                            <li ng-if="key<15" ng-repeat="(key,value) in trendsData">
+                                                                <a title="{{value.name}}" href="{{value.url}}" target="_blank">{{value.name}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 pad20px">
+                                                        <div class="row">
+                                                            <div ng-repeat="x in loaderArray" class="timeline-wrapper-no-boreder animation-background" ng-hide="popularTweetsData">
+                                                                <div class="timeline-item">
+                                                                    <div class="animated-background">
+                                                                        <div class="background-masker header-top"></div>
+                                                                        <div class="background-masker header-left"></div>
+                                                                        <div class="background-masker header-right"></div>
+                                                                        <div class="background-masker header-bottom"></div>
+                                                                        <div class="background-masker subheader-left"></div>
+                                                                        <div class="background-masker subheader-right"></div>
+                                                                        <div class="background-masker subheader-bottom"></div>
+                                                                        <div class="background-masker content-top"></div>
+                                                                        <div class="background-masker content-first-end"></div>
+                                                                        <div class="background-masker content-second-line"></div>
+                                                                        <div class="background-masker content-second-end"></div>
+                                                                        <div class="background-masker content-third-line"></div>
+                                                                        <div class="background-masker content-third-end"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <!--<div ng-repeat="(key,value) in popularTweetsData" class="col-sm-6 padd-odd-even">
+                                                                <div class="social-post twitter">
+                                                                    <div class="row">
+                                                                        <div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3">
+                                                                            <a class="tweet-img" ng-href="{{value.extended_entities.media[0].expanded_url}}" target="_blank">
+                                                                                <img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive">
+                                                                            </a>
+                                                                        </div>
+                                                                        <div ng-class="{'col-sm-9 task-details post-info': value.extended_entities.media[0].media_url_https!=null, 'col-sm-12 task-details post-info': value.extended_entities.media[0].media_url_https==null}">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 ">
+                                                                                    <h4 ng-model="copiedText" id="cp-{{key}}" ng-bind-html="value.text|toUrl" class="task-title">{{value.text|toUrl}}</h4>
+                                                                                </div>
+                                                                                <div class="col-sm-5 pr0px">
+                                                                                    <ul class="pl0px">
+                                                                                        <li class="retweet ng-binding"><i class="fa fa-retweet"></i>{{value.retweet_count
+                                                                                            | numberFormat:1}}</li>
+                                                                                        <li class="heart ng-binding"><i class="fa fa-heart heart"></i>{{value.favorite_count
+                                                                                            | numberFormat:1}}</li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                                <div class="col-sm-7">
+                                                                                    <span class="post-date">{{value.created_at | toTwitterData | date: 'MMM dd, yyyy - h:mm a'}}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row mt15px">
+                                                                        <div class="col-sm-3">
+                                                                            <label class="platform-bg"><i class="fa fa-twitter"></i></label>
+                                                                        </div>
+                                                                        <div class="col-sm-9 ">
+                                                                            <div class="pull-right">
+                                                                                <a ng-click="setDataToEditor(value.text)" class="btn btn-post ">Copy</a>
+                                                                                <a data-toggle="modal" ng-click="setCopiedData(value,addContentForm,true)" href="#addContent" class="btn btn-post">Add to content library</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>-->
+                                                            <div ng-repeat="(key,value) in popularTweetsData" class="col-sm-6 padd-odd-even">
+                                                                <div class="social-post twitter">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 mb10px">
+                                                                            <div class="media">
+                                                                                <div class="media-left">
+                                                                                    <div class="trends-profile-image">
+                                                                                        <img class="img-responsive center-block" ng-src="{{value.user.profile_image_url}}" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="media-body">
+                                                                                    <h3 class="profile-name">
+                                                                                        <a target="_blank" href="https://twitter.com/{{value.user.screen_name}}">{{value.user.name}}</a>
+                                                                                        <small class="handler-name">
+                                                                                                    <a target="_blank" href="https://twitter.com/{{value.user.screen_name}}">@{{value.user.screen_name}}</a>
+                                                                                                </small>
+                                                                                    </h3>
+                                                                                    <span class="date-time">{{value.created_at | toTwitterData | date: 'MMM dd, yyyy - h:mm a'}}</span>
+                                                                                    <ul class="content-action post-btns">
+                                                                                        <li>
+                                                                                            <a ng-click="setDataToEditor(value.text)" title="copy">
+                                                                                                        <span class="flaticon-copy-symbol-of-two-filled-paper-sheets"></span>
+                                                                                                    </a>
+                                                                                        </li>
+                                                                                        <li>
+                                                                                            <a data-toggle="modal" ng-click="setCopiedData(value,addContentForm,true)" href="#addContent" title="Add Content Library">
+                                                                                                        <span class="flaticon-notebook"></span>
+                                                                                                    </a>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div ng-class="{'col-sm-9 task-details post-info pr0px': value.extended_entities.media[0].media_url_https!=null, 'col-sm-12 task-details post-info ': value.extended_entities.media[0].media_url_https==null}">
+
+                                                                            <div class=" mb5px">
+                                                                                <h4 ng-model="copiedText" id="cp-{{key}}" ng-bind-html="value.text|toUrl" class="task-title">{{value.text|toUrl}}</h4>
+                                                                            </div>
+                                                                            <div class=" mb5px">
+                                                                                <ul class="pl0px">
+                                                                                    <li class="retweet ng-binding"><i class="fa fa-retweet"></i>{{value.retweet_count
+                                                                                        | numberFormat:1}}</li>
+                                                                                    <li class="heart ng-binding"><i class="fa fa-heart heart"></i>{{value.favorite_count
+                                                                                        | numberFormat:1}}</li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <!--
+                                                                                <div class="col-sm-12 mb5px">
+                                                                                    <label class="twitter"><i class="fa fa-twitter-square"></i></label>
+                                                                                </div>-->
+
+
+                                                                        </div>
+                                                                        <div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3">
+                                                                            <div class="influencer-profile">
+                                                                                <a class="tweet-img" ng-href="{{value.extended_entities.media[0].expanded_url}}" target="_blank">
+                                                                                    <img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive">
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt15px">
+
+                                                        <div class="col-sm-9">
+                                                            <div class="pull-right">
+                                                                <form class="client-form" novalidate angular-validator name="addContentForm">
+                                                                    <div class="add-modal popupmodal">
+                                                                        <div class="modal fade" tabindex="-1" role="dialog" id="addContent" aria-labelledby="gridSystemModalLabel">
+                                                                            <div class="modal-dialog" role="document">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                                                                                        <h4 class="modal-title" id="gridSystemModalLabel">Add Content
+                                                                                        </h4>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        <div class="row ">
+                                                                                            <div ng-if="clientDropdown">
+                                                                                                <div class="form-group  plr10px">
+                                                                                                    <div class="col-sm-4">
+                                                                                                        <label class="pt10px">Select Client:</label>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-8">
+                                                                                                        <div class="socioselect">
+                                                                                                            <div class="">
+                                                                                                                <div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+                                                                                                                    options="clientOpt"
+                                                                                                                    selected-model="selectedClientData"
+                                                                                                                    events="{ onItemSelect: changeClientDropDown, onItemDeselect: onDeselectClient }">
+
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <label ng-if="selectedClientError" class="control-label has-error validationMessage">
+                                                                                                                                <i class="fa fa-times"></i> Required
+                                                                                                                            </label>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group  plr10px">
+                                                                                                <div class="col-sm-4">
+                                                                                                    <label class="pt10px">Add Title:</label>
+                                                                                                </div>
+                                                                                                <div class="col-sm-8">
+                                                                                                    <input type="text" class="form-control" placeholder="Title" ng-model="contentDataComposePost.contentTitle" name="contentTitle"
+                                                                                                        validator="formValidator.alphabetOnly(contentDataComposePost.contentTitle) === true"
+                                                                                                        invalid-message="formValidator.alphabetOnly(contentDataComposePost.contentTitle)"
+                                                                                                        required/>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group  plr10px textarea">
+                                                                                                <div class="col-sm-4">
+                                                                                                    <label class="pt10px">Description:</label>
+                                                                                                </div>
+                                                                                                <div class="col-sm-8">
+                                                                                                    <textarea class="form-control" placeholder="Source" ng-model="contentDataComposePost.description" name="description" validator="formValidator.alphabetOnly(contentDataComposePost.description) === true"
+                                                                                                        invalid-message="formValidator.alphabetOnly(contentDataComposePost.description)"
+                                                                                                        required></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group  plr10px">
+                                                                                                <div class="col-sm-4">
+                                                                                                    <label class="pt10px">Keywords:</label>
+                                                                                                </div>
+                                                                                                <div class="col-sm-8">
+                                                                                                    <tags-input ng-model="contentDataComposePost.contentKeywords" class="form-control tag-input" placeholder="Add Keywords" name="keywords"
+                                                                                                        id="keywordsData" on-tag-added="tagAddedKeywords($tag)"></tags-input>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group  plr10px">
+                                                                                                <div class="col-sm-4">
+                                                                                                    <label class="pt10px">Source URL:</label>
+                                                                                                </div>
+                                                                                                <div class="col-sm-8">
+                                                                                                    <input type="text" placeholder="URL" class="form-control light-text" ng-model="contentDataComposePost.contentSourceUrl" name="contentSourceUrl"
+                                                                                                        validator="formValidator.isValidUrl(contentDataComposePost.contentSourceUrl) === true"
+                                                                                                        invalid-message="formValidator.isValidUrl(contentDataComposePost.contentSourceUrl)"
+                                                                                                    />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group  plr10px">
+                                                                                                <div class="col-sm-4">
+                                                                                                    <label class="pt10px">Upload Image:</label>
+                                                                                                </div>
+                                                                                                <div class="col-sm-8">
+
+                                                                                                    <input multiple type="file" id="media-img-content" class="form-control" ngf-select="" ng-model="contentDataComposePost.file"
+                                                                                                        name="file" ngf-pattern="'image/*'"
+                                                                                                        accept="image/gif, image/png, image/jpeg"
+                                                                                                        ng-change="previewFiles(contentDataComposePost.file)"
+                                                                                                        ngf-max-height="10000"
+                                                                                                        ngf-max-size="40MB" />
+                                                                                                    <label class="note">Maximum size of 4 MB is allowed</label>
+                                                                                                    <div> {{fileLimitError }}
+                                                                                                    </div>
+                                                                                                    <span ng-repeat="fd in filesData track by $index" class="san-inline-block img_choose_section">
+                                                                                    <img ng-src="{{fd.src}}" class="img-responsive img-thumbnail contentimg" />
+                                                                                    <i ng-click="removeFile($index)" class="fa fa-times-circle-o"></i>
+                                                                                    </span>
+                                                                                                    <img ng-if="filesData.length>0" ng-src="{{imageUrl}}add-more.jpg" ng-click="addMoreContentMedia()" class="img-responsive img-thumbnail contentimg"
+                                                                                                    />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="form-group  plr10px">
+                                                                                                <div class="col-sm-4">
+                                                                                                    <label class="pt10px">Upload Video:</label>
+                                                                                                </div>
+                                                                                                <div class="col-sm-8">
+                                                                                                    <input type="file" class="form-control" ng-change="mergeVideo(contentDataComposePost.videoFile)" ngf-select ng-model="contentDataComposePost.videoFile"
+                                                                                                        name="videoFile" ngf-pattern="video/*"
+                                                                                                        accept="video/*" ngf-max-size="1024MB"
+                                                                                                    />
+                                                                                                    <label class="note">Supported video format mp4 &amp; Max 15 MB is allowed</label>
+                                                                                                    <div ng-if="videoFile && videoFile.type=='video/mp4'" class="embed-responsive embed-responsive-16by9 mt10px">
+                                                                                                        <video class="embed-responsive-item" controls ngf-src="videoFile"></video>
+                                                                                                    </div>
+                                                                                                    <label class="has-error" ng-if="videoFile && videoFile.type!='video/mp4'"> Invalid File Type</label>
+                                                                                                    <label>Or</label>
+                                                                                                    <input type="text" placeholder="https://www.youtube.com/watch?v=YXjYfpqg8Z0" class="form-control " ng-keyup="getThumb(contentDataComposePost.youTubeUrl)"
+                                                                                                        ng-model="contentDataComposePost.youTubeUrl"
+                                                                                                        name="youTubeUrl" />
+                                                                                                    <img ng-src="{{thumbSrc}}" class="img-responsive youtube-thumb" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <div class="col-sm-12 ">
+                                                                                            <button type="submit" class="btn btn-compose" ng-click="addContent(addContentForm,true)" name="submit">Save</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- /.modal-content -->
+                                                                            </div>
+                                                                            <!-- /.modal-dialog -->
+                                                                        </div>
+                                                                        <!-- /.modal -->
+                                                                    </div>
+
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane fade plr15px fix-scroll" id="facebook" ng-scrollbars ng-scrollbars-config="configScroll">
+                                                <h4>No Content Available</h4>
+                                                <!--<div class="col-sm-12 ">
+                                       <a ui-sref="suggestions" class="pull-right"> <label>View All <i class="fa fa-angle-double-right"></i></label> </a>
+                                       </div>-->
+                                            </div>
+                                            <div class="col-sm-12 ">
+                                                <a ui-sref="suggestions" class="pull-right">
+                                                    <label>View All <i class="fa fa-angle-double-right"></i></label>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade in" ng-class="{'active': step1}" id="schedule">
+                        <form class="client-form" novalidate angular-validator name="selectAudienceForm">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label class="p10px">Frequency/Date Time Selection</label>
+                                        </div>
+                                        <div class="col-sm-6 ">
+                                            <button type="submit" name="addPlatform" ng-click="addPlatform()" class="btn btn-default pull-right mb10px"><span class="add-icon"></span> Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-if="allPlatforms.length>0">
+                                        <div class="col-sm-12">
+                                            <!-- table-heading -->
+                                            <div class="flex-heading">
+                                                <div class="flex_child">
+                                                    <label>Platform</label>
+                                                </div>
+                                                <div class="flex_child">
+                                                    <label>Frequency</label>
+                                                </div>
+                                                <div class="flex_child">
+                                                    <label>Start Date & Time</label>
+                                                    <span class="hint fa fa-question-circle-o" title="" aria-hidden="true"><span class="tool-tips tool-tips-arrow">
+                                                                                    Schedule a post with 5 mins delay for current date.</span>
+                                                    </span>
+                                                </div>
+                                                <div class="flex_child">
+                                                    <label> End Date & Time</label>
+                                                    <span class="hint fa fa-question-circle-o" title="" aria-hidden="true"><span class="tool-tips tool-tips-arrow">
+                                                                                    Schedule a post with 5 mins delay for current date.
+                                                                              </span>
+                                                    </span>
+                                                </div>
+                                                <div class="flex_child">
+                                                    <label>Action</label>
+                                                </div>
+                                            </div>
+                                            <!-- table-heading end -->
+                                            <!-- first row -->
+                                            <div class="flex-parent" ng-repeat="(platKey, sch) in allPlatforms">
+                                                <div class="flex_child">
+                                                    <div class="socioselect ">
+                                                        <select ng-change="onSelectVal('platform',platKey)" ng-class="{postErrorFieldBorder : errorPlt{{platKey}}==true}" name="platform"
+                                                            id="select-platform" placeholder="Platform" class="select-platform-valid simp-select form-control"
+                                                            ng-model="sch.platforms" ng-options="opt as opt.label for opt in selectedHandlerPlatform"
+                                                            ng-class="{}">
+                                                            <option value="">Select platform</option>
+                                                        </select>
+                                                        <label class="time-error" ng-show="errorPlt{{platKey}}">
+                                                            Required
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="flex_child">
+                                                    <div class="socioselect ">
+                                                        <select ng-change="onSelectVal('frequency',platKey)" ng-class="{postErrorFieldBorder : errorFreq{{platKey}}==true}" name="frequency"
+                                                            id="select-frequency" placeholder="frequency" class="select-frequency-valid simp-select form-control"
+                                                            ng-model="sch.frequency" ng-change="checkEndOption(sch.frequency)"
+                                                            ng-options="freq as freq.frequency for freq in allFrequency track by freq.id">
+                                                            <option value="">Select frequency</option>
+                                                        </select>
+                                                        <label class="time-error" ng-show="errorFreq{{platKey}}">
+                                                            Required
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <!-- repeat in this div-->
+                                                <div class="flex_child colmn_dir ">
+                                                    <div class="flex_subchild " ng-repeat="(key, sdt) in sch.dateTime">
+                                                        <div class="input-group custom_caledar">
+                                                            <input readonly ng-class="{postErrorFieldBorder : errorSDate{{platKey}}{{key}}==true}" type="text" class="form-control brd4px"
+                                                                name="sdt.startDT" datetime-picker="MM/dd/yyyy HH:mm" ng-model="sdt.startDT"
+                                                                closeOnTimeNow="true" closeOnDateSelection="true" is-open="sdt.isStartOpen"
+                                                                when-closed="onDateClose('sDate',platKey,key,sdt)" datepicker-options="picker1.datepickerOptions"
+                                                                timepicker-options="picker1.timepickerOptions" default-time="{{defaultTime}}"
+                                                                }} "
+                                                            />
+                                                            <span class="input-group-addon calender-icon calendar-btn
+                                                                " ng-click="sdt.isStartOpen=! sdt.isStartOpen ">
+                                             <a ><span class="date-time-icon "></span></a>
+                                                            </span>
+                                                            <label class="time-error " ng-show="errorSDate{{platKey}}{{key}} ">
+                                                                Invalid Time
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <!-- repeat in this div-->
+                                                <div class="flex_child colmn_dir ">
+                                                    <div class="flex_subchild " ng-repeat="(key, edt) in sch.dateTime ">
+                                                        <div class="input-group custom_caledar " ng-if="sch.frequency.id!=9 ">
+                                                            <input readonly ng-disabled="!edt.startDT " ng-class="{postErrorFieldBorder
+                                                                : errorEDate{{platKey}}{{key}}==true} " when-closed="onDateClose(
+                                                                'eDate',platKey,key) "
+                                                                type="text " class="form-control brd4px
+                                                                " datetime-picker="MM/dd/yyyy HH:mm "
+                                                                ng-model="edt.endDT " is-open="edt.isEndOpen
+                                                                " datepicker-options="edt.endDateOption.datepickerOptions "
+                                                                timepicker-options="picker1.timepickerOptions
+                                                                " default-time="{{defaultTime}} "
+                                                            />
+                                                            <span class="input-group-addon calender-icon calendar-btn
+                                                                " ng-click="edt.isEndOpen=!edt.isEndOpen ">
+                                             <a ng-click="refreshTime() "><span class="date-time-icon "></span></a>
+                                                            </span>
+                                                            <label class="time-error " ng-show="errorEDate{{platKey}}{{key}} ">
+                                                                Invalid Time
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <!-- repeat in this div-->
+                                                <div class="flex_child colmn_dir ">
+                                                    <div class="flex_subchild flex-row " ng-repeat="dt in sch.dateTime ">
+                                                        <a ng-if="dt.id==0 " ng-click="addDT(sch) "><span class="add-icon "></span></a>
+                                                        <a ng-click="deleteDT(dt, sch) "><span class="trash-icon "></span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- second row -->
+                                        </div>
+                                    </div>
+                                    <div class="mt20px ">
+                                        <!-- <img src="{{imageUrl }}schedule-graph.jpg " class="img-responsive " /> -->
+                                    </div>
+                                    <div class="col-sm-12 " ng-if="allPlatforms.length>0">
+                                                            <div class="pull-right mt20px">
+                                                                <!-- <span class="formErrorMsg">{{schedulerErrorMsg}}</span>
+                                            <button name="submit" ng-click="saveSchecule(selectAudienceForm)" data-toggle="tab" class="send btn btn-compose">
+                                                <i class="fa fa-paper-plane"></i> Select Audience
+                                            </button>-->
+                                                                <span class="formErrorMsg">{{errorAudiennceFormError}}</span>
+                                                                <a ng-click="saveSchecule(selectAudienceForm)" ng-if="!showPostButton" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Send for Review</a>
+                                                                <a ng-click="saveSchecule(selectAudienceForm)" ng-if="showPostButton" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Post </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        </form>
+                        </div>
+                        <!-- <div role="tabpanel" class="tab-pane fade in" ng-class="{'active': step2}" id="audience">
+                        <div class="row">
+                            <div class="col-sm-6 client-form">
+                                <div class="form-group height-auto">
+                                    <label>Select Audience</label>
+                                    <div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraMultiSettings" options="audienceOpt" selected-model="selectedAudience"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row hidden">
+                            <div class="col-sm-12">
+                                <label>Followers Suggestion </label>
+                                <div class="follower ">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-lg-3">
+                                            <div class="panel panel-default social-account twitter">
+                                                <div class="panel-heading ">
+                                                    <h3 class="panel-title"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <i class="fa fa-star pull-right"
+                                                            aria-hidden="true"></i></h3>
+                                                </div>
+                                                <div class="panel-body scrollme" ng-scrollbars ng-scrollbars-config="scrollbarConfig">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <ul class="pl0px suggestion-list">
+                                                                <li>Suggestion 1 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+                                                                <li>Suggestion 2 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+                                                                <li>Suggestion 3 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+                                                                <li>Suggestion 4 <i class="fa fa-star-o pull-right active" aria-hidden="true"></i></li>
+                                                                <li>Suggestion 5 <i class="fa fa-star-o pull-right" aria-hidden="true"></i></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 mt20px">
+                                <div class="pull-right">
+                                    <span class="formErrorMsg">{{errorAudiennceFormError}}</span>
+                                    <a ng-click="sendForReview()" ng-if="!showPostButton" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Send for Review</a>
+                                    <a ng-click="sendForReview()" ng-if="showPostButton" class="send btn btn-compose"> <i class="fa fa-paper-plane"></i> Post </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+
+                    </div>
+                    <div class="preview-modal popupmodal " ng-if="tinymceModel && selectedPlatform.length>0 && selectedHandlers.length>0">
+                        <div class="modal fade review" tabindex="-1" role="dialog" id="preview" aria-labelledby="gridSystemModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content ">
+                                    <form class="client-form">
+                                        <div class="modal-header ">
+                                            <button type="button" name="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <!--<li role="presentation" ng-class="{'active' : $index ==0 }" class="{{opt.class}}" ng-if="opt.select" ng-repeat="opt in selectedPlatform">
+                        <a href="{{opt.href}}" ng-click="setClassActive(optionSocial)" role="tab" data-toggle="tab">
+                        	{{opt.name}}
+                        </a>
+                        </li>-->
+                                                <li role="presentation" ng-class="{'active' : $first, 'twitter': pltf.label.toLowerCase()=='twitter', 'facebook': pltf.label.toLowerCase()=='facebook' }"
+                                                    ng-repeat="pltf in selectedPlatform">
+                                                    <a href="#{{pltf.label | lowercase}}-post" role="tab" data-toggle="tab">
+                                     {{pltf.label}}
+                                </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="modal-body p0px">
+                                            <!-- Tab panes -->
+                                            <div class="tab-content">
+                                                <div role="tabpanel" ng-class="{'active': selectedPlatform[0].label.toLowerCase()=='facebook' }" class="tab-pane fade in"
+                                                    id="facebook-post">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="permalink for-twitter">
+                                                                <div class="contents clearfix">
+                                                                    <div class="permalink-header">
+
+                                                                        <img ng-if="!getHandleImage(selectedHandlers,'facebook')" ng-src="{{imageUrl}}dummy-profile.jpg" id="twit_logo" class=" avatar js-action-profile-avatar"
+                                                                        />
+                                                                        <img ng-if="getHandleImage(selectedHandlers,'facebook')" id="twit_logo" ng-src="{{getHandleImage(selectedHandlers,'facebook')}}"
+                                                                            class="avatar js-action-profile-avatar" />
+
+                                                                        <div data-aria-label-part="" class="fullname js-action-profile-name show-popup-with-id">
+                                                                            <span class="txt_twit_name">
+														        <strong>{{getHandleName(selectedHandlers,'facebook')}}</strong>
+													        </span>
+                                                                        </div>
+                                                                        <div class="lineheight">
+                                                                            <span ng-if="handles.platform.toLowerCase()=='facebook'" ng-repeat="handles in selectedHandlers" class="txt_twit_account">
+                                                                <a ng-href="https://facebook.com/{{handles.accessToken.pageId}}" target="_blank">
+                                                                        {{handles.accessToken.screen_name}} 
+                                                                    </a>
+                                                                </span>
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                    <p class="desc" ng-bind-html="tinymceModel | parseTagsFacebook">
+                                                                        {{tinymceModel | parseTagsFacebook}}
+                                                                    </p>
+                                                                    <div id="box-image" class="mt10px">
+                                                                        <ul ng-class="{'imgone': selectedMedia.length == 1, 'imgtwo': selectedMedia.length == 2, 'imgthree': selectedMedia.length == 3, 'imgfour': selectedMedia.length == 4,'default':selectedMedia.length > 4}">
+                                                                            <li ng-repeat="(key,value) in selectedMedia">
+                                                                                <img ng-src="{{value.url}}" class="img-responsive" ng-if="value.mediaType=='IMAGE'" />
+                                                                                <video controls style="max-width: 100%; height: auto;" class="embed-responsive-item" ng-src="{{value.url}}" ng-if="value.mediaType=='VIDEO'"></video>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div role="tabpanel" ng-class="{'active': selectedPlatform[0].label.toLowerCase()=='twitter' }" class="tab-pane fade in"
+                                                    id="twitter-post">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div lang="it" data-aria-label-part="0" class="js-tweet-text tweet-text">
+                                                                <div class="txt_twit_content" class="mb10px" ng-repeat="c in twtPrevContent">
+                                                                    <!-- tw -->
+                                                                    <div class="permalink-tweet" id="permalink-tweet">
+                                                                        <div class="contents clearfix">
+                                                                            <div class="permalink-header">
+                                                                                <img ng-if="!getHandleImage(selectedHandlers,'twitter')" ng-src="{{imageUrl}}dummy-profile.jpg" id="twit_logo" class=" avatar js-action-profile-avatar"
+                                                                                />
+                                                                                <img ng-if="getHandleImage(selectedHandlers,'twitter')" id="twit_logo" ng-src="{{getHandleImage(selectedHandlers,'twitter')}}"
+                                                                                    class="avatar js-action-profile-avatar" />
+
+
+                                                                                <div data-aria-label-part="" class="fullname js-action-profile-name show-popup-with-id">
+                                                                                    <span id="twit_nome">
+                                                <span id="txt_twit_nome"><b>{{getHandleName(selectedHandlers,'twitter')}}</b></span>
+                                                                                    </span>
+                                                                                </div>
+                                                                                <div class="lineheight">
+                                                                                    <span ng-if="handles.platform.toLowerCase()=='twitter'" ng-repeat="handles in selectedHandlers" class="txt_twit_account">
+														<a   ng-href="https://twitter.com/{{handles.accessToken.screen_name}}" target="_blank">
+															@{{handles.accessToken.screen_name}} 
+														</a>
+													</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <span ng-if="twtPrevContent.length>1" class="san-wb">
+                                          {{'['}} {{$index+1}} {{'/'}} {{twtPrevContent.length}} {{']'}} 
+                                          <span ng-bind-html="c | parseTagsTwitter">{{c | parseTagsTwitter}}</span></span>
+                                                                            <span ng-bind-html="c | parseTagsTwitter" ng-if="twtPrevContent.length==1" class="san-wb">{{c | parseTagsTwitter}}</span>
+                                                                            <ul ng-if="$index==0" ng-class="{'imgone': selectedMedia.length == 1, 'imgtwo': selectedMedia.length == 2, 'imgthree': selectedMedia.length == 3, 'imgfour': selectedMedia.length == 4,'default':selectedMedia.length > 4}">
+                                                                                <li ng-repeat="(key,value) in selectedMedia">
+                                                                                    <img ng-src="{{value.url}}" class="img-responsive" ng-if="value.mediaType=='IMAGE'" />
+                                                                                    <video controls style="max-width: 100%; height: auto;" class="embed-responsive-item" ng-src="{{value.url}}" ng-if="value.mediaType=='VIDEO'"></video>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </form>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="retweet-modal">
+                        <div class="modal fade bs-example-modal-sm" id="retweet" tabindex="-1" role="dialog">
+                            <div class="modal-dialog " role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                                        <h4 class="modal-title">Retweet this to your followers?</h4>
+                                    </div>
+                                    <div class="modal-body client-form p0px">
+                                        <div class="col-sm-12 retweet-box">
+                                            <div class="col-sm-6 ">
+                                                <label>Select Handle</label>
+                                                <!-- {{handlerPost}} -->
+                                                <div ng-class="{postErrorFieldBorder : selectedHandlersError==true}" disabled="!handlersOpt || handlersOpt.length==0" ng-dropdown-multiselect=""
+                                                    class="custom_dropdown" extra-settings="extraMultiSettings" options="handlersOpt"
+                                                    selected-model="selectedHandlers" events="{ onItemSelect: changeHandlers, onItemDeselect: onDeselectHandlers}"></div>
+                                                <label ng-if="selectedHandlersError" class="control-label has-error validationMessage">Required</label>
+                                            </div>
+                                            <div class="col-sm-6 ">
+                                                <div class="">
+                                                    <label>Comments</label>
+                                                    <input type="text" class="form-control retweet-comment" placeholder="Add a comment..." />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="retweet-preview">
+                                                    <div class="col-sm-2"><img ng-if="currentUserProfileImage == 'null'" ng-src="{{imageUrl}}dummy-profile.jpg"
+                                                            id="twit_logo" class=" avatar js-action-profile-avatar" />
+                                                        <img ng-if="currentUserProfileImage != 'null'" ng-src="{{currentUserProfileImage}}" id="twit_logo" class=" avatar js-action-profile-avatar"
+                                                        />
+                                                    </div>
+                                                    <div class="col-sm-10">
+                                                        <strong data-aria-label-part="" class="fullname js-action-profile-name show-popup-with-id">
+                              <span id="twit_nome">
+                                 <div id="txt_twit_nome">{{currentUserName}}</div>
+                              </span>
+                           </strong>
+                                                        <span data-aria-label-part="" class="username js-action-profile-name">
+                              <b>
+                                 <span id="twit_account">
+                                    <div id="txt_twit_account"> @someHandleName</div>
+                                 </span>
+                                                        </b>
+                                                        </span>
+                                                        <p class="twi-test">
+                                                            <!-- post content goes here  -->
+                                                            {{popupContent}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="col-sm-12 dis-block">
+                                            <button type="button" class="btn  btn-compose"><i class="fa fa-retweet"></i> Retweet</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-include src="'includes/mediaLibrary.html'"></ng-include>

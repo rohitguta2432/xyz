@@ -1,0 +1,147 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 mtb">
+            <div class="row client-form mb20px" ng-if="clientDropdown">
+                <div class="col-sm-4  plr5px">
+                    <div class="from-group">
+                        <div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings" options="clientOpt" selected-model="selectedClient"
+                            events="{ onItemSelect: changeClient, onItemDeselect: onDeselectClient }"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <form class="client-form" autocomplete="off">
+                        <div class="row">
+                            <div class="plr5px" ng-class="isAdmin?'col-sm-6 col-md-2':'col-sm-4 col-md-3'">
+                                <div class="from-group">
+                                    <div class="button-group socioselect">
+                                        <select  class="simp-select form-control" ng-model="draftPlatform" ng-options="platform as platform.name for platform in optionSocial">
+											<option value="">Select platform</option>
+										</select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="plr5px" ng-class="isAdmin?'col-sm-6 col-md-2':'col-sm-4 col-md-3'">
+                                <div class="from-group">
+                                    <div class="button-group socioselect">
+                                        <select class="simp-select form-control" ng-model="postStatus">
+											<option value="">Select Status</option>
+											<option value="4">Draft</option>
+											<option value="6">Pending</option>
+											<option value="8">Rejected</option>
+											<option value="25">Expired</option>
+										</select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="isAdmin" class="col-sm-4 col-md-2 plr5px">
+                                <div class="from-group">
+                                    <div class="from-group">
+                                        <div disabled="authorOpt.length<1" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraMultiSettings"
+                                            options="authorOpt" selected-model="selectedAuthor"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-5 col-md-5 plr5px">
+                                <div class="input-group time-input">
+                                    <datepicker date-format="d MMMM,y" datepicker-show="{{visibility}}">
+                                        <input ng-model="startDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control no-right-brd"
+                                            readonly />
+                                    </datepicker>
+                                    <span class="input-group-addon  no-right-brd p0px"><span class=" date-icon" ></span></span>
+
+                                    <datepicker date-min-limit="{{startDate}}" date-format="d MMMM,y" datepicker-show="{{visibility}}">
+                                        <input ng-model="endDate" type="text" placeholder="End Date" class="nofirstnolast angular-datepicker-input form-control"
+                                            readonly />
+                                    </datepicker>
+                                    <span class="input-group-addon p0px"><span class=" date-icon" ></span></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 col-md-1 plr5px">
+                                <button ng-click="filterDrafts()" type="button" class="btn  btn-compose btn-block">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt20px">
+        <div class="col-sm-12 plr5px">
+            <div class="socio-table table-responsive">
+                <table class="table table-striped settings table-bordered theadp5px">
+                    <thead>
+                        <th ng-click="sortBy(textSort)">Message <i class="fa fa-sort-amount-{{textSort.dir}} fr asc-sort" aria-hidden="true"></i></th>
+                        <th class="sm-width">Platform(s)</th>
+                        <th class="sm-width" ng-click="sortBy(statusSort)">Status <i class="fa fa-sort-amount-{{statusSort.dir}} fr asc-sort" aria-hidden="true"></i></th>
+                        <th ng-if="canEditDraft || canDeleteDraft" class="small-width">Action</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, post) in draftPost">
+                            <td>
+                                <h4 ng-if="canEditDraft" ng-click="editPost(post)" class="task-title "><span class="blue-text">Campaign Title:</span> <a href="javascript:void(0)">{{post.campaignTitle?post.campaignTitle:'NA'}}</a></h4>
+                                <a class="draft-label" ng-if="canEditDraft" ng-click="editPost(post)">
+                                    <label class="text-trim" ng-bind-html="post.text">{{post.text}}</label>
+                                </a>
+                                <h4 ng-if="!canEditDraft" class="task-title "><span class="blue-text">Campaign Title:</span>{{post.campaignTitle?post.campaignTitle:'NA'}}</h4>
+                                <label ng-if="!canEditDraft" class="text-trim" ng-bind-html="post.text">{{post.text}}</label>
+
+                                <div class="task-details">
+                                    <ul class="pull-right">
+                                        <li><b>Author:</b> {{post.createdName}}</li>
+                                        <li><b>Date:</b> {{post.createdDate | date:'dd MMM h:mm a'}}</li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <!--<td><label>{{post.createdName}}</label></td>-->
+
+                            <td class="ac platform-icon">
+                                <span ng-repeat="platform in post.platformUniqueList">
+									<i ng-if="(platform.name | lowercase) == 'facebook'" class="fa fa-facebook fa-2x" ></i>													
+									<i ng-if="(platform.name | lowercase) == 'twitter'" class="fa fa-twitter fa-2x" ></i>													
+									<i ng-if="(platform.name | lowercase) == 'instagram'" class="fa fa-instagram fa-2x" ></i>													
+									<i ng-if="(platform.name | lowercase) == 'youtube'" class="fa fa-youtube fa-2x" ></i>													
+								</span>
+                            </td>
+
+                            <td>
+                                <label class="label {{post.statusClass.class}}"> {{post.statusClass.tag}}</label> </td>
+                            <td ng-if="canEditDraft || canDeleteDraft">
+                                <ul class="dis-flex-end">
+                                    <li ng-if="canEditDraft" class="dis-inline">
+                                        <a ng-if="post.status==4 || post.status==8 || post.status==25" ng-click="editPost(post, true)">
+                                            <i class="fa fa-pencil-square-o fa-2x vertical-top" aria-hidden="true"></i>
+                                        </a>
+                                    </li>
+                                    <li ng-if="canDeleteDraft" class="dis-inline"><a href="#delete" ng-click="deleteRecord(post)" data-toggle="modal"><span class="trash-icon"></span></a></li>
+                                </ul>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                    <tbody>
+                        <tr ng-if="!draftPost">
+                            <td colspan="6">No data found</td>
+                        </tr>
+                    </tbody>
+
+                    <!--<div class="modal-footer" ng-show="draftPostCount>10">
+						<div class="page-nation ">
+							<ng-include src="'includes/pagination.html'"></ng-include>
+						</div>
+					</div>-->
+                </table>
+                <div class="page-nation mt10px" ng-if="draftPostCount>10">
+                    <ng-include src="'includes/pagination.html'"></ng-include>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<ng-include src=popUpModal></ng-include>

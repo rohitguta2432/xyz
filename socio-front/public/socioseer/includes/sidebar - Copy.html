@@ -1,0 +1,86 @@
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+				<div class="sidebar-collapse">
+					<ul class="nav metismenu" id="side-menu">
+						<li class="brand">                   
+							<img ng-src="{{imageUrl}}white-logo.png" class="img-responsive center-block big-logo" />
+							<img ng-src="{{imageUrl}}sm-logo.png" class="img-responsive center-block mini-logo" />
+						</li> 
+						<li class="active">
+							<a ui-sref="#"><i class="fa fa-tachometer" aria-hidden="true"></i> <span class="nav-label">Outreach</span> <span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li class="active"><a ui-sref="summary"> Summary</a></li>								
+								<li><a ui-sref="#">Compose <i class="fa arrow"></i></a>
+									<ul class="nav nav-third-level">
+										<li><a ui-sref="campaignListing">Campaign</a></li>                        
+										<li><a ui-sref="composePost"> Compose Post</a></li>
+									</ul>
+								</li>
+								<li ><a ui-sref="draft">Drafts</a></li>
+								<li ><a ui-sref="scheduled">Scheduled</a></li>
+								<li><a ui-sref="published">Published</a></li>
+								<li><a ui-sref="tasks">Tasks</a></li>
+								<!--<li><a href="dashboard_5.html">Dashboard v.5 <span class="label label-primary pull-right">NEW</span></a></li>-->
+							</ul>
+						</li>						
+						<li>
+							<a ui-sref="#"><i class="fa fa-user"></i> <span class="nav-label">Client</span><span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li><a ui-sref="client"> Client Listing</a></li>
+								<!--<li><a ui-sref="addClient"> Add Client</a></li>-->
+								<li><a ui-sref="createBrand"> Create Brand</a></li>
+								
+							</ul>
+						</li>
+						<li>
+							<a ui-sref="#"><i class="fa fa-files-o"></i> <span class="nav-label">Content</span><span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li><a ui-sref="suggestions">Suggestions</a></li>
+								<li><a ui-sref="contentLibrary">Content Library</a></li>
+							</ul>
+						</li>
+						<li>
+							<a ui-sref="#"><i class="fa fa-users"></i> <span class="nav-label">Audience </span><span class="fa arrow"></span><!--<span class="label label-warning pull-right">16/24</span>--></a>
+							<ul class="nav nav-second-level collapse">
+								<li><a ui-sref="createAudience">Create Audience</a></li>
+								<li><a ui-sref="viewAudience">View Audience</a></li>
+							</ul>
+						</li>
+						<li>
+							<a ui-sref="#"><i class="fa fa-bar-chart-o"></i>  <span class="nav-label">Performance</span><span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level collapse">
+								<li><a ui-sref="performance">Summary</a></li>
+								<!--<li><a ui-sref="campaignReport">Campaign Report</a></li>-->
+								<li><a ui-sref="teamReport">Team Report</a></li>
+								
+							</ul>
+						</li>
+						<li>
+							<a ui-sref="#"><i class="fa fa-envelope"></i> <span class="nav-label">Settings </span><span class="fa arrow"></span><!--<span class="label label-warning pull-right">16/24</span>--></a>
+							<ul class="nav nav-second-level collapse">
+								<li><a ui-sref="setupMetrics">Set-up Metrics</a></li>
+								<li><a ui-sref="setupReminders">Set-up Reminders</a></li>
+							</ul>
+						</li>
+						<li>
+							<a ui-sref="#">
+								<label class="fa-stack"><i class="fa fa-user fa-stack-2x fa-user-manage"></i><i class="fa fa-cog fa-stack-1x fa-cog-manage"></i></label><span class="nav-label">User Management </span><span class="fa arrow"></span><!--<span class="label label-warning pull-right">16/24</span>-->
+							</a>
+							<ul class="nav nav-second-level collapse">
+								<li><a ui-sref="userListing">Users</a></li>
+								<!--<li><a ui-sref="addUser">Add User</a></li>-->
+								<li><a ui-sref="teamListing">Teams</a></li>
+								<!--<li><a ui-sref="createTeam">Create Team</a></li>-->
+								<li><a ui-sref="roleListing">Roles</a></li>
+								<!-- <li><a ui-sref="testUpload">upload</a></li> -->
+								<!--<li><a ui-sref="createRole">Create role</a></li>-->
+							</ul>
+						</li>
+						
+						<!--<li class="landing_link">
+							<a target="_blank" href="landing.html"><i class="fa fa-star"></i> <span class="nav-label">Landing Page</span> <span class="label label-warning pull-right">NEW</span></a>
+						</li>-->					
+					</ul>
+				</div>
+			</nav>
+			

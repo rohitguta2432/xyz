@@ -1,0 +1,193 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 p0px">
+			<h3 class="campaign-title">
+				{{campaignViewdata.title}}
+			</h3>
+			<label class="note">{{campaignViewdata.startDate | date:'MMM dd, yyyy'}}   to  {{campaignViewdata.endDate | date:'MMM dd, yyyy'}}</label>
+			<div class="content-tab library campaign-tab">
+				<!-- Nav tabs -->
+
+				<ul class="nav nav-tabs " role="tablist" ng-if="campaignSummary.platformReports.length>0">
+					<li role="presentation" ng-repeat="platformStats in campaignSummary.platformReports" class="{{platformStats.platform | lowercase}}"
+					 ng-class="{'active':$index==0}">
+						<a href="#{{platformStats.platform}}" aria-controls="{{platformStats.platform | lowercase}}" role="tab" data-toggle="tab"
+						 class="platform-icon">
+							<!--<i class="fa fa-{{platformStats.platform | lowercase}}"></i> -->
+							{{platformStats.platform}}
+						</a>
+					</li>
+				</ul>
+
+				<div ng-if="campaignSummary.platformReports.length==0">
+					<label class="no-found">No data available.</label>
+				</div>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in" ng-class="{'active': campaignSummary.platformReports[0].platform.toLowerCase()=='twitter'}"
+					 id="twitter">
+						<div class="campaign-statistic">
+							<div class="row" ng-repeat="report in campaignSummary.platformReports | filter : {platform: 'twitter'}">
+								<div class="col-sm-3 left">
+									<div class="post-summary posttwitter">
+										<h3 class="task-count">
+											{{report.postCount}}
+										</h3>
+										<h6 class="task-name">Total number of posts</h6>
+									</div>
+								</div>
+								<div class="col-sm-3 left">
+									<div class="post-summary reply">
+										<h3 class="task-count">
+											{{report.commentCount}}
+										</h3>
+										<h6 class="task-name">Replies</h6>
+									</div>
+								</div>
+								<div class="col-sm-3 left">
+									<div class="post-summary favourite ">
+										<h3 class="task-count">
+											{{report.likeCount}}
+										</h3>
+										<h6 class="task-name">Favourites</h6>
+									</div>
+								</div>
+								<div class="col-sm-3 left">
+									<div class="post-summary retweet">
+										<h3 class="task-count">
+											{{report.shareCount}}
+										</h3>
+										<h6 class="task-name">Retweets</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="containerTwitter" style="width: 90%; height: 400px; margin: 0 auto;"></div>
+						<div class="row campaign-summary-details" ng-if="campaignSummary.postReportDtos.length>0">
+							<div class="col-sm-12">
+								<h3 class=" campaign_summary_heading">Post</h3>
+							</div>
+							<div class="col-sm-12 p0px">
+								<div class="campaign-post ">
+									<div class="suggestion-count ">
+										<div ng-repeat="post in campaignSummary.postReportDtos | filter : {platform: 'twitter'}" class="col-sm-6 padd-odd-even">
+
+											<div class="social-post twitter">
+												<div class="row">
+													<div ng-if="post.mediaUrl" class="col-sm-3">
+														<a class="tweet-img"><img ng-src="{{post.mediaUrl}}" class="img-responsive" /></a>
+													</div>
+													<div ng-class="{'col-sm-9 task-details post-info': post.mediaUrl, 'col-sm-12 task-details post-info': !post.mediaUrl}">
+														<div class="row">
+															<div class="col-sm-12 ">
+																<h4 class="task-title text_limit">{{post.description}}</h4>
+															</div>
+															<div class="col-sm-7 mt10px">
+																<ul class="pl0px">
+																	<li class="share"><i class="fa fa-comment-o share"></i> {{post.commentCount}} </li>
+																	<li class="heart"><i class="fa fa-heart heart"></i> {{post.likeCount}} </li>
+																	<li class="retweet"><i class="fa fa-retweet"></i> {{post.shareCount}} </li>
+																</ul>
+															</div>
+															<div class="col-sm-5 ar">
+																<label class="twitter"><i class="fa fa-twitter-square"></i></label>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row mt10px">
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div role="tabpanel" class="tab-pane fade in" ng-class="{'active': campaignSummary.platformReports[0].platform.toLowerCase()=='facebook'}"
+					 id="facebook">
+						<div class="campaign-statistic">
+							<div class="row" ng-repeat="report in campaignSummary.platformReports | filter : {platform: 'facebook'}">
+								<div class="col-sm-3 left">
+									<div class="post-summary posttwitter">
+										<h3 class="task-count">
+											{{report.postCount}}
+										</h3>
+										<h6 class="task-name">Total number of posts</h6>
+									</div>
+								</div>
+								<div class="col-sm-3 left">
+									<div class="post-summary favourite">
+										<h3 class="task-count">
+											{{report.commentCount}}
+										</h3>
+										<h6 class="task-name">Comments</h6>
+									</div>
+								</div>
+								<div class="col-sm-3 left">
+									<div class="post-summary facebook ">
+										<h3 class="task-count">
+											{{report.likeCount}}
+										</h3>
+										<h6 class="task-name">Likes</h6>
+									</div>
+								</div>
+								<div class="col-sm-3 left">
+									<div class="post-summary reply">
+										<h3 class="task-count">
+											{{report.shareCount}}
+										</h3>
+										<h6 class="task-name">Share</h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="containerFacebook" style="width: 90%; height: 400px; margin: 0 auto;"></div>
+						<div class="row campaign-summary-details" ng-if="campaignSummary.postReportDtos.length>0">
+							<div class="col-sm-12">
+								<h3 class=" campaign_summary_heading">Post</h3>
+							</div>
+							<div class="col-sm-12 p0px">
+								<div class="campaign-post">
+									<div class="suggestion-count ">
+										<div ng-repeat="post in campaignSummary.postReportDtos | filter : {platform: 'facebook'}" class="col-sm-6 padd-odd-even">
+											<div class="social-post facebook">
+												<div class="row">
+													<div ng-if="post.mediaUrl" class="col-sm-3">
+														<img ng-src="{{post.mediaUrl}}" class="img-responsive" />
+													</div>
+													<div ng-class="{'col-sm-9 task-details post-info': post.mediaUrl, 'col-sm-12 task-details post-info': !post.mediaUrl}">
+														<div class="row">
+															<div class="col-sm-12">
+																<h4 class="task-title text_limit">{{post.description}}</h4>
+															</div>
+															<div class="col-sm-5">
+																<ul class="pl0px">
+																	<li class="comment"><i class="fa fa-comment-o "></i> {{post.commentCount}} </li>
+																	<li class="like"><i class="fa fa-thumbs-o-up like"></i> {{post.likeCount}} </li>
+																	<li class="share"><i class="fa fa-share"></i> {{post.shareCount}} </li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row mt10px">
+													<div class="col-sm-12 ar">
+														<label class="facebook"><i class="fa fa-facebook-square"></i></label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

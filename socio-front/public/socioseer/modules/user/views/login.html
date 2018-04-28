@@ -1,0 +1,83 @@
+<div class="login-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12 ">
+				<img class="logo img-responsive center-block" src="{{imageUrl}}logo.png" alt="Socioseer" />
+			</div>
+			<div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+				<div class="login-form">
+					<div class="user">
+						<img src="{{imageUrl}}user.png" class="img-responsive center-block user-img" alt="user image" />
+					</div>
+					<form autocomplete="off">
+						<div class="error-msg">{{errorMsgLogin}}</div>
+						<div class="col-sm-12 plr10px">
+
+							<div class="form-group">
+								<div class="input-group">
+
+									<span class="input-group-addon" id="username"><i class="fa fa-user"></i></span>
+									<input type="text" class="form-control" ng-model="email" placeholder="Username" aria-describedby="username" ng-keyup="removeError()" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 plr10px">
+							<div class="form-group">
+								<div class="input-group">
+									<span class="input-group-addon" id="password"><i class="fa fa-lock"></i></span>
+									<input type="password" class="form-control" ng-model="password" placeholder="Password" aria-describedby="password" ng-keyup="removeError()" />
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 plr10px">
+							<div class="row">
+								<div class="col-md-6 col-sm-6 check-box pr0px">
+									<label class="vote-check">
+												<input type="checkbox" ng-model="remember" ng-click="rememberMe(remember)" name="optionsRadios" id="" value=""><span>Keep me logged in</span>												
+											</label>
+								</div>
+								<div class="col-md-6 col-sm-6">
+									<a class="fgps" href="#forgetPassword" data-toggle="modal"><label class="form-label pull-right">Forgot Password</label></a>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-12 plr10px ac">
+							<button type="submit" ng-click="validateUser(email,password)" class="btn btn-login">Login <span class="arrow-icon flaticon-keyboard-right-arrow-button"></span></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+<div class="popupmodal loginpop">
+	<div class="modal fade" tabindex="-1" role="dialog" id="forgetPassword" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog bs-example-modal-sm " role="document">
+			<div class="modal-content modal-sm">
+				<form class="client-form" novalidate angular-validator name="forgotPasswordForm">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<h4 class="modal-title" id="gridSystemModalLabel">Forgot Password</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group textarea">
+							<label class="pt10px ">Enter your email address</label>
+							<input validator="formValidator.emailValidation(forgotEmail) === true" invalid-message="formValidator.emailValidation(forgotEmail)"
+							    ng-model="forgotEmail" name="forgotEmail" type="text" placeholder="Email Id" class="form-control" required />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-12 ">
+							<button type="submit" class="btn btn-compose" name="forgotButton" ng-click="forgotPassword(forgotPasswordForm)">Send</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>

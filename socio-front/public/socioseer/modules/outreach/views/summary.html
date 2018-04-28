@@ -1,0 +1,477 @@
+<div class="container-fluid">
+	<form class="client-form">
+		<div class="row" ng-if="clientDropdown">
+			<div class="col-sm-4 pl0px">
+				<div class="form-group height-auto">
+					<label>Select Client</label>
+					<div class="form-group height-auto">
+
+						<div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings" options="clientOpt" selected-model="selectedClient"
+						 events="{ onItemSelect: changeClient, onItemDeselect: onDeselectClient }"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-8 pl0px hidden">
+				<ul class="platform-summary">
+					<li class="">
+						<div class="dis-flex">
+							<div class="platform-icon">
+								<i class="fa fa-facebook"></i>
+							</div>
+							<div class="platform-statistic">
+								<i class="fa fa-caret-up"></i>
+								<span>25</span>
+							</div>
+						</div>
+					</li>
+					<li class="">
+						<div class="dis-flex">
+							<div class="platform-icon">
+								<i class="fa fa-youtube"></i>
+							</div>
+							<div class="platform-statistic">
+								<i class="fa fa-caret-up"></i>
+								<span>25</span>
+							</div>
+						</div>
+					</li>
+					<li class="">
+						<div class="dis-flex">
+							<div class="platform-icon">
+								<i class="fa fa-google-plus"></i>
+							</div>
+							<div class="platform-statistic">
+								<i class="fa fa-caret-up"></i>
+								<span>25</span>
+							</div>
+						</div>
+					</li>
+					<li class="">
+						<div class="dis-flex">
+							<div class="platform-icon">
+								<i class="fa fa-linkedin"></i>
+							</div>
+							<div class="platform-statistic">
+								<i class="fa fa-caret-down"></i>
+								<span>25</span>
+							</div>
+						</div>
+					</li>
+					<li class="">
+						<div class="dis-flex">
+							<div class="platform-icon">
+								<i class="fa fa-twitter"></i>
+							</div>
+							<div class="platform-statistic">
+								<i class="fa fa-caret-up"></i>
+								<span>25</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="col-sm-4 pr0px hidden">
+				<div class="influencer">
+					<div class="top-heading">
+						<h4>Top Influencer</h4>
+					</div>
+					<div class="influencer-profile">
+						<ul class="mb0px">
+							<li><img ng-src="{{imageUrl}}profile.jpg" class="img-responsive" data-toggle="tooltip" data-placement="left" title="John Doe, Facebook"
+								/></li>
+							<li><img ng-src="{{imageUrl}}profile.jpg" class="img-responsive" data-toggle="tooltip" data-placement="left" title="John Doe, Facebook"
+								/></li>
+							<li><img ng-src="{{imageUrl}}profile.jpg" class="img-responsive" data-toggle="tooltip" data-placement="left" title="John Doe, Facebook"
+								/></li>
+							<li><img ng-src="{{imageUrl}}profile.jpg" class="img-responsive" data-toggle="tooltip" data-placement="left" title="John Doe, Facebook"
+								/></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-sm-8 pl0px">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="summary-box panel panel1">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-sm-5">
+										<h4 class="panel-title">Published Post</h4>
+									</div>
+									<div class="col-sm-7">
+										<ul class="summary-filter navbar-right ">
+											<li ng-class="{'active': allPost}" class="all"><a ng-click="filterPublishPost('all')" class="filter">All</a></li>
+											<li ng-class="{'active': facebookPost}" class="facebook"><a ng-click="filterPublishPost('facebook')" class="filter"><i class="fa fa-facebook"></i></a></li>
+											<li ng-class="{'active': twitterPost}" class="twitter"><a ng-click="filterPublishPost('twitter')" class="filter"><i class="fa fa-twitter"></i></a></li>
+											<li ng-show="false" ng-class="{'active': linkedinPost}"><a ng-click="filterPublishPost('linkedin')" class="filter"><i class="fa fa-linkedin"></i></a></li>
+											<li ng-show="false" ng-class="{'active': googlePost}"><a ng-click="filterPublishPost('google')" class="filter"><i class="fa fa-google-plus"></i></a></li>
+
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="panel-body" ng-scrollbars ng-scrollbars-config="configScroll">
+								<ul class="separate">
+									<h4 class="time">Today</h4>
+									<ng-include src="'includes/loader.html'"></ng-include>
+									<label class="no-post" ng-show="todayPubData.length==0">No Post found.</label>
+
+									<li ng-repeat="pub in todayPubData">
+										<div class="dis-flex">
+											<div class="platform">
+												<div class="platform-icon">
+													<i ng-if="(pub.platform.name | lowercase) == 'facebook'" class="fa fa-facebook-official comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'twitter'" class="fa fa-twitter comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'instagram'" class="fa fa-instagram comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'youtube'" class="fa fa-youtube comma"></i>
+												</div>
+											</div>
+											<div class="post-summary">
+												<div class="dis-flex p0px">
+													<!--<div class="post-image" ng-if="pub.post.urls[0]"><img ng-src="{{pub.post.urls[0]}}" class="img-responsive center-block" /></div>-->
+													<div class="post-image " ng-if="pub.post.mediaUrls && pub.post.mediaUrls.length>0">
+														<img ng-src="{{pub.post.mediaUrls[0].url}}" class="img-responsive center-block" ng-if="pub.post.mediaUrls[0].mediaType=='IMAGE'"
+														/>
+														<video ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'" class="embed-responsive-item" controls>
+															<source ng-src="{{pub.post.mediaUrls[0].url}}" type="video/mp4">
+														</video>
+														<div class="mediatypevideo" ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'"><i class="fa fa-play"></i></div>
+													</div>
+													<div class="post-data">
+														<h4 class="task-title"><b>{{pub.campaignName?pub.campaignName:''}}</b></h4>
+														<h6 class="post-desc" ng-bind-html="pub.post.text | parseTagsTwitter"></h6>
+														<ul class="mb0px post-comments">
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'facebook'"><i class="fa fa-thumbs-up"></i>{{pub.campSummary.likeCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'twitter'"><i class="fa fa-retweet"></i>{{pub.campSummary.retweetCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'twitter'"><i class="fa fa-heart"></i>{{pub.campSummary.likeCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'facebook'"><i class="fa fa-share-square"></i>{{pub.campSummary.commentCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'facebook'"><i class="fa fa-comments"></i>{{pub.campSummary.commentCount}}</li>
+															<li><i class="fa fa-clock-o"></i>{{pub.runAt | date: 'MMM dd, yyyy - h:mm a'}}</li>
+
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+								<ul class="separate" ng-show="todayPubData.length<5">
+									<h4 class="time">Yesterday</h4>
+									<ng-include src="'includes/loader.html'"></ng-include>
+									<label class="no-post" ng-show="yesPubData.length==0">No Post found.</label>
+
+									<li ng-repeat="pub in yesPubData">
+										<div class="dis-flex">
+											<div class="platform">
+												<div class="platform-icon">
+													<i ng-if="(pub.platform.name | lowercase) == 'facebook'" class="fa fa-facebook-official comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'twitter'" class="fa fa-twitter comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'instagram'" class="fa fa-instagram comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'youtube'" class="fa fa-youtube comma"></i>
+												</div>
+											</div>
+											<div class="post-summary">
+												<div class="dis-flex p0px">
+
+													<div class="post-image " ng-if="pub.post.mediaUrls && pub.post.mediaUrls.length>0">
+														<img ng-src="{{pub.post.mediaUrls[0].url}}" class="img-responsive center-block" ng-if="pub.post.mediaUrls[0].mediaType=='IMAGE'"
+														/>
+														<video ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'" class="embed-responsive-item" controls>
+															<source ng-src="{{pub.post.mediaUrls[0].url}}" type="video/mp4">
+														</video>
+														<div class="mediatypevideo" ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'"><i class="fa fa-play"></i></div>
+													</div>
+													<div class="post-data">
+														<h4 class="task-title"><b>{{pub.campaignName?pub.campaignName:''}}</b></h4>
+														<h6 class="post-desc" ng-bind-html="pub.post.text | parseTagsTwitter"></h6>
+														<ul class="mb0px post-comments">
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'facebook'"><i class="fa fa-thumbs-up"></i>{{pub.campSummary.likeCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'twitter'"><i class="fa fa-retweet"></i>{{pub.campSummary.retweetCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'twitter'"><i class="fa fa-heart"></i>{{pub.campSummary.likeCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'facebook'"><i class="fa fa-share-square"></i>{{pub.campSummary.commentCount}}</li>
+															<li ng-if="(pub.campSummary.platform | lowercase) == 'facebook'"><i class="fa fa-comments"></i>{{pub.campSummary.commentCount}}</li>
+															<li><i class="fa fa-clock-o"></i>{{pub.runAt | date: 'MMM dd, yyyy - h:mm a'}}</li>
+
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="panel-footer">
+								<a ui-sref="published"> <span>View More <i class="fa fa-angle-double-right"></i></span> </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4 pr0px">
+
+				<div class="row">
+					<div class="col-sm-12 pl5px">
+						<div class="summary-box panel schedule panel1">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-sm-8">
+										<h4 class="panel-title">Scheduled Post</h4>
+									</div>
+									<div class="col-sm-4">
+										<ul class="summary-filter navbar-right ">
+											<li class="dropdown more-options">
+												<a class="dropdown-toggle filter" data-toggle="dropdown" href="#"><i class="fa fa-ellipsis-h"></i></a>
+												<ul class="dropdown-menu dropdown-messages dropdown-arrow stop-dropdown ">
+													<li>
+														<div class="col-sm-3">
+															<label class="ptb7px">Platforms:</label>
+														</div>
+														<div class="col-sm-9 mb5px">
+															<div class="socioselect ">
+																<select placeholder="Select Numbers of Brands" class="form-control fix-height" ng-model="schPlatform" ng-change="filterSchPost()"
+																 ng-options="platform as platform.name for platform in optionSocial">
+																	<option value="">All</option>
+																</select>
+															</div>
+														</div>
+													</li>
+
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="panel-body schedule " ng-scrollbars ng-scrollbars-config="configScroll">
+								<ul class="separate">
+									<h4 class="time">Today</h4>
+									<div ng-repeat="x in [1,2]" class="timeline-wrapper-no-boreder" ng-hide="showLoaderSchedule">
+										<div class="timeline-item">
+											<div class="animated-background">
+												<div class="background-masker header-top"></div>
+												<div class="background-masker header-left"></div>
+												<div class="background-masker header-right"></div>
+												<div class="background-masker header-bottom"></div>
+												<div class="background-masker subheader-left"></div>
+												<div class="background-masker subheader-right"></div>
+												<div class="background-masker subheader-bottom"></div>
+												<div class="background-masker content-top"></div>
+												<div class="background-masker content-first-end"></div>
+												<div class="background-masker content-second-line"></div>
+												<div class="background-masker content-second-end"></div>
+												<div class="background-masker content-third-line"></div>
+												<div class="background-masker content-third-end"></div>
+											</div>
+										</div>
+									</div>
+									<label class="no-post" ng-show="todaySchData.length==0">No Post found.</label>
+
+									<li ng-repeat="pub in todaySchData">
+										<div class="dis-flex">
+											<div class="platform">
+												<div class="platform-icon">
+													<i ng-if="(pub.platform.name | lowercase) == 'facebook'" class="fa fa-facebook-official comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'twitter'" class="fa fa-twitter comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'instagram'" class="fa fa-instagram comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'youtube'" class="fa fa-youtube comma"></i>
+												</div>
+											</div>
+											<div class="post-summary">
+												<div class="dis-flex p0px">
+													<div class="post-image " ng-if="pub.post.mediaUrls && pub.post.mediaUrls.length>0">
+														<img ng-src="{{pub.post.mediaUrls[0].url}}" class="img-responsive center-block" ng-if="pub.post.mediaUrls[0].mediaType=='IMAGE'"
+														/>
+														<video ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'" class="embed-responsive-item" controls>
+															<source ng-src="{{pub.post.mediaUrls[0].url}}" type="video/mp4">
+														</video>
+														<div class="mediatypevideo" ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'"><i class="fa fa-play"></i></div>
+													</div>
+													<div class="post-data">
+														<h4 class="task-title"><b>{{pub.campaignName?pub.campaignName:''}}</b></h4>
+														<h6 class="post-desc" ng-bind-html="pub.post.text | parseTagsTwitter"></h6>
+														<ul class="mb0px post-comments">
+															<li><i class="fa fa-clock-o"></i>{{pub.runAt | date: 'MMM dd, yyyy - h:mm a'}}</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+
+								</ul>
+
+								<ul class="separate" ng-show="todaySchData.length<5">
+									<h4 class="time">Tomorrow</h4>
+									<div ng-repeat="x in [1,2]" class="timeline-wrapper-no-boreder" ng-hide="showLoaderSchedule">
+										<div class="timeline-item">
+											<div class="animated-background">
+												<div class="background-masker header-top"></div>
+												<div class="background-masker header-left"></div>
+												<div class="background-masker header-right"></div>
+												<div class="background-masker header-bottom"></div>
+												<div class="background-masker subheader-left"></div>
+												<div class="background-masker subheader-right"></div>
+												<div class="background-masker subheader-bottom"></div>
+												<div class="background-masker content-top"></div>
+												<div class="background-masker content-first-end"></div>
+												<div class="background-masker content-second-line"></div>
+												<div class="background-masker content-second-end"></div>
+												<div class="background-masker content-third-line"></div>
+												<div class="background-masker content-third-end"></div>
+											</div>
+										</div>
+									</div>
+									<label class="no-post" ng-show="tomSchData.length==0">No Post found.</label>
+
+									<li ng-repeat="pub in tomSchData">
+										<div class="dis-flex">
+											<div class="platform">
+												<div class="platform-icon">
+													<i ng-if="(pub.platform.name | lowercase) == 'facebook'" class="fa fa-facebook-official comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'twitter'" class="fa fa-twitter comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'instagram'" class="fa fa-instagram comma"></i>
+													<i ng-if="(pub.platform.name | lowercase) == 'youtube'" class="fa fa-youtube comma"></i>
+												</div>
+											</div>
+											<div class="post-summary">
+												<div class="dis-flex p0px">
+													<!--<div class="post-image" ng-if="pub.post.urls[0]"><img ng-src="{{pub.post.urls[0]}}" class="img-responsive center-block" /></div>-->
+													<div class="post-image " ng-if="pub.post.mediaUrls && pub.post.mediaUrls.length>0">
+														<img ng-src="{{pub.post.mediaUrls[0].url}}" class="img-responsive center-block" ng-if="pub.post.mediaUrls[0].mediaType=='IMAGE'"
+														/>
+														<video ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'" class="embed-responsive-item" controls>
+															<source ng-src="{{pub.post.mediaUrls[0].url}}" type="video/mp4">
+														</video>
+														<div class="mediatypevideo" ng-if="pub.post.mediaUrls[0].mediaType=='VIDEO'"><i class="fa fa-play"></i></div>
+													</div>
+													<div class="post-data">
+														<h4 class="task-title"><b>{{pub.campaignName?pub.campaignName:''}}</b></h4>
+														<h6 class="post-desc" ng-bind-html="pub.post.text | parseTagsTwitter"></h6>
+														<ul class="mb0px post-comments">
+															<li><i class="fa fa-clock-o"></i>
+																{{pub.runAt | date: 'MMM dd, yyyy - h:mm a'}}</li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="panel-footer">
+								<a ui-sref="scheduled"> <span>View More <i class="fa fa-angle-double-right"></i></span> </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pl0px" ng-class="{'col-sm-8':canViewTask,'col-sm-12 pad-right':!canViewTask}">
+				<ng-include src="'includes/trends.html'"></ng-include>
+			</div>
+			<div class="col-sm-4 pr0px" ng-if="canViewTask">
+				<div class="row mt10px">
+					<div class="col-sm-12 pl5px">
+						<div class="summary-box panel fx-hg">
+							<div class="panel-heading">
+								<h4 class="panel-title">My Tasks</h4>
+							</div>
+							<div class="panel-body">
+								<ul>
+									<div ng-repeat="x in [1,2,3,4]" class="timeline-wrapper-no-boreder" ng-hide="countDataLoader">
+										<div class="timeline-item">
+											<div class="animated-background">
+												<div class="background-masker header-top"></div>
+												<div class="background-masker header-left"></div>
+												<div class="background-masker header-right"></div>
+												<div class="background-masker header-bottom"></div>
+												<div class="background-masker subheader-left"></div>
+												<div class="background-masker subheader-right"></div>
+												<div class="background-masker subheader-bottom"></div>
+												<div class="background-masker content-top"></div>
+												<div class="background-masker content-first-end"></div>
+												<div class="background-masker content-second-line"></div>
+												<div class="background-masker content-second-end"></div>
+												<div class="background-masker content-third-line"></div>
+												<div class="background-masker content-third-end"></div>
+											</div>
+										</div>
+									</div>
+									<li class=" dis-flex">
+										<div class="platform">
+											<div class="task-icon"><span class="task-schedule"></span></div>
+										</div>
+										<div class="post-summary">
+											<h3 ng-if="countData.Task_schedule" class="task-count">{{countData.Task_schedule}}</h3>
+											<h3 ng-if="!countData.Task_schedule" class="task-count">0</h3>
+											<h6 class="task-name">Scheduled for Today</h6>
+										</div>
+									</li>
+									<li class=" dis-flex">
+										<div class="platform">
+											<div class="task-icon"><span class="task-pending"></span></div>
+										</div>
+										<div class="post-summary">
+											<h3 ng-if="countData.Task_pending" class="task-count">{{countData.Task_pending}}</h3>
+											<h3 ng-if="!countData.Task_pending" class="task-count">0</h3>
+											<h6 class="task-name">Pending Request</h6>
+										</div>
+									</li>
+									<li class=" dis-flex">
+										<div class="platform">
+											<div class="task-icon"><span class="task-approved"></span></div>
+										</div>
+										<div class="post-summary">
+											<h3 ng-if="countData.Task_approved" class="task-count">{{countData.Task_approved}}</h3>
+											<h3 ng-if="!countData.Task_approved" class="task-count">0</h3>
+											<h6 class="task-name">Approved Request</h6>
+										</div>
+									</li>
+									<li class=" dis-flex">
+										<div class="platform">
+											<div class="task-icon"><span class="task-reject"></span></div>
+										</div>
+										<div class="post-summary">
+											<h3 ng-if="countData.Task_reject" class="task-count">{{countData.Task_reject}}</h3>
+											<h3 ng-if="!countData.Task_reject" class="task-count">0</h3>
+											<h6 class="task-name">Rejected Request</h6>
+										</div>
+									</li>
+								</ul>
+
+							</div>
+							<div class="panel-footer">
+								<a ui-sref="tasks"> <span>View More <i class="fa fa-angle-double-right"></i></span> </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+	</div>
+</div>
+<!--Load modal to show facebook token expiration-->
+<div class="modal fade bs-example-modal-md" id="validityModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span class="close-icon"></span>
+						</button>
+			</div>
+			<div class="modal-body">
+				{{validityData}}
+			</div>
+			<!--<div class="modal-footer">
+				<div class="col-sm-12 dis-block">
+					<button type="button" data-dismiss="modal" class="btn btn-cancel">Cancel</button>
+				</div>
+			</div>-->
+		</div>
+	</div>
+</div>

@@ -1,0 +1,276 @@
+<div class="container-fluid mtb20px">
+    <!--<div class="row">
+        <div class="col-sm-12">
+            <h4 style="text-decoration:none;font-weight:500;text-align:center;">
+                <span ng-repeat="camp in campaignData">
+                {{camp.campaignName}} <span ng-if="!$last">vs</span>
+                </span>
+            </h4>
+        </div>
+    </div>-->
+    <!--<div class="row">
+        <div class="col-sm-3">
+            <div id="likesData" ></div>
+        </div>
+        <div class="col-sm-3">
+            <div id="totalPostData"></div>
+        </div>
+        <div class="col-sm-3">
+            <div id="commentsData"></div>
+        </div>
+        <div class="col-sm-3">
+            <div id="sharesData"></div>
+        </div>
+    </div>-->
+
+    <div class="row" ng-if="campaignData.length==3">
+        <div class="col-sm-4">
+            <div class="camp">
+                <div class="cam-btn-brd brd1">
+                    <h4 ng-if="camp_title1">{{camp_title1}}</h4>
+                    <label>{{camp_sDate1 | date:'MMM dd, yyyy' }} to {{camp_eDate1 | date:'MMM dd, yyyy'}}</label>
+                </div>
+                <div class="camp_graph">
+                    <div id="camp1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="camp">
+                <div class="cam-btn-brd brd2">
+                    <h4 ng-if="camp_title2">{{camp_title2}}</h4>
+                    <label>{{camp_sDate2 | date:'MMM dd, yyyy' }} to {{camp_eDate2 | date:'MMM dd, yyyy'}}</label>
+                </div>
+                <div class="camp_graph">
+                    <div id="camp2"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="camp">
+                <div class="cam-btn-brd brd3">
+                    <h4 ng-if="camp_title3">{{camp_title3}} </h4>
+                    <label>{{camp_sDate3 | date:'MMM dd, yyyy' }} to {{camp_eDate3 | date:'MMM dd, yyyy'}}</label>
+                </div>
+                <div class="camp_graph">
+                    <div id="camp3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="campaignData.length==2">
+        <div class="col-sm-6">
+            <div class="camp">
+                <div class="cam-btn-brd brd1">
+                    <h4 ng-if="camp_title1">{{camp_title1}} </h4>
+                    <label>{{camp_sDate1 | date:'MMM dd, yyyy' }} to {{camp_eDate1 | date:'MMM dd, yyyy'}}</label>
+                </div>
+                <div class="camp_graph">
+                    <div id="camp1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="camp">
+                <div class="cam-btn-brd brd2">
+                    <h4 ng-if="camp_title2">{{camp_title2}}</h4>
+                    <label> {{camp_sDate2 | date:'MMM dd, yyyy' }} to {{camp_eDate2 | date:'MMM dd, yyyy'}}</label>
+                </div>
+                <div class="camp_graph">
+                    <div id="camp2"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mt20px">
+        <div class="col-sm-12">
+            <div id="bubbleChart"></div>
+        </div>
+    </div>
+    <div class="row mt20px client-form">
+        <div class="col-sm-12">
+            <div class="socio-table table-responsive">
+                <table class="table table-striped table-bordered settings campaign-compare">
+                    <thead>
+                        <tr>
+                            <th class="sm-width">Statistics</th>
+                            <th class="ac fix-width" ng-repeat="camp in campaignData">{{camp.campaignName}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                            <th><label> Duration</label></th>
+                            <td class="ac" ng-repeat="camp in campaignData ">{{camp.startDate | date:'MMM dd, yyyy' }} to {{camp.endDate | date:'MMM dd, yyyy'}}</td>
+                        </tr>-->
+                        <tr>
+                            <th><label>Post </label></th>
+                            <td ng-repeat="post in campPostCountReport">
+                                <div class="col-sm-4">
+                                    <label class="table-stats table-stat-icon"><i class="fa fa-plus-square" aria-hidden="true"></i></label>
+                                    <label class="table-stats"><span class="sigma">&#x2211;</span> {{post.posts}}</label>
+                                </div>
+                                <div class="col-sm-4" ng-repeat="platform in post.campObj.platformReports | orderBy: 'platform' track by $index">
+                                    <label class="table-stats platform-icon">
+                                        <i ng-if="platform.platform.toLowerCase()=='facebook'" class="fa fa-facebook-official fa-2x"></i>
+                                        <i ng-if="platform.platform.toLowerCase()=='twitter'" class="fa fa-twitter fa-2x"></i>
+                                    </label>
+                                    <label class="table-stats">{{platform.postCount}}</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label>Like/Favourite </label></th>
+                            <td ng-repeat="like in campLikesReport">
+                                <div class="col-sm-4">
+                                    <label class="table-stats table-stat-icon"><i class="fa fa-thumbs-up" aria-hidden="true"></i></label>
+                                    <label class="table-stats"><span class="sigma">&#x2211;</span> {{like.likes}}</label>
+                                </div>
+                                <div class="col-sm-4" ng-repeat="platform in like.campObj.platformReports  | orderBy: 'platform'">
+                                    <label class="table-stats platform-icon">
+                                        <i ng-if="platform.platform.toLowerCase()=='facebook'" class="fa fa-facebook-official fa-2x"></i>
+                                        <i ng-if="platform.platform.toLowerCase()=='twitter'" class="fa fa-twitter fa-2x"></i>
+                                    </label>
+                                    <label class="table-stats">{{platform.likeCount}}</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label>Comments/Replies </label></th>
+                            <td ng-repeat="comment in campCommentsReport">
+                                <div class="col-sm-4">
+                                    <label class="table-stats table-stat-icon"><i class="fa fa-commenting" aria-hidden="true"></i></label>
+                                    <label class="table-stats"><span class="sigma">&#x2211;</span>{{comment.comments}}</label>
+                                </div>
+                                <div class="col-sm-4" ng-repeat="platform in comment.campObj.platformReports  | orderBy: 'platform'">
+                                    <label class="table-stats platform-icon">
+                                        <i ng-if="platform.platform.toLowerCase()=='facebook'" class="fa fa-facebook-official fa-2x"></i>
+                                        <i ng-if="platform.platform.toLowerCase()=='twitter'" class="fa fa-twitter fa-2x"></i>
+                                    </label>
+                                    <label class="table-stats">{{platform.commentCount}}</label>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th><label>Shares/Retweet </label></th>
+                            <td ng-repeat="share in campSharesReport">
+                                <div class="col-sm-4">
+                                    <label class="table-stats table-stat-icon"><i class="fa fa-share-square" aria-hidden="true"></i></label>
+                                    <label class="table-stats"><span class="sigma">&#x2211;</span> {{share.share}}</label>
+                                </div>
+                                <div class="col-sm-4" ng-repeat="platform in share.campObj.platformReports  | orderBy: 'platform'">
+                                    <label class="table-stats platform-icon">
+                                        <i ng-if="platform.platform.toLowerCase()=='facebook'" class="fa fa-facebook-official fa-2x"></i>
+                                        <i ng-if="platform.platform.toLowerCase()=='twitter'" class="fa fa-twitter fa-2x"></i>
+                                    </label>
+                                    <label class="table-stats">{{platform.shareCount}}</label>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th><label>Mentions</label></th>
+                            <td ng-repeat="mentions in campLikesReport" class="ac">
+
+                                <div ng-repeat="men in mentions.campObj.userMentionSummarieList | orderBy: 'platform'">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-4">
+                                        <label class="table-stats platform-icon">
+                                        <i ng-if="men.platform.toLowerCase()=='facebook'" class="fa fa-facebook-official fa-2x"></i>
+                                        <i ng-if="men.platform.toLowerCase()=='twitter'" class="fa fa-twitter fa-2x"></i>
+                                    </label>
+                                        <label class="table-stats">{{men.mentionCount}} </label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label>Follwers Change</label></th>
+                            <td ng-repeat="followers in campLikesReport" class="ac">
+
+                                <div ng-repeat="followerChange in followers.campObj.clientFollowersInfoList | orderBy: 'platform'">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-4">
+                                        <label class="table-stats platform-icon">
+                                        <i ng-if="followerChange.platform.toLowerCase()=='facebook'" class="fa fa-facebook-official fa-2x"></i>
+                                        <i ng-if="followerChange.platform.toLowerCase()=='twitter'" class="fa fa-twitter fa-2x"></i>
+                                    </label>
+                                        <label class="table-stats">{{followerChange.followersChange}} </label>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                        <!--<tr>
+                            <th><label>Top Post</label></th>
+                            <td ng-repeat="topPost in campLikesReport">
+                                <div class="platform-icon dis-flex">
+                                    <i class="fa fa-{{topPost.campObj.topPost.platform.toLowerCase()}}"></i>
+                                    <label class="mb0px ng-binding">
+                                            {{topPost.campObj.topPost.post.text}}
+							        </label>
+                                </div>
+                            </td>
+
+                        </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt10px">
+        <div class="col-sm-12">
+            <!--<img ng-src="{{imageUrl}}report2.jpeg" class="img-responsive center-block" />-->
+            <div id="stackedGraph"></div>
+        </div>
+    </div>
+    <div class="row mt10px">
+        <div class="col-sm-12">
+            <h4> <strong>Top Post</strong></h4>
+        </div>
+    </div>
+    <div class="row mt10px">
+        <div ng-class="{'col-sm-6': campaignData.length==2, 'col-sm-4': campaignData.length==3  }" ng-repeat="topPost in campaignData">
+            <h5 class="top-post">{{topPost.campaignName}}</h5>
+            <div class="social-post camp-compare-post {{topPost.topPost.platform.toLowerCase()}}">
+                <div class="row">
+
+                    <div ng-if="value.extended_entities.media[0].media_url_https" class="col-sm-3">
+                        <a class="tweet-img" ng-href="{{value.extended_entities.media[0].expanded_url}}" target="_blank">
+                           <img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div ng-class="{'col-sm-9 task-details post-info': value.extended_entities.media[0].media_url_https!=null, 'col-sm-12 task-details post-info': value.extended_entities.media[0].media_url_https==null}">
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <h4 class="task-title">
+                                    {{topPost.topPost.post.text}}
+                                </h4>
+                            </div>
+                            <div class="col-sm-7 mt20px">
+                                <ul class="pl0px" ng-if="topPost.topPost.platform.toLowerCase()=='twitter'">
+                                    <li class="share"><i class="fa fa-share share"></i> 0 </li>
+                                    <li class="heart"><i class="fa fa-heart heart"></i> {{topPost.topPost.likeCount}} </li>
+                                    <li class="retweet"><i class="fa fa-retweet"></i> 0 </li>
+                                </ul>
+                                <ul class="pl0px" ng-if="topPost.topPost.platform.toLowerCase()=='facebook'">
+                                    <li class="comment"><i class="fa fa-comment-o "></i> 0 </li>
+                                    <li class="like"><i class="fa fa-thumbs-o-up like"></i> {{topPost.topPost.likeCount}} </li>
+                                    <li class="share"><i class="fa fa-share"></i> 0 </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-5 ">
+                                <label class="twitter pull-right" ng-if="topPost.topPost.platform.toLowerCase()=='twitter'"><i class="fa fa-twitter-square"></i></label>
+                                <label class="facebook pull-right" ng-if="topPost.topPost.platform.toLowerCase()=='facebook'"><i class="fa fa-facebook-square"></i></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

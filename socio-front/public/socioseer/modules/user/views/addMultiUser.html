@@ -1,0 +1,112 @@
+<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-12">
+								<form class="client-form">
+									<div class="add-user mtb20px">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>First Name</label>
+												<input type="text" placeholder="First Name" class="form-control" />											
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Last Name</label>
+												<input type="text" placeholder="Last Name" class="form-control" />											
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Select Client</label>
+												<div class="socioselect ">
+													<select id="select-state" placeholder="Select Client" class="form-control">
+														<option value="aa" class="Selected">Select Client</option>
+														<option value="AL">Admin</option>
+														<option value="AK">Author</option>
+														<option value="AZ">User</option>												
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Email</label>
+												<input type="email" placeholder="Enter Email id" class="form-control" />											
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Password</label>
+												<input type="password" placeholder="Password" class="form-control" />											
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Re-Enter Password</label>
+												<input type="text" placeholder="Re-Enter Password" class="form-control" />											
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Phone</label>
+												<input type="text" placeholder="Phone Number" class="form-control" />											
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label>Role</label>
+												<div class="socioselect ">
+													<select id="select-state" placeholder="Select Role" class="form-control">
+														<option value="aa" class="Selected">Select Role</option>
+														<option value="AL">Admin</option>
+														<option value="AK">Author</option>
+														<option value="AZ">User</option>												
+													</select>
+												</div>
+											</div>
+										</div>
+										
+										
+								</div>
+									<div class=" col-sm-2 pull-right">
+										<a  class="btn btn-compose pull-right">Add</a>
+									</div>
+								</form>
+							</div>
+						
+							<div class="col-sm-12 client-form mtb20px">
+								<ul class="user-listing pl0px " >
+									<li>
+										<div class="dis-flex">
+											<div class="flex-ch1">
+												<!--<img ng-if="!profileImageName" ng-src="http://192.168.1.164:9000/assets/images/dummy-profile.jpg" class="img-responsive pull-right ng-scope" src="http://192.168.1.164:9000/assets/images/dummy-profile.jpg">-->
+											</div>
+											<div class="flex-ch2">
+												<label class="user-name ng-binding">Ajay</label>
+												<label class="email ng-binding"><i class="fa fa-envelope"></i> ajaydroliya@gmail.com</label>
+												<label class="ng-binding"><strong>Role:</strong> APPROVER</label>
+											</div>
+										</div>
+										<div class="posab left"><a class="" ng-click="deleteUserById(value.id)"><i class="fa fa-close"></i></a></div>
+									</li>
+									<li>
+										<div class="dis-flex">
+											<div class="flex-ch1">
+												<!--<img ng-if="!profileImageName" ng-src="http://192.168.1.164:9000/assets/images/dummy-profile.jpg" class="img-responsive pull-right ng-scope" src="http://192.168.1.164:9000/assets/images/dummy-profile.jpg">-->
+											</div>
+											<div class="flex-ch2">
+												<label class="user-name ng-binding">Ajay</label>
+												<label class="email ng-binding"><i class="fa fa-envelope"></i> ajaydroliya@gmail.com</label>
+												<label class="ng-binding"><strong>Role:</strong> APPROVER</label>
+											</div>
+										</div>
+										<div class="posab left"><a class="" ng-click="deleteUserById(value.id)"><i class="fa fa-close"></i></a></div>
+									</li>
+
+								</ul>
+								<div class=" col-sm-2 pull-right">
+										<a  class="btn btn-compose pull-right">Save</a>
+									</div>
+							</div>
+						</div>
+					</div>

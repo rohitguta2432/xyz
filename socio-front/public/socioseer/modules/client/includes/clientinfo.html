@@ -1,0 +1,260 @@
+<div class="edit-mode" ng-if="editMode && isAdmin">
+	<form name="clientEditForm" novalidate angular-validator enctype="multipart/form-data" class="">
+		<div class="row">
+			<div class="col-sm-4 ac mb10px">
+				<div class="circle">
+					<img ng-if="clientImage" ng-src="{{clientImage}}" class="brand-logo img-responsive img-circle" />
+					<img ng-if="!clientImage" ng-src="{{defaultImage}}" class="brand-logo img-responsive img-circle" />
+					<a ng-click="opeFileManager()">
+						<div class="edit-icon"><i class="fa fa-pencil"></i></div>
+					</a>
+				</div>
+				<div class="clearfix"></div>
+				<label class="note"><em>(image should not be greater than 1600x1200 px and max 2MB)</em></label>
+			</div>
+			<div class="col-sm-8">
+				<div class="row">
+					<div class="col-sm-6 mb20px">
+						<label class="label-heading mb5px">Client Name:</label>
+						<input readonly disabled="disabled" type="text" class="form-control" required placeholder="Client Name" ng-model="clientData.clientName"
+						 name="clientData.clientName" />
+					</div>
+					<div class="col-sm-6 mb20px">
+						<label class="label-heading mb5px">No. of Brands:</label>
+						<input type="number" min="1" class="form-control" required placeholder="No. of Brands" ng-model="clientData.noOfBrands" name="clientData.noOfBrands"
+						/>
+					</div>
+					<div class="col-sm-6 mb10px">
+						<label class="label-heading mb5px">License Type:</label>
+						<div class="socioselect ">
+							<select required class="form-control" id="select-license" placeholder="Select Licence Type" name="clientData.licenseType"
+							 ng-model="clientData.licenseType" data-ng-options="item as item.licenceType for item in licenseTypeData track by item.id">
+													<option value="">Select licence Type</option>
+													</select>
+						</div>
+					</div>
+					<div class="col-sm-6 ">
+						<div class="form-group ">
+							<label class="label-heading mb5px">No. of Users:</label>
+							<input type="number" min="1" class="form-control" required placeholder="No. of Users" ng-model="clientData.noOfUsers" name="clientData.noOfUsers"
+							/>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 ">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="label-heading ">Subscription Duration Start:</label>
+							<datepicker date-format="d MMMM,y" datepicker-show="{{visibility}}">
+
+								<input required ng-model="clientData.startDateString" name="clientData.startDateString" type="text" placeholder="Start Date"
+								 class="angular-datepicker-input form-control" required/>
+							</datepicker>
+							<span class="input-group-addon calender-icon custom-date">
+								<span class="date-icon"></span>
+							</span>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label class="label-heading ">Subscription Duration End:</label>
+							<datepicker date-min-limit="{{minDate}}" date-format="d MMMM,y" datepicker-show="{{visibility}}">
+								<input id="endDate" required ng-model="clientData.endDateString" name="clientData.endDateString" validator="formValidator.dateValidator(clientData.startDateString,clientData.endDateString) === true"
+								 invalid-message="'End date should be greater than start date!'" type="text" placeholder="End Date" class="angular-datepicker-input form-control"
+								 required />
+							</datepicker>
+							<span class="input-group-addon calender-icon custom-date"><span class=" date-icon"></span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Web URL:</label>
+					<input required type="text" class="form-control" placeholder="Web URL" ng-model="clientData.webUrl" name="clientData.webUrl"
+					/>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Industry:</label>
+					<div class="socioselect">
+						<select required name="clientData.industry" id="select-industry" class="  form-control" ng-model="clientData.industry" ng-change="getSegments(clientData.industry.id)"
+						 ng-options="item as item.industryName for item in industries track by item.id" required>
+													<option  value="">Select Industry</option>
+											</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Segment:</label>
+					<div class="socioselect ">
+						<select required ng-disabled="helperFactory.isEmpty(segmentsData)" id="select-segment" name="clientData.segment" class="form-control"
+						 ng-model="clientData.segment" ng-change="getSubSegments(clientData.segment.id)" data-ng-options="item as item.segmentName for item in segmentsData track by item.id"
+						 required>
+							<option value="">Select Segment</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Sub-segment:</label>
+					<div class="socioselect ">
+						<select required ng-disabled="helperFactory.isEmpty(subSegmentsData)" id="select-segment" class="form-control" name="clientData.subSegment"
+						 ng-model="clientData.subSegment" data-ng-options="item as item.subSegmentName for item in subSegmentsData track by item.id"
+						 required>
+													<option value="">Select Sub Segment</option>
+											</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Contact Person Name:</label>
+					<input required type="text" class="form-control" name="clientData.clientInformation.name" placeholder="Contact Person Name"
+					 ng-model="clientData.clientInformation.name" /></div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Designation:</label>
+					<input required type="text" class="form-control" placeholder="Designation" ng-model="clientData.clientInformation.designation"
+					 name="clientData.clientInformation.designation" />
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Mobile No:</label>
+					<input required ng-model="clientData.clientInformation.mobileNumber" name="clientData.clientInformation.mobileNumber" type="text"
+					 placeholder="Enter Mobile Number" validator="formValidator.phoneValidation(clientData.clientInformation.mobileNumber) === true"
+					 invalid-message="formValidator.phoneValidation(clientData.clientInformation.mobileNumber)" maxlength="10" required class="form-control numberonly"
+					/>
+				</div>
+			</div>
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Email:</label>
+					<input required type="email" class="form-control" placeholder="Email" ng-model="clientData.clientInformation.email" name="clientData.clientInformation.email"
+					 validator="formValidator.emailValidation(clientData.clientInformation.email) === true" invalid-message="formValidator.emailValidation(clientData.clientInformation.email)"
+					/>
+				</div>
+			</div>
+
+
+			<div class="col-sm-6 ">
+				<div class="form-group">
+					<label class="label-heading">Landline:</label>
+					<input type="text" class="form-control numberonly" maxlength="15" placeholder="Email" ng-model="clientData.clientInformation.officeLandline"
+					 name="clientData.clientInformation.officeLandline" />
+				</div>
+			</div>
+
+
+			<div class="col-sm-12 ">
+				<div class="form-group height_auto">
+					<label class="label-heading ">Address:</label>
+					<textarea maxlength="256" required class="form-control" placeholder="Address" ng-model="clientData.clientInformation.address"
+					 name="clientData.clientInformation.address"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row mt20px">
+			<div class="competitor">
+
+				<div class="col-sm-6 mtb20px">
+					<h3>Competitor's Definition</h3>
+				</div>
+				<div class="col-sm-6 mtb20px">
+					<button ng-click="addMoreCompetitors()" name="addMore" type="button" class="btn btn-default addcomptr addnewcomptr fr"><span class="add-icon" ></span> <span class="text">Add</span></button>
+				</div>
+				<div ng-repeat="clientComptitor in clientData.competitiorsDefinitions" class="add-competitor">
+					<!--<strong>
+						{{clientComptitor}}
+					</strong>-->
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label>Competitor's Name</label>
+							<input type="text" ng-model="clientComptitor.name" name="clientComptitor.name" placeholder="Enter Competitor's Name" class="form-control"
+							/>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+
+							<label>Keywords</label>
+							<tags-input ng-model="clientComptitor.keyword" class="form-control tag-input" placeholder="Add Keywords" name="clientComptitor.keyword"
+							 on-tag-added="tagAddedKeywords($tag)"></tags-input>
+
+
+						</div>
+					</div>
+					<!--<div class="col-sm-6">
+						<div class="form-group">
+							<label>Competitor's Handle</label>
+							<input type="text" name="clientComptitor.handles" ng-model="clientComptitor.handles" placeholder="Enter Competitor's Handle"
+							 class="form-control" />
+						</div>
+					</div>-->
+
+					<div class="col-sm-6" ng-repeat="pltf in platformData">
+						<div class="form-group">
+							<label>{{pltf.name}}</label>
+							<div class="competitor-data">
+								<tags-input ng-model="clientComptitor.handle[pltf.name]" class="form-control tag-input" placeholder="Add Handles" name="clientComptitor.handle[pltf.id]"
+								 on-tag-added="tagAddedKeywords($tag)" allowed-tags-pattern="@"></tags-input>
+								<label class="note ar">
+									<em>Allowed pattern eg. @socioseer </em>
+								</label>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+		<button style="display: none" type="submit" name="sub" id="saveButton" ng-click="saveCLientByData(clientEditForm)">Save</button>
+	</form>
+</div>
+
+
+<div class="view-mode" ng-if="!editMode || !isAdmin">
+	<div class="row">
+		<div class="col-sm-5 mtb20px ac">
+			<div class="client-view-img">
+				<img ng-if="clientImage" ng-src="{{clientImage}}" class="img-responsive center-block" />
+				<img ng-if="!clientImage" ng-src="{{defaultImage}}" class="img-responsive center-block" />
+			</div>
+			<div class="view-details mt20px">
+				<label><strong>No. of Brands:</strong> {{clientData.noOfBrands}}</label>
+				<label><strong>No. of Users:</strong> {{clientData.noOfUsers}}</label>
+				<label><strong>License Type:</strong> {{clientData.licenseType.licenceType}}</label>
+				<label><strong>Web URL:</strong><a ng-click="redirectWebUrl(clientData.webUrl)"> {{clientData.webUrl}}</a></label>
+				<label><strong>Subscription Duration:</strong> {{clientData.subscriptionStartDate  | date:'dd MMM, yyyy'}} - {{clientData.subscriptionEndDate | date:'dd MMM, yyyy'}}</label>
+			</div>
+		</div>
+		<div class="col-sm-7">
+			<h4 class="review-title">{{clientData.clientName}}</h4>
+			<div class="client-details mt20px">
+				<label><strong>Industry:</strong> {{clientData.industry.industryName}}</label>
+				<label><strong>Segment:</strong> {{clientData.segment.segmentName}}</label>
+				<label><strong>Sub-segment:</strong> {{clientData.subSegment.subSegmentName}}</label><br/>
+				<label><strong>Contact Person Name:</strong> {{clientData.clientInformation.name}}</label>
+				<label><strong>Designation:</strong> {{clientData.clientInformation.designation}}</label>
+				<label><strong>Mobile No.:</strong> {{clientData.clientInformation.mobileNumber}}</label>
+				<label><strong>Office Landline:</strong> {{clientData.clientInformation.officeLandline}}</label>
+				<label><strong>Email:</strong> {{clientData.clientInformation.email}}</label>
+				<label><strong>Address:</strong> {{clientData.clientInformation.address}}</label>
+				<label><strong>Competitors:</strong>
+										<span class="competitors" ng-repeat="(key,value) in clientData.competitiorsDefinitions">{{value.name}}</span></label>
+			</div>
+		</div>
+	</div>
+
+</div>

@@ -1,0 +1,198 @@
+<div class="container-fluid">
+	<div class="row mt10px">
+		<form class="client-form">
+			<div class="col-sm-12">
+				<div class="row" ng-if="clientDropdown">
+					<div class="col-sm-4 pl0px">
+						<div class="form-group height-auto">
+							<div class="socioselect">
+								<select name="adminClient" class="simp-select  form-control" ng-change="changeClient(selectedClient)" ng-model="selectedClient"
+								 ng-options="item as item.clientName for item in clientData track by item.id">
+							<option value="">Select Client</option>
+						</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="summary-box panel trending-tab">
+						<div class="panel-heading p0px">
+							<div class="row">
+								<div class="col-sm-5">
+									<ul class="nav nav-tabs" role="tablist">
+										<li ng-if="showRecommended" role="presentation" class="active"><a ng-click="getTrends()" href="#recommended" aria-controls="recommended" role="tab" data-toggle="tab">Recommended</a></li>
+										<li ng-class="{'active': !showRecommended}" role="presentation"><a ng-click="getTrends('global')" href="#global" aria-controls="global" role="tab" data-toggle="tab">Global</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+
+							<div class="tab-content">
+								<div ng-if="showRecommended" role="tabpanel" class="tab-pane fade in active" id="recommended">
+									<div class="tags">
+										<ul class="key-list">
+											<div class="timeline-wrapper-no-boreder" ng-hide="trendsData">
+												<div class="timeline-item">
+													<div class="animated-background">
+														<div class="background-masker header-top"></div>
+														<div class="background-masker header-left"></div>
+														<div class="background-masker header-right"></div>
+														<div class="background-masker header-bottom"></div>
+														<div class="background-masker subheader-left"></div>
+														<div class="background-masker subheader-right"></div>
+														<div class="background-masker subheader-bottom"></div>
+														<div class="background-masker content-top"></div>
+														<div class="background-masker content-first-end"></div>
+														<div class="background-masker content-second-line"></div>
+														<div class="background-masker content-second-end"></div>
+														<div class="background-masker content-third-line"></div>
+														<div class="background-masker content-third-end"></div>
+													</div>
+												</div>
+											</div>
+											<li ng-if="key<50" ng-repeat="(key,value) in trendsData">
+												<a title="{{value.name}}" href="{{value.url}}" target="_blank">{{value.name}}</a></li>
+										</ul>
+									</div>
+
+									<ul class="all-trending-post" ng-scrollbars ng-scrollbars-config="configScroll">
+
+										<div ng-repeat="x in loaderArray" class="timeline-wrapper-no-boreder" ng-hide="popularTweetsData">
+
+											<div class="timeline-item">
+												<div class="animated-background">
+													<div class="background-masker header-top"></div>
+													<div class="background-masker header-left"></div>
+													<div class="background-masker header-right"></div>
+													<div class="background-masker header-bottom"></div>
+													<div class="background-masker subheader-left"></div>
+													<div class="background-masker subheader-right"></div>
+													<div class="background-masker subheader-bottom"></div>
+													<div class="background-masker content-top"></div>
+													<div class="background-masker content-first-end"></div>
+													<div class="background-masker content-second-line"></div>
+													<div class="background-masker content-second-end"></div>
+													<div class="background-masker content-third-line"></div>
+													<div class="background-masker content-third-end"></div>
+												</div>
+											</div>
+										</div>
+										<li ng-repeat="(key,value) in popularTweetsData" class="trending-list">
+											<div class="col-sm-1 p0px">
+												<div class="trends-profile-image">
+													<img class="img-responsive center-block" ng-src="{{value.user.profile_image_url}}" />
+												</div>
+											</div>
+											<div class="col-sm-11 p0px">
+												<h3 class="profile-name"><a target="_blank" href="https://twitter.com/{{value.user.screen_name}}">{{value.user.name}}</a> <small class="handler-name"><a target="_blank" href="https://twitter.com/{{value.user.screen_name}}">@{{value.user.screen_name}}</a></small></h3>
+												<h4 ng-bind-html="value.text|toUrl" class="task-title">{{value.text|toUrl}}</h4>
+												<a class="trend-img" ng-if="value.extended_entities.media[0].media_url_https" target="_blank" ng-href="{value.extended_entities.media[0].expanded_url}}">
+													<img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive " />
+												</a>
+												<ul class="mb0px post-comments">
+													<li class="retweet"><i class="fa fa-retweet"></i> {{value.retweet_count | numberFormat : 1}}</li>
+													<li class="favourite"><i class="fa fa-heart"></i> {{value.favorite_count | numberFormat : 1}} </li>
+													<li><i class="fa fa-clock-o"></i>{{value.created_at | toTwitterData | date: 'MMM dd, yyyy - h:mm a'}}</li>
+												</ul>
+											</div>											
+										</li>
+									</ul>
+								</div>
+								<div role="tabpanel" class="tab-pane fade in" id="global" ng-class="{'active': !showRecommended}">
+									<div class="tags">
+										<ul class="key-list">
+											<div class="timeline-wrapper-no-boreder" ng-hide="trendsData">
+												<div class="timeline-item">
+													<div class="animated-background">
+														<div class="background-masker header-top"></div>
+														<div class="background-masker header-left"></div>
+														<div class="background-masker header-right"></div>
+														<div class="background-masker header-bottom"></div>
+														<div class="background-masker subheader-left"></div>
+														<div class="background-masker subheader-right"></div>
+														<div class="background-masker subheader-bottom"></div>
+														<div class="background-masker content-top"></div>
+														<div class="background-masker content-first-end"></div>
+														<div class="background-masker content-second-line"></div>
+														<div class="background-masker content-second-end"></div>
+														<div class="background-masker content-third-line"></div>
+														<div class="background-masker content-third-end"></div>
+													</div>
+												</div>
+											</div>
+											<li ng-if="key<50" ng-repeat="(key,value) in trendsData">
+												<a title="{{value.name}}" href="{{value.url}}" target="_blank">{{value.name}}</a>
+											</li>
+										</ul>
+									</div>
+									<ul class="all-trending-post" ng-scrollbars ng-scrollbars-config="configScroll">
+										<div ng-repeat="x in loaderArray" class="timeline-wrapper-no-boreder" ng-hide="popularTweetsData">
+											<div class="timeline-item">
+												<div class="animated-background">
+													<div class="background-masker header-top"></div>
+													<div class="background-masker header-left"></div>
+													<div class="background-masker header-right"></div>
+													<div class="background-masker header-bottom"></div>
+													<div class="background-masker subheader-left"></div>
+													<div class="background-masker subheader-right"></div>
+													<div class="background-masker subheader-bottom"></div>
+													<div class="background-masker content-top"></div>
+													<div class="background-masker content-first-end"></div>
+													<div class="background-masker content-second-line"></div>
+													<div class="background-masker content-second-end"></div>
+													<div class="background-masker content-third-line"></div>
+													<div class="background-masker content-third-end"></div>
+												</div>
+											</div>
+										</div>
+										<!--<li ng-repeat="(key,value) in popularTweetsData" class=" dis-flex">
+												<div class="platform ">
+													<div class="platform-icon"><i class="fa fa-twitter"></i></div>
+												</div>
+												<div class="post-summary">
+													<div class="col-sm-12">
+														<h4 ng-bind-html="value.text|toUrl" class="task-title">{{value.text|toUrl}}</h4>
+
+													</div>
+													<div class="col-sm-12 p0px">
+														<a class="trend-img"  ng-if="value.extended_entities.media[0].media_url_https" target="_blank" ng-href="{{value.extended_entities.media[0].expanded_url}}">
+													<img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive " />
+													</a>
+														<ul class="mb0px post-comments">
+															<li class="retweet"><i class="fa fa-retweet"></i> {{value.retweet_count | numberFormat : 1}}</li>
+															<li class="favourite"><i class="fa fa-heart"></i> {{value.favorite_count | numberFormat : 1}} </li>
+															<li><i class="fa fa-clock-o"></i>{{value.created_at | toTwitterData | date: 'MMM dd, yyyy - h:mm a'}}</li>
+														</ul>
+													</div>
+												</div>
+											</li>-->
+										<li ng-repeat="(key,value) in popularTweetsData" class="trending-list">
+											<div class="col-sm-1 p0px">
+												<div class="trends-profile-image">
+													<img class="img-responsive center-block" ng-src="{{value.user.profile_image_url}}" />
+												</div>
+											</div>
+											<div class="col-sm-11 p0px">
+												<h3 class="profile-name"><a target="_blank" href="https://twitter.com/{{value.user.screen_name}}">{{value.user.name}}</a> <small class="handler-name"><a target="_blank" href="https://twitter.com/{{value.user.screen_name}}">@{{value.user.screen_name}}</a></small></h3>
+												<h4 ng-bind-html="value.text|toUrl" class="task-title">{{value.text|toUrl}}</h4>
+												<a class="trend-img" ng-if="value.extended_entities.media[0].media_url_https" target="_blank" ng-href="{value.extended_entities.media[0].expanded_url}}">
+													<img ng-src="{{value.extended_entities.media[0].media_url_https}}" class="img-responsive " />
+												</a>
+												<ul class="mb0px post-comments">
+													<li class="retweet"><i class="fa fa-retweet"></i> {{value.retweet_count | numberFormat : 1}}</li>
+													<li class="favourite"><i class="fa fa-heart"></i> {{value.favorite_count | numberFormat : 1}} </li>
+													<li><i class="fa fa-clock-o"></i>{{value.created_at | toTwitterData | date: 'MMM dd, yyyy - h:mm a'}}</li>
+												</ul>
+											</div>											
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

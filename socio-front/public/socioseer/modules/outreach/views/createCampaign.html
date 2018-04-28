@@ -1,0 +1,484 @@
+<div class="container-fluid">
+    <div class="row ">
+        <div class="col-md-11 col-lg-11 col-sm-12">
+            <div class="row bs-wizard">
+                <div class="process">
+                    <div class="process-row nav nav-tabs">
+                        <div class="process-step bs-wizard-step menu1 active">
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a class=" btn btn-info btn-circle bs-wizard-dot" data-toggle="tab" href="#menu1"><span class="flaticon-checked"></span></a>
+                            <div class="bs-wizard-info text-center ">Client Description</div>
+                        </div>
+                        <div class="process-step bs-wizard-step menu2 disabled">
+                            <div class="progress">
+                                <div class="progress-bar"></div>
+                            </div>
+                            <a class=" btn btn-default btn-circle bs-wizard-dot" data-toggle="tab" href="#menu2"><span></span></a>
+                            <div class="bs-wizard-info text-center "> Campaign Details</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div id="menu1" class="tab-pane fade active in">
+                        <form class="client-form" novalidate angular-validator name="createCampaignForm1">
+                            <div class="">
+                                <div class="row plr15px">
+                                    <div class="col-sm-6" ng-show="adminClientDropdown">
+                                        <div class="form-group height-auto">
+                                            <div ng-dropdown-multiselect="" ng-class="{postErrorFieldBorder : selectedClientErrorFlag}" class="custom_dropdown" extra-settings="extraSettings"
+                                                options="clientOpt" selected-model="selectedClient" events="{ onItemSelect: changeClient, onItemDeselect: onDeselectClient }">
+                                            </div>
+                                            <label ng-if="selectedClientErrorFlag" class="control-label has-error validationMessage">
+                                                <i class="fa fa-times"></i> 
+                                                Required 
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row plr15px">
+                                    <div class="col-sm-6">
+                                        <div class="form-group height-auto">
+                                            <div class="profile-img">
+                                                <img ng-if="campaignImage" ng-src="{{campaignImage}}" class="img-responsive" />
+                                                <img ng-if="!campaignImage" ng-src="{{imageUrl}}campaign-image.jpg" class="img-responsive" />
+
+                                                <a class="editImage" ng-click="opeFileManager()">
+                                                    <div class="edit-icon"><i class="fa fa-pencil"></i></div>
+                                                </a>
+                                            </div>
+                                            <input type="file" id="campaignPic" class="form-control hide" ngf-select="" ng-model="file" name="file" ngf-pattern="'image/*'"
+                                                accept="image/gif, image/png, image/jpeg" ngf-max-size="30MB" ng-change="changeMySrc()"
+                                                ngf-max-height="10000" />
+                                            <label class="note"><em>(image should not be greater than 1600x1200 px and max 2MB)</em></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="date col-sm-6">
+                                            <label>Start Date</label>
+                                            <div class="input-group height_68">
+                                                <datepicker date-min-limit="{{minDate}}" date-format="d MMMM,y" datepicker-show="{{visibility}}">
+                                                    <input readonly="true" ng-model="startDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control"
+                                                        name="startDate" required />
+                                                </datepicker>
+                                                <span class="input-group-addon calender-icon"><span class="date-icon"></span></span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="date col-sm-6">
+                                            <label>End Date</label>
+                                            <div class="input-group height_68">
+                                                <datepicker date-min-limit="{{startDate}}" date-format="d MMMM,y" datepicker-show="{{visibility}}">
+                                                    <input  readonly="true" ng-disabled="!startDate" ng-model="endDate" type="text" placeholder="End Date" class="angular-datepicker-input form-control"
+                                                        name="endDate" required validator="formValidator.dateValidator(startDate,endDate) === true"
+                                                        invalid-message="'End date should be greater than start date!'" />
+                                                </datepicker>
+                                                <span class="input-group-addon calender-icon"><span class="date-icon" ></span></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 ">
+                                    <div class="form-group ">
+                                        <label>Brands</label>
+
+                                        <div class="">
+                                            <div disabled="!brandPost || brandPost.length<1" ng-class="{postErrorFieldBorder : selectedBrandsErrorFlag}" ng-dropdown-multiselect=""
+                                                class="custom_dropdown" extra-settings="extraMultiSettings" options="brandPost"
+                                                selected-model="selectedBrand" events="{ onItemSelect: changeBrand, onItemDeselect: onDeselectBrand }"></div>
+                                        </div>
+                                        <label ng-if="selectedBrandsErrorFlag" class="control-label has-error validationMessage">
+                                                        <i class="fa fa-times"></i> Required
+                                        </label>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Title</label>
+                                        <input type="text" placeholder="Title" ng-model="campaign.title" class="form-control" ng-model="campaign.title" name="campaign.title"
+                                            validator="formValidator.alphabetOnly(campaign.title) === true" invalid-message="formValidator.alphabetOnly(campaign.title)"
+                                            required />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group height-auto btm_m">
+                                        <label>Description</label>
+                                        <textarea placeholder="Description" class="form-control" ng-model="campaign.description" name="campaign.description" validator="formValidator.alphabetOnly(campaign.description) === true"
+                                            invalid-message="formValidator.alphabetOnly(campaign.description)" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group height-auto btm_m">
+                                        <label>Objective</label>
+                                        <textarea placeholder="Objective" ng-model="campaign.objective" class="form-control" name="campaign.objective" validator="formValidator.alphabetOnly(campaign.objective) === true"
+                                            invalid-message="formValidator.alphabetOnly(campaign.objective)" required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mb10px btm_nm">
+                                        <label>Social Platform</label>
+                                        <div class="">
+                                            <div ng-class="{postErrorFieldBorder : mediaChannelErrorFlag}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraMultiSettings"
+                                                options="optionSocial" selected-model="selectedSocial" events="{ onItemSelect: changeSocial, onItemDeselect: onDeselectSocial }"></div>
+                                        </div>
+                                        <label ng-if="mediaChannelErrorFlag" class="control-label has-error validationMessage">
+                                                <i class="fa fa-times"></i> Required
+                                            </label>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group mb10px btm_nm">
+                                        <label>Handles</label>
+                                        <div disabled="!handlerPost || handlerPost.length<1" ng-dropdown-multiselect="" class="custom_dropdown" ng-class="{postErrorFieldBorder : selectedHandlersErrorFlag}"
+                                            extra-settings="extraMultiSettings" options="handlerPost" selected-model="selectedHandle"
+                                            events="{ onItemSelect: changeHandle, onItemDeselect: onDeselectHandle }"></div>
+                                        <label ng-if="selectedHandlersErrorFlag" class="control-label has-error validationMessage">
+												<i class="fa fa-times"></i> Required
+											</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class=""><label>Location</label></div>
+                                    <div class="campaign-box">
+                                        <div class="row">
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Country</label>
+                                                    <div class="socioselect ">
+
+                                                        <div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings" options="countryList" selected-model="selectedCountry"
+                                                            events="{ onItemSelect: changeCountry, onItemDeselect: onDeselectCountry }">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Region</label>
+                                                    <div class="">
+                                                        <div disabled="!stateList || stateList.length<1" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+                                                            options="stateList" selected-model="selectedState">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>City</label>
+                                                    <input type="text" placeholder="City" ng-model="selectedCity" class="form-control" name="city" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class=""><label>Budget</label></div>
+                                    <div class="campaign-box">
+                                        <div class="row">
+
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group ">
+                                                    <label>Currency</label>
+                                                    <div class="s socioselect ">
+                                                        <div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings" options="currencyList" selected-model="selectedCurrency">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-group ">
+                                                    <div class="col-sm-10 p0px">
+                                                        <span ng-if="addPlatfromWarning" class="budgetListError">{{addBudgetError}}</span>
+                                                    </div>
+
+                                                    <div class="col-sm-12 mtb10px p0px">
+                                                        <div class="socio-table table-responsive">
+                                                            <table class="table table-striped table-bordered  settings">
+                                                                <thead>
+                                                                    <th class="nfix-width">Platform </th>
+                                                                    <th class=" nfix-width">Duration</th>
+                                                                    <th class="nfix-width">Budget</th>
+                                                                    <th class=" nlg-width">Start/End Date </th>
+                                                                    <th class="minw_50"><button type="button" class="btn btn-budget pull-right "
+                                                                            ng-click="addNewListPlatform()"><span class="add-icon-white"></span> </button></th>
+                                                                </thead>
+                                                                <tbody id="plateformBudjet" ng-if="!addPlatfromWarning">
+
+                                                                    <tr ng-repeat="budgetList in selectedPlatformList">
+
+                                                                        <td>
+                                                                            <div class="droparrow ">
+                                                                                <select id="platform{{$index}}" placeholder="Select Platform" ng-model="budgetList.platform" class="simp-select form-control"
+                                                                                    ng-options="opt as opt.name for opt in budgetList.name"
+                                                                                    ng-value="budgetList.name" name="budgetList.platform"
+                                                                                    ng-class="{'formErrorMsgCampBorer': errorPlt{{$index+1}}==true && !budgetList.platform}">
+                                                                                    <option ng-disabled="true" value="">Select platform </option>
+                                                                                </select>
+
+                                                                                <span class="budgetErrorMsg" ng-show="errorPlt{{$index+1}} && !budgetList.platform"> Required  </span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="droparrow ">
+                                                                                <select id="duration{{$index}}" placeholder="Duration" class="simp-select form-control" ng-model="budgetList.durability"
+                                                                                    ng-options="opt as opt for opt in budgetList.duration"
+                                                                                    name="budgetList.durability" ng-class="{'formErrorMsgCampBorer': errorDur{{$index+1}}==true && !budgetList.durability}">
+                                                                        <option  ng-disabled="true" value="">Select duration</option>
+                                                                    </select>
+                                                                                <span class="budgetErrorMsg" ng-show="errorDur{{$index+1}} && !budgetList.durability">        Required  </span>
+
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div>
+                                                                               
+<input id="budget{{$index}}" type="number" min="0" placeholder="budget"                                                                                 ng-model="budgetList.budget" name="budgetList.budget" class="form-control" ng-class="{'formErrorMsgCampBorer': errorBud{{$index+1}}==true && !budgetList.budget}"/>
+                                                                                
+                                                                                <span class="budgetErrorMsg" ng-show="errorBud{{$index+1}} && !budgetList.budget">  
+                                                                                    Required  
+                                                                 </span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="sm-date">
+                                                                            <div class="relative duration fl down">
+                                                                                <datepicker date-format="d MMMM,y" date-min-limit="{{minDate}}" datepicker-show="{{visibility}}" class="">
+                                                                                    <input readonly="true" id="bSartDate{{$index}}" ng-model="budgetList.startDate" type="text" placeholder="Start" class="angular-datepicker-input form-control "
+                                                                                        name="budgetList.startDate" ng-class="{'formErrorMsgCampBorer': errorSDate{{$index+1}}==true && !budgetList.startDate}"
+                                                                                    />
+                                                                                    <span class="input-group-addon calender-icon"><span class=" date-icon" ></span></span>
+                                                                                </datepicker>
+                                                                                <span class="budgetErrorMsg" ng-show="errorSDate{{$index+1}} && !budgetList.startDate">        Required                                                              </span>
+                                                                            </div>
+                                                                            <span class="to">--</span>
+                                                                            <div class="relative duration fr down">
+                                                                                <datepicker date-format="d MMMM,y" date-min-limit="{{budgetList.startDate}}" datepicker-show="{{visibility}}" class="">
+                                                                                    <input readonly="true"  ng-model="budgetList.endDate" type="text" placeholder="End" class="angular-datepicker-input form-control  ss " name="budgetList.endDate"
+                                                                                     ng-class="{'formErrorMsgCampBorer': errorEDate{{$index+1}}==true && !budgetList.endDate}" />
+                                                                                    <span class="input-group-addon calender-icon"><span class=" date-icon" ></span></span>
+                                                                                </datepicker>
+                                                                                <span class="budgetErrorMsg" ng-show="errorEDate{{$index+1}} && !budgetList.endDate">        Required                                                              </span>
+                                                                            </div>
+
+
+
+                                                                        </td>
+                                                                        <td> <a ng-click="deleteBudgetRow($index)"><span class="trash-icon"></a>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                            </div>
+                            <ul class="list-unstyled list-inline">
+                                <li class="pr15px">
+                                    <button type="submit" name="submit" class="btn btn-done next-step" ng-click="saveCampaignStep1(createCampaignForm1)">Save &amp; Continue <i class="fa fa-chevron-right"></i></button>
+                                </li>
+                            </ul>
+                        </form>
+
+                    </div>
+
+                    <div id="menu2" class="tab-pane fade">
+                        <form class="client-form" novalidate angular-validator name="createCampaignForm2" autocomplete="off">
+                            <div>
+                                <div class="col-sm-6">
+                                    <div class="form-group control-group">
+                                        <label>Keywords</label>
+
+                                        <tags-input ng-model="campaign.keywords" class="form-control tag-input" placeholder="Add Keywords" name="keywords" id="keywordsData"
+                                            on-tag-added="tagAddedKeywords($tag)"></tags-input>
+
+                                        <span class="formErrorMsgCamp">{{keywordsErrorMsg}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group control-group">
+                                        <label>Hashtags</label>
+                                        <tags-input name="hashtags" ng-model="campaign.hashtags" class="form-control tag-input" placeholder="Add Hashtags" name="hashtags"
+                                            id="hashtagsData" allowed-tags-pattern="#" on-tag-adding="onTagAdding($tag)" on-tag-added="tagAddedHashtags($tag)">
+
+                                        </tags-input>
+                                        <span class="formErrorMsgCamp">{{hashtagsErrorMsg}}</span>
+                                        <label class="note ar"><em>Allowed pattern eg. #socioseer </em></label>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-sm-6">
+
+                                    <div class="form-group height-auto">
+                                        <label>Select Audience</label>
+                                        <div ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraMultiSettings" options="audienceOpt" selected-model="audienceSelected"></div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Select Team</label>
+                                        <div class="control-group">
+                                            <div class="socioselect ">
+
+                                                <div ng-dropdown-multiselect="" ng-class="{postErrorFieldBorder : selectedTeamErrorFlag}" class="custom_dropdown" extra-settings="extraSettings"
+                                                    options="allTeams" selected-model="selectedTeam" events="{ onItemSelect: changeTeam, onItemDeselect: onDeselectTeam }">
+                                                </div>
+                                                <label ng-if="selectedTeamErrorFlag" class="control-label has-error validationMessage">
+																<i class="fa fa-times"></i> Required
+															</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12">
+                                    <div class="form-group height-auto">
+                                        <label>Notification Triggers</label>
+
+                                        <div class="socio-table table-responsive">
+                                            <table class="table table-bordered  settings">
+                                                <thead>
+                                                    <th>Name</th>
+                                                    <th>Unit</th>
+                                                    <th class="xm-width">Level</th>
+                                                    <th>Action</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="pm in postMetricsList">
+                                                        <td><label>{{pm.name}}</label></td>
+                                                        <td><label>{{pm.unit}}</label></td>
+                                                        <td>
+                                                            <div class="socioselect notification-trigger">
+                                                                <select id="select-state" placeholder="Select Numbers of Brands" class="simp-select form-control" ng-model="pm.levelSelect"
+                                                                    ng-options="level as level for level in pm.level track by level">
+																			</select>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="check-box">
+                                                                <label class="vote-check">
+															    <input type="checkbox" name="optionscheck" ng-model="pm.selected" checked><span class="pl10px">Notify me when metrics fulfilled</span>
+																			</label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul class="list-unstyled list-inline ">
+                                    <li><button type="button" name="button" class="btn btn-default prev-step"><i class="fa fa-chevron-left"></i> Back</button></li>
+                                    <!--  <li><a href="javascript:void(0);" class="btn btn-done" ><i class="fa fa-check"></i> Done</a></li> -->
+
+                                    <li><button type="submit" name="submit" class="btn btn-done" ng-click="saveCampaign(createCampaignForm2)">Done <i class="fa fa-check"></i></button></li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="edit-modal popupmodal">
+        <div class="modal fade " tabindex="-1" role="dialog" id="triggerNotification">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form class="client-form">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                            <h4 class="modal-title">Notification Trigger</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="setting-box">
+                                <div class="setting-header">
+                                    <h4>Set-up Metrics for Monitoring</h4>
+                                </div>
+                                <div class="setting-content">
+                                    <div class="socio-table table-responsive">
+                                        <table class="table table-striped table-bordered table-hover settings">
+                                            <thead>
+                                                <th>Name</th>
+                                                <th>Unit</th>
+                                                <th class="sm-width">Level</th>
+                                                <th>Action</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="pm in postMetricsList">
+                                                    <td><label>{{pm.name}}</label></td>
+                                                    <td><label>{{pm.unit}}</label></td>
+                                                    <td>
+                                                        <div class="socioselect notification-trigger">
+                                                            <select id="select-state" placeholder="Select Numbers of Brands" class="simp-select form-control" ng-model="pm.levelSelect"
+                                                                ng-options="level as level + 'K' for level in pm.level track by level">
+																			</select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="check-box">
+                                                            <label class="vote-check">
+															    <input type="checkbox" name="optionscheck" ng-model="pm.selected" checked><span class="pl10px">Notify me when metrics fulfilled</span>
+																			</label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-sm-12 dis-block">
+                                <button type="button" data-dismiss="modal" aria-label="Close" class="btn  btn-cancel">Cancel</button>
+                                <a data-dismiss="modal" ng-click="makePostMetricsModel()" class="btn btn-compose">Submit</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </div>

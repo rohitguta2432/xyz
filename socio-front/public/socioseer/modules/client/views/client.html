@@ -1,0 +1,67 @@
+<div class="container-fluid">
+	<div class="row">
+		<form class="client-form">
+			<div class="col-sm-3 mt20px">
+				<a ui-sref="addClient" class="btn btn-default"><span class="add-icon"></span> Add Client</a>
+			</div>
+			<div class="col-sm-4 pull-right mt20px">
+
+				<div class="form-group height-auto">
+					<div class="input-group">
+						<input type="text" ng-keyup="searchCLients($event)" class="form-control input-text-addon" ng-model="searchKey" placeholder="Search"
+						/>
+						<span class="input-group-addon search-icon" ng-if="searchKey.length" ng-click="getClientsView(0)"><i class="fa fa-search"></i></span>
+						<span class="input-group-addon search-icon" ng-if="!searchKey.length"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="col-sm-12 mt10px">
+			<form class="client-form">
+				<div class="add-client">
+
+					<div class="setting-content">
+						<div class="socio-table table-responsive">
+							<table class="table table-striped table-bordered  settings">
+								<thead>
+									<th class="small-width">S.No</th>
+									<th ng-click="sortBy(sortClientName)">Name <i class="fa fa-sort-amount-{{sortClientName.dir}} fr asc-sort" aria-hidden="true"></i></th>
+									<th ng-click="sortBy(sortIndustry)">Industry <i class="fa fa-sort-amount-{{sortIndustry.dir}} fr asc-sort" aria-hidden="true"></i></th>
+									<th ng-click="sortBy(sortUserCount)" class="sm-width">User <i class="fa fa-sort-amount-{{sortUserCount.dir}} fr asc-sort" aria-hidden="true"></i></th>
+									<th class="fix-width">Action</th>
+								</thead>
+								<tbody>
+									<tr ng-repeat="(key,value) in clientData">
+										<td class="ac">{{indexer + key+1}}</td>
+										<td><label>{{value.clientName}}</label></td>
+										<td><label>{{value.industry.industryName}}</label></td>
+										<td>{{value.countUsers}}</td>
+										<td>
+											<ul class="action-listing pl0px">
+ 
+												<li><a ui-sref="viewClient" ng-click="viewClientById(value.id)"><i class="fa fa-eye fa-2x vertical-top" aria-hidden="true"></i> </a></li>
+												<li><a ui-sref="viewClient" ng-click="viewClientById(value.id,true)"><i class="fa fa-pencil-square-o fa-2x vertical-top" aria-hidden="true"></i> </a></li>										 
+												<li>
+													<label class="switch">
+														<input class="switch-input" ng-model="switchControl" ng-click="changeStatus(value.id, value.status)" ng-checked="value.status==1?1:0" type="checkbox"  />
+														<span class="switch-label" data-on="On" data-off="Off"></span> <span class="switch-handle"></span> 
+													</label>
+												</li>
+											</ul>
+										</td>
+									</tr>
+									<tr ng-if="!clientData">
+										<td colspan="5">No Data Found..</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div ng-include="'includes/pagination.html'" class="page-nation mt20px">
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div> 

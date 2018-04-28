@@ -1,0 +1,199 @@
+<div class="container-fluid">
+	<div class="row client-form">
+		<div class="col-sm-4 plr10px" ng-show="adminClientDropdown">
+			<div class="form-group height-auto">
+				<label>Select Client</label>
+				<div class="socioselect">
+					<div ng-class="{postErrorFieldBorder : selectedClientError==true}" ng-dropdown-multiselect="" class="custom_dropdown" extra-settings="extraSettings"
+					 options="clientOpt" selected-model="selectedClient" events="{ onItemSelect: changeClient}"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4 plr5px">
+			<label>Filter</label>
+			<div class="input-group time-input">
+				<datepicker date-format="d MMMM,y" datepicker-show="{{visibility}}">
+					<input ng-model="startDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control no-right-brd"
+					 readonly />
+				</datepicker>
+				<span class="input-group-addon  no-right-brd p0px"><span class=" date-icon" ></span></span>
+
+				<datepicker date-min-limit="{{startDate}}" date-format="d MMMM,y" datepicker-show="{{visibility}}">
+					<input ng-model="endDate" type="text" placeholder="End Date" class="nofirstnolast angular-datepicker-input form-control"
+					 readonly />
+				</datepicker>
+				<span class="input-group-addon p0px"><span class=" date-icon" ></span></span>
+			</div>
+		</div>
+
+		<div class="col-sm-1 plr5px">
+			<label>&nbsp;</label>
+			<button ng-click="filterReports()" type="button" class="btn  btn-compose btn-block">Filter</button>
+		</div>
+		<div class="col-sm-3  plr5px">
+			<div class="form-group height" ng-if="summary.length>1">
+				<label>&nbsp;</label>
+				<a class="btn btn-compose pull-right" ng-click="selecteCampaign()">Compare Campaign</a>
+			</div>
+			<label class="control-label has-error pull-right note">{{compareCampError}}</label>
+		</div>
+		<div class="col-sm-12 plr10px" ng-if="summary.length!=0 && hashTagCount.length>0">
+			<h3 class="h3">#tags</h3>
+			<div class="tags trending-tab" ng-scrollbars ng-scrollbars-config="configScroll">
+				<div class="row">
+					<div class="col-sm-12 hashtags-section">
+						<ul ng-if="hashTagCount.length>0" class="dis-flex">
+							<li ng-repeat="hash in hashTagCount" class="dis-flex">
+								<div class="hashcount dis-flex">
+									<span>{{hash.count}}</span>
+								</div>
+								<div class="hashtag dis-flex">
+									<h3>{{hash.tag}}</h3>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 plr10px ">
+			<h4>{{summaryReportError}}</h4>
+		</div>
+		<div class="col-sm-12 plr10px">
+			<div class="summary-head">
+
+				<div class="row" ng-show="summary.length!=0">
+					<div class="col-sm-2 ac"><label>Campaign</label></div>
+					<div class="col-sm-8">
+						<div class="row">
+							<div class="col-sm-2"><label>Platform</label></div>
+							<div class="col-sm-2"><label>Mentions</label></div>
+							<div class="col-sm-3"><label>Followers Change</label></div>
+							<div class="col-sm-2"><label>Post Count</label></div>
+							<!--<div class="col-sm-2"><label>Interaction Change (%)</label></div>-->
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<label>Top Post</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="summary-tags" ng-repeat="val in summary">
+				<div class="row">
+
+					<div class="col-sm-2 ac check-box">
+						<div class="campaign-add selectCampCheck"><label class="vote-check">
+							<input type="checkbox" checklist-model="comparisonObj" checklist-value="val">
+							
+							<span></span>
+						</label>
+						</div>
+						<a ng-if="canViewDetail" ng-click="getCampaignReport(val)" class="performance-campaign dis-flex">
+                  <img ng-if="(!val.profileImageName || val.profileImageName !=null )&& val.profileImageName =='default'" ng-src="{{imageUrl}}no-image.jpg" class="img-responsive center-block" />
+                  <img ng-if="val.profileImageName &&  val.profileImageName !='default'" ng-src="{{val.profileImageName}}" class="img-responsive center-block" />
+                  </a>
+						<label ng-click="getCampaignReport(val)" class="img_title">{{val.campaignName}}</label>
+					</div>
+
+					<div class="col-sm-8 statistics">
+						<div class="row" ng-if="val.platformReports.length>0" ng-repeat="report in val.platformReports | filter : {platform: 'twitter'}">
+							<div class="col-sm-2 platform-icon"><i class="fa fa-twitter"></i></div>
+							<div class="col-sm-2">
+								<label class="mention-text">
+									
+									{{userMentionSummarieList.length >0 && userMentionSummarieList[0].platform.toLowerCase()=='twitter' ?userMentionSummarieList[0].mentionCount:'0'}}
+								</label>
+							</div>
+							<div class="col-sm-3" ng-repeat="follower in clientFollowersInfoList | filter : {platform: 'twitter'}">
+								<label ng-if="follower.followersChange==0">
+									{{follower.followersChange}}
+                        		</label>
+								<label class="success-text" ng-if="follower.followersChange>0">
+									<i  class="fa fa-long-arrow-up"></i>
+									{{follower.followersChange}}
+                        		</label>
+								<label class="error-text" ng-if="follower.followersChange<0">
+                        			<i class="fa fa-long-arrow-down"></i>
+                        			{{follower.followersChange}}
+                        		</label>
+							</div>
+							<div class="col-sm-2">
+								<label>{{report.postCount}}</label>
+							</div>
+						</div>
+						<div class="row" ng-repeat="report in val.platformReports | filter : {platform: 'facebook'}">
+							<div class="col-sm-2 platform-icon"><i class="fa fa-facebook-official"></i></div>
+							<div class="col-sm-2"><label class="mention-text">
+								{{userMentionSummarieList.length>0 && userMentionSummarieList[0].platform.toLowerCase()=='facebook'? userMentionSummarieList[0].mentionCount:'0'}}
+								</label></div>
+							<div class="col-sm-3" ng-repeat="follower in clientFollowersInfoList | filter : {platform: 'facebook'}">
+
+								<label ng-if="follower.followersChange==0">
+									{{follower.followersChange}}
+                        		</label>
+								<label class="success-text" ng-if="follower.followersChange>0">
+									<i  class="fa fa-long-arrow-up"></i>
+									{{follower.followersChange}}
+								</label>
+								<label class="error-text" ng-if="follower.followersChange<0">
+									<i class="fa fa-long-arrow-down"></i>
+									{{follower.followersChange}}
+								</label>
+							</div>
+							<div class="col-sm-2"><label>{{report.postCount}}</label></div>
+						</div>
+					</div>
+
+					<!--If no data available -->
+
+					<div class="col-sm-8 statistics" ng-if="val.platformReports.length==0">
+						<div class="row" ng-repeat="platform in val.platformNames | unique : $index">
+							<div class="col-sm-2 platform-icon">
+								<i ng-if="platform.toLowerCase() =='facebook'" class="fa fa-facebook-official"></i>
+								<i ng-if="platform.toLowerCase() =='twitter'" class="fa fa-twitter"></i>
+
+							</div>
+							<div class="col-sm-2">
+								<label class="mention-text">
+									0
+								</label>
+							</div>
+							<div class="col-sm-3">
+								<label class="success-text">
+									0
+                        		</label>
+
+							</div>
+							<div class="col-sm-2"><label>0</label></div>
+						</div>
+					</div>
+
+					<div class="col-sm-2 top-post ac">
+						<a class="performance-campaign dis-flex"><img ng-src="{{imageUrl}}no-image.jpg" class="img-responsive center-block" /> </a>
+						<div class="platform-icon dis-flex">
+							<i class="fa fa-{{val.topPost.platform}} "></i>
+							<label class="mb0px">
+								{{val.topPost?val.topPost.post.text:'NA'  | cut:true:80:' ...' }}
+							</label>
+						</div>
+
+						<ul>
+							<li class="heart" ng-if="val.topPost.platform=='twitter'">
+								<i class="fa fa-heart"></i> {{val.topPost?val.topPost.likeCount:0}}
+							</li>
+							<li class="like" ng-if="val.topPost.platform=='facebook'">
+								<i class="fa fa-thumbs-o-up"></i> {{val.topPost?val.topPost.likeCount:0}}
+							</li>
+						</ul>
+
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!-- /body part -->

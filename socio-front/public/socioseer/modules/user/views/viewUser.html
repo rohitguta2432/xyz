@@ -1,0 +1,93 @@
+<div class="container-fluid">
+	<form class="client-form">
+		<div class="row">
+			<div class="col-sm-12 mtb20px">
+				<div class="review view">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a href="#userinfo" aria-controls="userinfo" role="tab" data-toggle="tab">User Info</a></li>
+						<li role="presentation"><a href="#rolespermission" aria-controls="rolespermission" role="tab" data-toggle="tab">Roles &amp; Permission</a></li>
+						<!--<li role="presentation"><a href="#accounts" aria-controls="accounts" role="tab" data-toggle="tab">Social Accounts</a></li>-->
+						<li class="right-btn" ng-if="canEditUser">
+							<a ui-sref="editUser" class="edit btn btn-default"> <i class="fa fa-pencil"></i> Edit</a>
+						</li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content"  >
+						<div role="tabpanel" class="tab-pane active fade in" id="userinfo" >
+							<div class="row">
+								<div class="col-sm-3">
+									<img ng-src="{{userProfileImg}}" class="img-responsive center-block img-thumbnail"  />
+								</div>
+								<div class="col-sm-9 ">
+									<h4 class="review-title">{{currentUserValue.firstName + ' ' + currentUserValue.lastname}}</h4>
+									<div class="details mt20px">
+										<label><b>Name:</b> {{currentUserValue.fullName}}</label>
+										<label><b>Email Id:</b> {{currentUserValue.email}}</label>
+										<label><b>Team:</b> <span ng-repeat="t in currentUserValue.teams">
+													{{t.name}}<span ng-if="!$last">{{', '}}</span>
+											</span> 
+										</label>
+										<label><b>Role:</b> {{currentUserValue.securityGroups[0].name}}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade in" id="rolespermission" >
+							<div class="socio-table table-responsive readonly-table">
+								<table class="table table-striped table-bordered table-hover settings">
+									<thead>
+										<th>Role/Permission</th>
+										<th class="role">All </th>
+										<th class="role">Create</th>
+										<th class="role">Read </th>
+										<th class="role">Update</th>
+										<th class="role">Delete</th>
+									</thead>
+									<tbody>
+
+										<tr ng-if="!entity.admin && !entity.default" ng-repeat="entity in currentUserValue.securityGroups[0].roles">
+											
+											<td><label>{{entity.displayName}}<!-- {{entity.name}}--></label></td>
+
+											<td class="ac">
+												<div class="check-box">
+													<label class="vote-check">
+												    
+													<input type="checkbox" ng-disabled="true" ng-model="check" ng-click="checkAll(key,check,key)" ng-checked="entity.checkAll=='1'">
+     											<span></span>
+							    					</label>
+												</div>
+											</td>
+
+											<td ng-repeat="(k, value) in entity.role_permissions" class="ac">
+
+												<div class="check-box">
+													<label class="vote-check">
+													<input type="checkbox" ng-model="checkInd" ng-disabled="true" ng-checked="entity.role_permissions[k].status=='1'" ng-click="checkIndCheck(key,checkInd,entity.role_permissions[k].name)">
+													<span></span>
+												</label>
+												</div>
+											</td>
+
+
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+						 <!--<div role="tabpanel" class="tab-pane fade in" id="accounts">
+						 </div>-->
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</form>
+</div>

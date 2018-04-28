@@ -1,0 +1,25 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<form class="client-form">
+				<div class="add-user mtb20px view-mode">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label>Role Name:</label>
+							<input type="text" placeholder="Approver" class="form-control" ng-model="roleApproverView.name" readonly />
+						</div>
+					</div>
+
+				<ng-include src=rolePermissionsView></ng-include>
+
+
+				</div>
+				<div class="btnbox">
+					<div class=" pull-right plr15px">
+						<button type="submit" ng-click="editRoleView()" class="btn btn-compose">Edit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

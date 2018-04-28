@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" class="no-js" ng-controller="mainController" ng-init="init()">
+<!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ title }}</title>
+	<!-- Favicon -->
+	<link type="text/css"  rel="shortcut icon" type="image/icon" href="assets/images/favicon.ico" />
+	<!-- CSS -->
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/app.css">
+	<link type="text/css"  href="assets/css_dev/bootstrap.min.css" rel="stylesheet">
+	<link type="text/css"  href="assets/css_dev/responsive.css" rel="stylesheet">
+	<link type="text/css"  href="assets/fonts/flaticon.css" rel="stylesheet">
+
+	<link type="text/css"  href="assets/css_dev/animate.css" rel="stylesheet">
+	<link type="text/css"  href="assets/css_dev/bootstrap-datepicker3.standalone.css" rel="stylesheet">
+
+	<link type="text/css"  href="assets/css_dev/bootstrap-multiselect.css" rel="stylesheet">
+	<link type="text/css"  href="assets/css_dev/angular-vertical-menu.css" rel="stylesheet">
+
+	<!-- Fonts -->
+	<link type="text/css"  href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet">
+
+	<link type="text/css"  href="assets/css_dev/font-awesome.min.css" rel="stylesheet">
+	<link type="text/css"  href="assets/css_dev/angular-datepicker.css" rel="stylesheet">
+	<link type="text/css"  href="assets/css_dev/datetimepicker.css" rel="stylesheet">
+	<link type="text/css"  href="assets/css_dev/ng-tags-input.css" rel="stylesheet">
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/fullcalendar.css" />
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/loading-bar.min.css" />
+	<link type="text/css"  href="assets/css_dev/socioseer.css" rel="stylesheet">
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/ng-image-gallery.min.css">
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/jquery.mCustomScrollbar.min.css">
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/angular-bootstrap-lightbox.css">
+	<link type="text/css"  rel="stylesheet" href="assets/css_dev/jquery.mCustomScrollbar.min.css" type="text/css"/>
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!--<base href="/">-->
+</head>
+<body ng-cloak class="pace-done mini-navbar" >
+	<div id="successMessage" class="success-message animated ">
+		<!-- <a href="#" class="close"><i class="fa fa-close"></i></a> -->
+		<div class="success"></div>
+		<div class="error"></div>
+	</div>
+	<div id="wrapper" >
+		<ng-include src=sidebar ng-if="!isFogotPwdView"></ng-include>
+		<ng-include src=header ng-if="!isFogotPwdView"></ng-include>
+		<!-- Body Part -->
+		<div class="page-wrapper white-bg" ng-if="!isFogotPwdView" >
+			<ng-include src="titlesection"></ng-include>
+			<div class="wrapper wrapper-content" ui-view></div>
+		</div>
+
+		<div ng-if="isFogotPwdView" class="wrapper wrapper-content" ui-view></div>
+
+		<script type="text/javascript" src="assets/js_dev/lib/moment.min.js"></script>
+
+		<script data-main="require-config" src="assets/js_dev/lib/require.js"></script>
+		
+
+		<ng-include src=footer></ng-include>

@@ -1,0 +1,29 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<form class="client-form" novalidate angular-validator name="createRoleForm">
+				<div class="add-user mtb20px ">
+					<div class="col-sm-6">
+						
+						<div class="form-group">
+							<label>Role Name:</label>
+							<input type="text" placeholder="Role Name" class="form-control" ng-model="createRoleName" 
+							name="createRoleName" validator="formValidator.alphabetOnly(createRoleName) === true"
+								    invalid-message="formValidator.alphabetOnly(createRoleName)" required />
+						</div>
+					</div>
+
+				
+				<ng-include src=rolePermissionsView ></ng-include>
+
+				<div class="btnbox plr15px">
+					<div class=" pull-right">
+						<span class="formErrorMsg">{{roleErrorMsg}}</span>
+						<button type="submit" name="submit" class="btn btn-compose" ng-click="createNewRole(createRoleForm)">Save</button>
+					</div>
+				</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

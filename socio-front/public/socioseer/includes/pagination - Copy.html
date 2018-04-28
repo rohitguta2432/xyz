@@ -1,0 +1,9 @@
+<ul ng-if="dx.length>1" class="pagination pagination-large"> 
+	<li id="prevPage"  ng-class="{'disabled':  paginationData.page_num==0 }" ><a rel="next"  ng-click="getPagedData(page-1)">Prev</a></li>
+	 
+	<li ng-class="{'active': paginationData.page_num == key}" class="{{val.class}}" ng-repeat="(key,val) in dx"> 
+		<a rel="next" ng-click="getPagedData(key)">{{key + 1}}</a>
+	</li>  
+	<li  ng-class="{'disabled':  paginationData.page_num>=dx.length-1 }" id="nextPage"><a rel="next" ng-click="getPagedData(page+1)">Next</a></li>
+</ul> 
+ 

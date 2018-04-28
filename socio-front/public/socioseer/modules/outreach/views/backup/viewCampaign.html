@@ -1,0 +1,738 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<h3 class="campaign-title">{{campaignViewdata.title}}</h3>
+			<label class="note">{{campaignViewdata.startDate | date:'MMM dd, yyyy'}}   to   {{campaignViewdata.endDate | date:'MMM dd, yyyy'}}</label>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+
+	<form class="client-form">
+		<div class="row">
+			<div class="col-sm-12 mtb20px">
+				<div class="review view">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active"><a ng-click="clickCampaignTab()" href="#campaign" aria-controls="campaign" role="tab" data-toggle="tab"> Campaign Details</a></li>
+						<li role="presentation"><a href="#posts" ng-click="clickPostTab()" aria-controls="posts" role="tab" data-toggle="tab"> Posts </a></li>
+						<li class="right-btn">
+							<button class="edit btn btn-default" ng-hide="hideBtn" ng-click="buttonEditView()"> <i class="fa fa-pencil"></i> {{buttonValue}}</button>
+						</li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content p0px">
+						<div role="tabpanel" class="tab-pane active fade in" id="campaign">
+							<div class="view-mode" ng-hide="viewMode">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Campaign Name:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.title}}</label></div>
+										</div>
+
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Campaign Description:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.description}}</label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Objective:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.objective}}</label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Social Platforms:</label></div>
+											<div class="col-sm-9">
+												<div class="platform-icon">
+
+													<i ng-repeat="data in uniqueIcons" class="fa fa-{{data.name  | lowercase}} fa-2x"></i>
+
+												</div>
+											</div>
+										</div>
+										<div class="row view-section hide">
+											<div class="col-sm-3"><label class="label-heading">Handles:</label></div>
+											<div class="col-sm-9">
+												<label>@petday, @rusty, @smile, @happy</label>
+											</div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Keywords:</label></div>
+											<div class="col-sm-9"><label>
+												<span ng-repeat="keyword in campaignViewdata.keywords">
+													{{keyword.text}}{{$last ? '' : ', '}}
+												</span>
+											</label>
+											</div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Hashtags:</label></div>
+											<div class="col-sm-9"><label><span ng-repeat="hashtag in campaignViewdata.hashtags">{{hashtag.text}}{{$last ? '' : ', '}}</span></label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Team:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.team.name}}</label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Targeted Audience:</label></div>
+											<div class="col-sm-9"><label><span ng-repeat="targetaud in campaignViewdata.targetAudience">{{targetaud.text}}{{$last ? '' : ', '}}</span></label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Country:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.location.country}}</label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">Region:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.location.region}}</label></div>
+										</div>
+										<div class="row view-section">
+											<div class="col-sm-3"><label class="label-heading">City:</label></div>
+											<div class="col-sm-9"><label>{{campaignViewdata.location.city}}</label></div>
+										</div>
+
+										<div class="row view-section ptb10px">
+											<div class="col-sm-12">
+												<label class="label-heading mb10px">Budget:</label>
+												<div class="socio-table table-responsive">
+													<table class="table table-bordered table-hover budget">
+														<thead>
+															<th class="lg-width">Platform</th>
+															<th class="lg-width">Duration</th>
+															<th class="lg-width">Budget</th>
+															<th class="lg-width">Start/End Date</th>
+														</thead>
+														<tbody>
+															<tr ng-repeat="(k,budget) in campaignViewdata.budgetList">
+																<td><label>{{budget.platform.name}}</label></td>
+																<td><label>{{budget.duration}}</label></td>
+																<td> {{ budget.symbol}} {{ budget.budget}}</td>
+																{{budget.startDate}}
+																<td>
+																	<label>{{budget.startDate | date:'dd MMM yyyy'}}
+																	</label> to
+																	<label>{{ budget.endDate | date:'dd MMM yyyy'}}
+																	</label>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="row view-section hide">
+											<div class="col-sm-12">
+												<label class="label-heading mb10px">Notification Triggers:</label>
+												<div class="socio-table table-responsive">
+													<table class="table table-bordered table-hover budget">
+														<thead>
+															<th class="lg-width">Name</th>
+															<th class="lg-width">Unit</th>
+															<th class="lg-width">Level</th>
+														</thead>
+														<tbody>
+															<tr>
+																<td><label>Reach</label></td>
+																<td><label>Count</label></td>
+																<td><label>5k</label></td>
+															</tr>
+															<tr>
+																<td><label>Shares</label></td>
+																<td><label>Count</label></td>
+																<td><label>15k</label></td>
+															</tr>
+															<tr>
+																<td><label>Tweets</label></td>
+																<td><label>Count</label></td>
+																<td><label>10k</label></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="edit-mode" ng-hide="editMode">
+								<div class="row">
+									<div class="col-sm-12">
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Campaign Name:</label></div>
+											<div class="col-sm-9"><input type="text" class="form-control" ng-model="campaignViewdata.title" placeholder="Campaign Name" /></div>
+										</div>
+
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Campaign Description:</label></div>
+											<div class="col-sm-9"><textarea class="form-control" ng-model="campaignViewdata.description"> </textarea></div>
+										</div>
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Objective:</label></div>
+											<div class="col-sm-9"><textarea class="form-control" ng-model="campaignViewdata.objective"></textarea></div>
+										</div>
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Social Platforms:</label></div>
+											<div class="col-sm-9">
+												<div class="btn-group socioselect multiselect" data-ng-class='{open: open}'>
+													<button class='btn btn-blank dropdown-toggle form-control'>{{selectedPlatforms}}
+													 <span class='caret'></span>
+											</button>
+													<ul class='dropdown-menu drop-check' aria-labelledby='dropdownMenu'>
+														<li class="check-box">
+															<label class="vote-check">
+															<input type="checkbox" ng-model="selectAll" ng-click='checkAll()' />
+															<span>Select All</span>																 
+														</label>
+														</li>
+														<li class="check-box" ng-class="{'select-check check-box': option.select, 'check-box': option.select===false}" ng-repeat='option in optionSocial'>
+															<label ng-click='toggleSelectItem(option)' class="vote-check">
+															<input type="checkbox"  ng-model="option.select" />
+															<span> {{option.name}}</span>																
+														</label>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<div class="row edit-section hide">
+											<div class="col-sm-3"><label class="label-heading">Handles:</label></div>
+											<div class="col-sm-9">
+												<div class="from-group">
+													<select class="multidrop" multiple="multiple" placeholder="Platform">
+														<option value="@petday" selected>@petday</option>
+														<option value="@rusty" selected>@rusty</option>
+														<option value="@smile" selected>@smile</option>
+														<option value="@happy">@happy</option>
+													</select>
+												</div>
+											</div>
+										</div>
+
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Keywords:</label></div>
+											<div class="col-sm-9">
+												<!--<input type="text" value="@petday, @rusty, @smile" placeholder="Keywords" class="form-control">-->
+
+												<!-- <input type="text" id="input-tags-keywords" class="demo-default form-control input-tags-keywords" /> -->
+												<tags-input ng-model="campaignViewdata.keywords" class="form-control" placeholder="Add Keywords"></tags-input>
+
+											</div>
+										</div>
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Hashtags:</label></div>
+											<div class="col-sm-9">
+												<!--<input type="text" value="#petday, #rusty, #smile" placeholder="Hashtags" class="form-control">-->
+												<!--  <input id="input-tags-hashtags" type="text" class="demo-default form-control input-tags-hashtags" value=""> -->
+
+												<tags-input ng-model="campaignViewdata.hashtags" on-tag-added="tagAdded($tag)" class="form-control" placeholder="Add Hashtags"></tags-input>
+											</div>
+										</div>
+
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Team:</label></div>
+											<div class="col-sm-9">
+												<div class="socioselect ">
+													<select class=" form-control" ng-model="campaignViewdata.team" ng-options="team as team.name for team in allTeams track by team.id">
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Targeted Audience:</label></div>
+											<div class="col-sm-9">
+												<tags-input ng-model="campaignViewdata.targetAudience" class="form-control" placeholder="Add Audience"></tags-input>
+											</div>
+										</div>
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Country:</label></div>
+											<div class="col-sm-9">
+												<div class="socioselect">
+													<select class="form-control" id="select-country" ng-change="changeStates()" ng-model="updatedCountry" placeholder="Select Country"
+													 ng-options="country as country.name for country in countryList track by country.name">
+                                                        <option value="">Select country</option>
+                                                    </select>
+												</div>
+											</div>
+										</div>
+
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">Region:</label></div>
+											<div class="col-sm-9">
+												<div class="socioselect ">
+													<select id="select-state" ng-model="updatedState" class="form-control" placeholder="Select Platform" onchange="" ng-options="state as state.name for state in testStates track by state.name">
+                                                        <option value="">Select state</option>
+                                                    </select>
+												</div>
+											</div>
+										</div>
+										<div class="row edit-section">
+											<div class="col-sm-3"><label class="label-heading">City:</label></div>
+											<div class="col-sm-9"><input type="text" class="form-control" ng-model="campaignViewdata.location.city" placeholder="City" /></div>
+										</div>
+
+										<div class="row edit-section ptb10px">
+											<div class="col-sm-12">
+												<label class="label-heading mb10px">Budget:</label>
+												<div class="socio-table table-responsive">
+													<table class="table table-bordered table-hover budget">
+														<thead>
+															<th class="lg-width">Platform</th>
+															<th class="lg-width">Duration</th>
+															<th class="lg-width">Budget</th>
+															<th class="lg-width">Start/End Date</th>
+															<th class="sm-width">Action</th>
+														</thead>
+														<tbody>
+														
+															<tr ng-repeat="(k,budget) in campaignViewdata.budgetList">
+																<td>
+																	<div class="socioselect ">
+																		<select placeholder="Select Platform" class="form-control" ng-options="item as item.name for item in campaignViewdata.platformList track by item.id" ng-model="budget.platform">
+																			
+																		</select>
+																	</div>
+																</td>
+																<td>
+																	<div class="socioselect ">
+																		<select placeholder="Duration" class="form-control" ng-options="item for item in campaignViewdata.duration" ng-model="budget.duration">
+																			
+																		</select>
+																	</div>
+																</td>
+																<td><input type="text" ng-model="budget.budget" placeholder="budget" class="form-control"></td>
+																<td>
+																	<datepicker date-format="d MMMM,y"  date-min-limit="{{minDate}}" >
+																		<input ng-model="budget.startDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control"
+																		 name="startDate" required />
+																	</datepicker>
+																	<span class="to">to</span>
+
+ 
+
+																	<datepicker date-format="d MMMM,y"  date-min-limit="{{minDate}}" >
+																		<input ng-model="budget.endDate" type="text" placeholder="Start Date" class="angular-datepicker-input form-control"
+																		 name="startDate" required />
+																	</datepicker>
+																</td>
+																<td>
+																	<ul class="action-listing  dis-flex">
+																		<li><a href="#delete" data-toggle="modal"><i class="fa fa-trash del-red" aria-hidden="true"></i> </a></li>
+																	</ul>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="row edit-section hide">
+											<div class="col-sm-12">
+												<label class="label-heading mb10px">Notification Triggers: <a href="#trigger" data-toggle="modal" class="btn btn-edit pull-right mb10px">Edit</a></label>
+												<div class="socio-table table-responsive">
+													<table class="table table-bordered table-hover budget">
+														<thead>
+															<th class="lg-width">Name</th>
+															<th class="lg-width">Unit</th>
+															<th class="lg-width">Level</th>
+														</thead>
+														<tbody>
+															<tr>
+																<td><label>Reach</label></td>
+																<td><label>Count</label></td>
+																<td><label>5k</label></td>
+															</tr>
+															<tr>
+																<td><label>Shares</label></td>
+																<td><label>Count</label></td>
+																<td><label>15k</label></td>
+															</tr>
+															<tr>
+																<td><label>Tweets</label></td>
+																<td><label>Count</td>
+																<td><label>10k</label></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane fade in" id="posts">
+							<div class="row">
+								<div class="col-sm-12 p20px">
+									<div class="socio-table table-responsive">
+										<table class="table table-striped table-bordered  table-hover budget">
+											<thead>
+												<th>Post</th>
+												<th class="fix-width">Platforms</th>
+												<th class="fix-width">Date Time</th>
+												<th>Status</th>
+												<th>Action</th>
+											</thead>
+
+											<tbody ng-if="campaignPosts.length>0">
+												<tr ng-repeat="post in campaignPosts">
+													<td>
+														<label ng-bind-html="post.text | cut:true:60:' ...'"></label>
+													</td>
+													<td class="ac platform-icon">
+														<span ng-repeat="platform in post.socialHandlers">
+															<i ng-if="(platform.socialPlatform.name | lowercase) == 'facebook'" class="fa fa-facebook" ></i>													
+															<i ng-if="(platform.socialPlatform.name | lowercase) == 'twitter'" class="fa fa-twitter" ></i>													
+															<i ng-if="(platform.socialPlatform.name | lowercase) == 'instagram'" class="fa fa-instagram" ></i>													
+															<i ng-if="(platform.socialPlatform.name | lowercase) == 'youtube'" class="fa fa-youtube" ></i>													
+														</span>
+													</td>
+													<td><label>{{post.createdDate | date:'dd MMM h:mm a'}}</label></td>
+													<td><label class="{{post.statusClass.class}}"> {{post.statusClass.tag}}</label> </td>
+													<td>
+														<ul class="action-listing  dis-flex">
+															<li><a data-toggle="modal" ng-if="post.status==4" ng-click="editPostIndex($index)"><i class="fa fa-pencil" aria-hidden="true"></i> </a></li>
+															<li><a data-toggle="modal" ng-click="previewPostIndex($index)"><i class="fa fa-eye" aria-hidden="true"></i> </a></li>
+														</ul>
+													</td>
+												</tr>
+											</tbody>
+											<tbody ng-if="campaignPosts.length==0">
+												
+											</tbody>
+										</table>
+									</div>
+
+								</div>
+								<div class="page-nation mt20px">
+									<ng-include src="'includes/pagination.html'"></ng-include>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</form>
+</div>
+
+<div class="preview-modal popupmodal ">
+	<div class="modal fade review" tabindex="-1" role="dialog" id="preview" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content ">
+				<form class="client-form">
+					<div class="modal-header ">
+						<button type="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="{{opt.class}}" ng-repeat="opt in previewPost.optionSocial">
+								<a href="{{opt.href}}" aria-controls="facebook" role="tab" data-toggle="tab">
+									{{opt.name}}
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="modal-body">
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane fade in active" id="facebook-post">
+								<div class="row">
+									<div class="col-sm-12">
+										<!--										<img ng-src="{{imageUrl}}preview.jpg" class="img-responsive  center-block" />
+										<h4 class="review-title">Bollywood Actress Kriti Sanon walks for designer duo Sukriti, Akriti</h4>
+-->
+										<p class="desc" ng-bind-html="previewPost.text"></p>
+										<ul class="post-stats">
+											<li>2 <i class="fa fa-share"></i></li>
+											<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+											<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade in" id="twitter-post">
+								<div class="row">
+									<div class="col-sm-12">
+										<p class="desc" ng-bind-html="previewPost.text"></p>
+										<ul class="post-stats">
+											<li>2 <i class="fa fa-share"></i></li>
+											<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+											<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div role="tabpanel" class="tab-pane fade in" id="youtube-post">
+								<div class="row">
+									<div class="col-sm-12">
+										<p class="desc" ng-bind-html="previewPost.text"></p>
+										<ul class="post-stats">
+											<li>2 <i class="fa fa-share"></i></li>
+											<li class="green-like">19 <i class="fa fa-thumbs-up "></i></li>
+											<li class=" ong-share">20 <i class="fa fa-comments-o"></i></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+
+<div class="delete-modal popupmodal">
+	<div class="modal fade bs-example-modal-sm" id="delete" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+					<h4 class="modal-title">Delete</h4>
+				</div>
+				<div class="modal-body">
+					<h4 class="warning">Are you sure you want to delete?</h4>
+				</div>
+				<div class="modal-footer">
+					<div class="col-sm-12 dis-block">
+						<button type="button" class="btn  btn-compose">OK</button>
+						<button type="button" data-dismiss="modal" class="btn btn-cancel">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="edit-modal popupmodal">
+	<div class="modal fade " tabindex="-1" role="dialog" id="trigger">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<form class="client-form">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+						<h4 class="modal-title">Notification Trigger</h4>
+					</div>
+					<div class="modal-body">
+						<div class="setting-box">
+							<div class="setting-header">
+								<h4>Set-up Metrics for Monitoring</h4>
+							</div>
+							<div class="setting-content">
+								<div class="socio-table table-responsive">
+									<table class="table table-striped table-bordered table-hover settings">
+										<thead>
+											<th>Name <i class="fa fa-sort-amount-asc fr asc-sort" aria-hidden="true"></i></th>
+											<th>Unit</th>
+											<th class="sm-width">Level <i class="fa fa-exchange fa-rotate-270 fr exchange" aria-hidden="true"></i></th>
+											<th>Action</th>
+										</thead>
+										<tbody>
+											<tr>
+												<td><label>Reach</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value="" checked><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Comments</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value=""><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Impress</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value=""><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Shares</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value=" " checked><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Tweets</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value="" checked><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Connections</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value="" checked><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Followers</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value="" checked><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Subscribers</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value=""><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td><label>Likes</label></td>
+												<td><label>Count</label></td>
+												<td>
+													<div class="socioselect form-control">
+														<select id="select-state" placeholder="Select Numbers of Brands" class="simp-select">
+																				<option value="aa" class="Selected">5K</option>
+																				<option value="AL">10K</option>
+																				<option value="AK">15K</option>											
+																			</select>
+													</div>
+												</td>
+												<td>
+													<div class="check-box">
+														<label class="vote-check">
+																				<input type="checkbox" name="optionscheck" id="" value=""><span>Notify me when metrics fulfilled</span>
+																			</label>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-12 dis-block">
+							<button type="button" data-dismiss="modal" aria-label="Close" class="btn  btn-cancel">Cancel</button>
+							<a href="compose-post.html" class="btn btn-compose">Submit</a>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>

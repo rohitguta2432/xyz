@@ -1,0 +1,143 @@
+<!-- 							<p style="clear: both;font-size: 14px;font-weight: bold">{{mediaData}}</p> -->
+
+
+
+<!-- Modal -->
+
+<div id="myContentModal" class="modal fade popupmodal" role="dialog">
+	<div class="modal-dialog modal-lg">
+
+		<!-- Modal content-->
+		<div class="modal-content content-tab">
+			<div class="modal-header content-modal">
+				<button type="button" name="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#content" ng-click="selectedTab('content')" aria-controls="content" role="tab" data-toggle="tab">Content</a></li>
+					<li role="presentation">
+						<a href="#media" ng-click="selectedTab('media')" id="mediaTab" aria-controls="media" role="tab" data-toggle="tab">Media</a>
+					</li>
+					<li class="pull-right error-msg"> {{mediaErrorMsg}}</li>
+				</ul>
+
+			</div>
+			<div class="modal-body modal-body-height-auto">
+				<div class="row">
+					<div class="col-sm-12 ">
+						<div class=" ">
+							<!-- Nav tabs -->
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane fade in active" id="content">
+									<div class="row">
+										<div class="col-sm-12 no-found" ng-if="countValue==0">
+											{{contentDataMsg}}
+										</div>
+										<div class="col-sm-12" ng-if="countValue>0" ng-repeat="content in contentData">
+											<!--| orderBy: content.createdDate: true ">-->
+											<div class="content-box">
+												<div class="row">
+													<div class="col-sm-8">
+														<h4 class="content-title">
+															{{content.title===null?'NA':content.title}}
+														</h4>
+													</div>
+													<div class="col-sm-4">
+														<ul class="content-action">
+															<li>
+																{{content.createdDate===null?'NA':content.createdDate | date:'EEE, MMM dd yyyy'}}
+															</li>
+															<li style="position: relative;">
+																<a ng-click="setDataToEditor(content.postDescription)" href="javascript:void(0)" title="Copy" ngclipboard data-clipboard-target="#content{{$index}}">
+																	<i class="fa fa-files-o" aria-hidden="true"></i>
+																</a>
+																<span style="display:none;position: absolute; right: 5px;  font-size: 12px; opacity: 0.8;">Copied</span>
+															</li>
+														</ul>
+													</div>
+													<div class="col-sm-12">
+														<div class="content-details">
+															<ul>
+																<li>
+																	Author: {{content.authorName===null?'NA':content.authorName}}
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div class="col-sm-12">
+														<div class="content-desc">
+															<p id="content{{$index}}">
+																{{content.postDescription===null?'NA':content.postDescription}}
+															</p>
+														</div>
+													</div>
+													<div class="col-sm-12">
+														<div class="content-share">
+															Source URL:
+															<a ng-href="{{content.postURL===null?'javascript:void(0)':content.postURL}}">
+																		{{content.postURL===null?'NA':content.postURL}}
+																	</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div role="tabpanel" class="tab-pane fade" id="media">
+									<div class="container-fluid">
+										<div class="row">
+											<label class="error-text no-found">{{mediaDataError}}</label>
+											<!-- <ul class="row"> -->
+											<ul>
+												<li class="media-block col-sm-2 gallery-item-height-fix" ng-repeat="(key,value) in finalMediaData">
+
+													<a class="media-box" ng-click="setMedia(key,value)">
+													
+														<img class="img-responsive " ng-src="{{value.url}}" ng-if="value.mediaType=='IMAGE'"/>
+														<video style="max-width: 100%; height: auto;" class="embed-responsive-item" ng-src="{{value.url}}" ng-if="value.mediaType=='VIDEO'"></video>
+														<div ng-class="{'media-selected':value.select}" class="select-media-img "></div>
+														<div ng-if="value.mediaType=='VIDEO'" class="select-media-img-video"><i class="fa fa-play "></i></div>
+													</a>
+
+													<div class="select-media-img-checkbox check-box">
+														<label class="vote-check image-select " id="" value="" checked=""> 
+															<input class="media-select" type="checkbox" ng-checked="value.select" ng-click="setMedia(key,value)" ><span></span>
+														</label>
+													</div>
+												</li>
+
+												<li ng-if="finalMediaData.length==0">
+													<span style="font-size: 15px;font-weight: 500;">No media found</span>
+												</li>
+
+
+											</ul>
+											<!-- <ng-image-gallery images="images" methods="methods" thumbnails="true" thumb-size="5"
+											 inline="true" bubbles="true" bubble-size="5" img-bubbles="true"
+											 bg-close="true" piracy="true" img-anim="fadeup" conf="conf" on-open="opened();"
+											 on-close="closed();" ></ng-image-gallery> -->
+
+
+
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="page-nation "  ng-show="countValue>10">
+					<ng-include src="'includes/pagination.html'"></ng-include>
+				</div>
+				<a ng-if="tab=='media'" class="btn btn-compose addmedia " ng-click="insertMedia()">Add Media</a>
+			</div>
+		</div>
+
+	</div>
+</div>

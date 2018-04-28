@@ -1,0 +1,56 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12 mtb20px">
+			<div class="review view">
+				<input ng-hide="clientImage" type="file" id="profile-img" class="form-control hide" ngf-select="" ng-model="userProfileFile"
+				 name="userProfileFile" accept="image/*" ngf-max-height="10000" ngf-max-size="40MB" ng-change="changeMySrc()" />
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a ng-click="getClientInfo()" href="#clientinfo" aria-controls="clientinfo" role="tab" data-toggle="tab"> Client Info</a></li>
+					<li ng-if="canViewBrands" role="presentation"><a ng-click="getBrands()" href="#brands" aria-controls="brands" role="tab" data-toggle="tab"> Brands</a></li>
+					<li ng-if="canViewHandles" role="presentation"><a ng-click="getHandles()" href="#handles" aria-controls="handles" role="tab" data-toggle="tab"> Handles</a></li>
+					<li ng-if="canViewUsers" role="presentation"><a ng-click="getUsersByClientId()" href="#user" aria-controls="user" role="tab" data-toggle="tab"> Users</a></li>
+					<li ng-if="canViewTeam" role="presentation"><a ng-click="getTeams()" href="#team" aria-controls="team" role="tab" data-toggle="tab"> Teams</a></li>
+
+					<li ng-if="editMode && showSaveButton" class="right-btn">
+						<a class="btn btn-default save" name="saveForm" onclick="$('#saveButton').click()"> <i class="fa fa-save"></i> Save</a>
+					</li>
+					<li class="right-btn" ng-if="showEditButton && !editMode">
+						<a class="btn btn-default edit" ng-click="editclientById(viewClient)"> <i class="fa fa-pencil"></i> Edit</a>
+					</li>
+
+					<li class="right-btn" ng-if="editMode">
+						<a class="btn btn-default save" name="saveForm" ng-click="changeToViewMode()"> <i class="fa fa-times"></i> cancel</a>
+					</li>
+
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content client-form edit-client">
+					<div  role="tabpanel" class="tab-pane active" id="clientinfo" >
+						<ng-include src="clientinfoTab"></ng-include>
+					</div>
+					<div role="tabpanel" class="tab-pane " id="brands" >
+						<ng-include src="brandsTab"></ng-include>
+					</div>
+					<div  role="tabpanel" class="tab-pane fade in" id="handles" >
+
+						<div class="edit-mode" ng-include="'modules/client/includes/handles.html'">
+
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="user" >
+						<ng-include src="usersTab"></ng-include>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="team" >
+
+						<ng-include src="teamsTab"></ng-include>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-include src=popUpModal></ng-include>

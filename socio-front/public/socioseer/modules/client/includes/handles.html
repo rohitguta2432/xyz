@@ -1,0 +1,127 @@
+<div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="panel panel-default social-account twitter">
+            <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter
+                    <a ng-if="canManageHandles" class="btn bnt-add pull-right" ng-click="authTwitter()">Add Account</a></h3>
+            </div>
+            <div class="panel-body plr0px" ng-scrollbars ng-scrollbars-config="configScroll">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="pl0px list-none account-listing">
+                            <li ng-if="(handle.socialPlatform.name | lowercase) == 'twitter'" ng-repeat="handle in twitterHandle" class="dis-flex">
+                                <div class="flex-ch1"><img ng-src="{{handle.accessToken.profileImage}}" class="img-responsive" /></div>
+                                <div class="flex-ch2 "><label class="title">
+                                    {{handle.accessToken.fullName}}
+                                    </label><label class="sub-title"><a ng-href="https://twitter.com/{{handle.accessToken.screen_name}}" target="_blank"> @{{handle.accessToken.screen_name}}</a></label></div>
+                                <a class="delete" ng-if="editMode" data-toggle="modal" href="#deleteHandle" ng-click="deleteHandleRecord(handle.id)"><i class="fa fa-close"></i></a>
+                            </li>
+
+                            <p class="plr10px" ng-if="helperFactory.isEmpty(twitterHandle)">No Handle Found</p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="panel panel-default social-account facebook">
+            <div class="panel-heading ">
+                <h3 class="panel-title"><i class="fa fa-facebook" aria-hidden="true"></i> facebook
+                    <a ng-if="canManageHandles" class="btn bnt-add pull-right" ng-click="authFacebook()">Add Account</a></h3>
+            </div>
+            <div class="panel-body plr0px">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="pl0px list-none account-listing">
+                            <li ng-repeat="handle in facebookHandle" class="dis-flex">
+
+                                <div class="flex-ch1"><img ng-src="{{handle.accessToken.profileImage}}" class="img-responsive" /></div>
+                                <div class="flex-ch2 ">
+                                    <label class="title">
+                                        <a ng-href="https://facebook.com/{{handle.handler}}" target="_blank">
+                                            {{handle.accessToken.fullName}}
+                                        </a>
+                                    </label>
+                                    <!--<label class="sub-title"><a ng-href="https://twitter.com/{{handle.accessToken.screen_name}}" target="_blank"> @{{handle.accessToken.screen_name}}</a></label>-->
+                                </div>
+                                <a class="delete" ng-if="editMode" data-toggle="modal" href="#deleteHandle" ng-click="deleteHandleRecord(handle.id)"><i class="fa fa-close"></i></a>
+                            </li>
+                            <p class="plr10px" ng-if="helperFactory.isEmpty(facebookHandle)">No Handle Found</p>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+
+<div id="status">
+</div>-->
+
+<div class="delete-modal popupmodal">
+    <div class="modal fade bs-example-modal-sm" id="deleteHandle" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    <h4 class="warning">Are you sure you want to delete?</h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 dis-block">
+                        <button type="button" class="btn  btn-compose" ng-click="deleteHandleId(handleRecordData)">OK</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Facebook pagelist selection Modal -->
+<div class="popupmodal handles">
+    <div class="modal fade" id="pageListModel" role="dialog">
+        <div class="modal-dialog ">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                    <h4 class="modal-title">Facebook Handlers</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <ul class="facebook-handler">
+                            <li class="dis-flex" ng-repeat="handlers in pageListData track by $index">
+                                <div class="fb-handle-img vertical-middle">
+                                    <img src="{{handlers.picture.data.url}}" class="img-responsive" />
+                                    <label class="ml15px">{{handlers.name}}</label>
+                                </div>
+                                <div class="check-box">
+                                    <label class="vote-check">
+                                        <input type="checkbox" ng-model="selectedHandlers[handlers.id]" ng-false-value="false"><span></span>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul class="facebook-handler" ng-if="!pageListData">
+                            <h4 style="padding: 10% 0;" class="modal-title">{{pageListDataError}}</h4>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer" ng-if="pageListData">
+                    <button type="button" class="btn btn-compose " ng-click="saveFBHandlers()">Save</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

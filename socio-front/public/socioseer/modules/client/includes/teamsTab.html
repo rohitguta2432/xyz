@@ -1,0 +1,121 @@
+<form  class="client-form" novalidate angular-validator name="saveTeamForm">
+<div class="view-mode">
+    
+    <div class="row">
+        <div class="col-sm-12 mt20px">
+
+            <div ng-if="canAddTeam" class="add-user"><a data-toggle="modal" ng-click="prepareTeamData(saveTeamForm)" href="#addTeamModal" class="btn btn-default create"><span class="add-icon"></span> Create Team</a></div>
+ 
+        </div>
+        <div ng-repeat="(key,value) in teamListData" class="col-sm-4 col-lg-3 client-team">
+            <div class="panel panel-default ">
+                <div class="panel-heading ">
+                    <h3 class="panel-title"> {{value.name}}</h3>
+                    <a ng-if="canDeleteTeam && editMode" class="delete" href="#deleteTeam" ng-click="setDeleteTeamId(value.id)" data-toggle="modal"><span class="fa fa-close"></span></a>
+                </div>
+                <div class="panel-body" ng-scrollbars ng-scrollbars-config="configScroll">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="approver"><strong>Approver: </strong> {{value.contentApprovers[0].fullName}}</div>
+                            <ul class="pl0px team-list">
+                                <li ng-repeat="u in value.users">
+                                    <label class="col-sm-12 pl0px">{{$index+1}}. {{u.fullName}}</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <h4 ng-if="!teamListData">No team Found...</h4>
+        </div>
+    </div>
+</div>
+
+<!-- add user popup -->
+<div class="preview-modal popupmodal ">
+    <div class="modal fade" tabindex="-1" role="dialog" id="addTeamModal" aria-labelledby="gridSystemModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content ">
+                
+                    <div class="modal-header ">
+                        <button type="button" name="button" class="close " data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                        <h4>Create Team</h4>
+                    </div>
+                    <div class="modal-body ">
+                        <div class="tab-content p10px create-team">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Team Name</label>
+                                        <input required name="teamRawData.teamName" ng-model="teamRawData.teamName" type="text" class="form-control" placeholder="Team Name"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>User</label>
+                                        <div class="socioseslect">
+                                            <div name="teamRawData.selectedUsers" ng-dropdown-multiselect="" limit="2" class="custom_dropdown" extra-settings="extraMultiSettings"
+                                                options="usersForTeam" ng-class="{postErrorFieldBorder : selectedUserError==true}"
+                                                selected-model="teamRawData.selectedUsers" events="{ onItemSelect: changeUsers, onItemDeselect: onDeselectUsers }">
+                                            </div>
+                                            <label ng-if="selectedUserError" class="control-label has-error validationMessage">
+                                             <i class="fa fa-times"></i> Required
+                                        </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Approver</label>
+                                        <div name="teamRawData.selectedApprovers" ng-dropdown-multiselect="" limit="2" class="custom_dropdown" extra-settings="extraSingleSettings"
+                                            options="approversForTeam" ng-class="{postErrorFieldBorder : selectedApproverError==true}"
+                                            selected-model="teamRawData.selectedApprovers" events="{ onItemSelect: changeApprovers, onItemDeselect: onDeselectApprovers }"></div>
+                                        <label ng-if="selectedApproverError" class="control-label has-error validationMessage">
+                                             <i class="fa fa-times"></i> Required
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 mt20px">
+                                    <div class="pull-right">
+                                        <button name="sub" type="submit" ng-click="saveTeam(saveTeamForm)" class="btn btn-compose"><i class="fa fa-save"></i> Save</button>
+                                        <button type="submit" name="savensub" ng-click="saveTeam(saveTeamForm,'reset')" class="btn btn-compose"><i class="fa fa-plus"></i> Save &amp; Add New</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+<div class="delete-modal popupmodal">
+    <div class="modal fade bs-example-modal-sm" id="deleteTeam" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="close-icon"></span></button>
+                    <h4 class="modal-title">Delete</h4>
+                </div>
+                <div class="modal-body">
+                    <h4 class="warning">Are you sure you want to delete?</h4>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-12 dis-block">
+                        <button type="button" class="btn  btn-compose" ng-click="deleteClientTeamById(deleteTeamId)">OK</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-cancel">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
